@@ -1,0 +1,28 @@
+{
+  "root": true,
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.js"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": "./tsconfig.json"
+      },
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:tailwindcss/recommended",
+        "plugin:react/recommended",
+        "next/core-web-vitals"
+      ]
+    },
+    {
+      "files": ["*.graphql", "*.gql"],
+      "parser": "@graphql-eslint/eslint-plugin",
+      "plugins": ["@graphql-eslint"],
+      "extends": ["plugin:@graphql-eslint/schema-recommended"],
+      "parserOptions": {
+        "schema": "./**/*.graphql"
+      }
+    }
+  ]
+}
