@@ -4,10 +4,12 @@ import React from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="h-full overflow-hidden bg-blue-900 bg-gradient-to-b	from-blue-900 from-30% to-fuchsia-800">
+    <div className="h-full overflow-hidden">
       <LazyMotion features={domAnimation}>
         <AnimatePresence mode="sync">{children}</AnimatePresence>
       </LazyMotion>
     </div>
   );
 }
+
+export const runtime = "edge";

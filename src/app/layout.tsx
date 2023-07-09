@@ -2,6 +2,7 @@ import { Nav } from "@/components/nav";
 import "./globals.css";
 import { Inter, Roboto } from "next/font/google";
 import classNames from "classnames";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,17 +28,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className="h-screen overflow-hidden bg-slate-950">
-      <body
-        className={classNames(
-          inter.variable,
-          roboto.variable,
-          "h-full overflow-hidden text-white"
-        )}
-      >
-        <Nav />
-        {children}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="es" className="h-screen overflow-hidden bg-slate-950">
+        <body
+          className={classNames(
+            inter.variable,
+            roboto.variable,
+            "h-full overflow-hidden text-white",
+          )}
+        >
+          <Nav />
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

@@ -18,9 +18,3 @@
     @apply font-heading;
   }
 }
-
-/*
-::selection {
-  color: rgb(251, 39, 187);
-  background: rgb(21, 165, 49);
-} */

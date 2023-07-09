@@ -1,7 +1,8 @@
+import { UserButton, currentUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { TeapotLogo } from "@/components/teapot418";
 
-export const Nav = () => {
+export const Nav = async () => {
+  const user = await currentUser();
   return (
     <div className="fixed top-0 z-10 flex w-full justify-center py-4">
       <div className="md: xl: flex w-full max-w-5xl flex-row items-center justify-between px-6 transition-all md:px-10 xl:px-0">
@@ -9,7 +10,7 @@ export const Nav = () => {
           href={"/"}
           className=" flex h-16 w-16 shrink-0 cursor-pointer items-center justify-center  px-4 py-2 font-bold  hover:no-underline"
         >
-          <TeapotLogo />
+          🔥
         </Link>
 
         <div className="flex flex-1 justify-end ">
@@ -32,6 +33,15 @@ export const Nav = () => {
             >
               Discord
             </Link>
+            {!user && (
+              <Link
+                href={"/sign-in"}
+                className=" shrink-0 p-2 font-bold transition-all hover:no-underline"
+              >
+                Sign in
+              </Link>
+            )}
+            <UserButton afterSignOutUrl="/" />
           </div>
         </div>
       </div>

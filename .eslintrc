@@ -12,7 +12,8 @@
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
         "plugin:tailwindcss/recommended",
         "plugin:react/recommended",
-        "next/core-web-vitals"
+        "next/core-web-vitals",
+        "plugin:@next/next/recommended"
       ]
     },
     {

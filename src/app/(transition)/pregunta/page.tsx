@@ -13,3 +13,5 @@ export default function Pregunta() {
     </main>
   );
 }
+
+export const runtime = "edge";
