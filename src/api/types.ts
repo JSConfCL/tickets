@@ -23,7 +23,22 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  hello: Scalars['String']['output'];
+  status: Scalars['String']['output'];
+  users: Array<User>;
+};
+
+
+export type QueryStatusArgs = {
+  name: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Representation of auser */
+export type User = {
+  __typename?: 'User';
+  email: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  name: Maybe<Scalars['String']['output']>;
+  username: Scalars['String']['output'];
 };
 
 
