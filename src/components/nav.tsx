@@ -1,50 +1,57 @@
-import { UserButton, currentUser } from "@clerk/nextjs";
+import { cn } from "@/lib/utils"
 import Link from "next/link";
+import { buttonVariants } from "./ui/button";
+import { Icons } from "./icons";
+import { MainNav } from "./Navbar/MainNav";
+import { MobileNav } from "./Navbar/MobileNav";
 
 export const Nav = async () => {
-  const user = await currentUser();
   return (
-    <div className="fixed top-0 z-10 flex w-full justify-center py-4">
-      <div className="md: xl: flex w-full max-w-5xl flex-row items-center justify-between px-6 transition-all md:px-10 xl:px-0">
-        <Link
-          href={"/"}
-          className=" flex h-16 w-16 shrink-0 cursor-pointer items-center justify-center  px-4 py-2 font-bold  hover:no-underline"
-        >
-          🔥
-        </Link>
-
-        <div className="flex flex-1 justify-end ">
-          <div className="flex flex-1 items-center justify-end gap-6">
-            <Link
-              href={"/pregunta"}
-              className=" shrink-0 rounded border-b-4 border-amber-700  bg-amber-500 px-4 py-2 font-bold   transition-all hover:border-amber-700 hover:bg-amber-600 hover:no-underline"
-            >
-              Haz una pregunta!
-            </Link>
-            <Link
-              href={"/sponsors"}
-              className=" shrink-0 p-2 font-bold transition-all hover:no-underline"
-            >
-              Sponsors
-            </Link>
-            <Link
-              href={"/discord"}
-              className=" shrink-0 p-2 font-bold transition-all hover:no-underline"
-            >
-              Discord
-            </Link>
-            {!user && (
-              <Link
-                href={"/sign-in"}
-                className=" shrink-0 p-2 font-bold transition-all hover:no-underline"
-              >
-                Sign in
-              </Link>
-            )}
-            <UserButton afterSignOutUrl="/" />
+    <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
+      <div className="container flex h-14 items-center">
+        <MainNav />
+        <MobileNav />
+        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+          <div className="w-full flex-1 md:w-auto md:flex-none">
           </div>
+          <nav className="flex items-center">
+            <Link
+              href={'/'}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <div
+                className={cn(
+                  buttonVariants({
+                    variant: "ghost",
+                  }),
+                  "w-9 px-0"
+                )}
+              >
+                <Icons.logo className="h-4 w-4" />
+                <span className="sr-only">GitHub</span>
+              </div>
+            </Link>
+            <Link
+              href={'/'}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <div
+                className={cn(
+                  buttonVariants({
+                    variant: "ghost",
+                  }),
+                  "w-9 px-0"
+                )}
+              >
+                <Icons.logo className="h-4 w-4 fill-current" />
+                <span className="sr-only">Twitter</span>
+              </div>
+            </Link>
+          </nav>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
