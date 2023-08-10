@@ -35,7 +35,7 @@ export default function RootLayout({
           className={classNames(
             inter.variable,
             roboto.variable,
-            "h-full overflow-hidden text-white",
+            "h-full overflow-hidden",
           )}
         >
           <ThemeProvider

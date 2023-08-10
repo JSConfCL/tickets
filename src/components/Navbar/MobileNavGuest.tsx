@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
-export function MobileNav() {
+export function MobileNavGuest() {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -51,27 +51,19 @@ export function MobileNav() {
               >
                 Comunidades
               </MobileLink>
-              <h4 className="font-medium text-muted-foreground">Perfil</h4>
               <MobileLink
                 href={"/"}
                 onOpenChange={setOpen}
                 className="text-muted-foreground"
               >
-                Mi Cuenta
+                Login
               </MobileLink>
               <MobileLink
                 href={"/"}
                 onOpenChange={setOpen}
                 className="text-muted-foreground"
               >
-                Settings
-              </MobileLink>
-              <MobileLink
-                href={"/"}
-                onOpenChange={setOpen}
-                className="text-muted-foreground"
-              >
-                Salir
+                Regístrate
               </MobileLink>
             </div>
           </div>
