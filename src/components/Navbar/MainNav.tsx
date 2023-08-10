@@ -8,32 +8,32 @@ export function MainNav({
 }: React.HTMLAttributes<HTMLElement>) {
   return (
     <nav
-      className={cn("flex items-center space-x-4 lg:space-x-6", className)}
+      className={cn("items-center space-x-4 lg:space-x-6", className)}
       {...props}
     >
       <Link
-        href="/examples/dashboard"
-        className="text-sm font-medium transition-colors hover:text-primary"
+        href="/"
+        className="text-sm font-medium text-muted-foreground hover:text-primary"
       >
-        Overview
+        Eventos
       </Link>
       <Link
-        href="/examples/dashboard"
+        href="/"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Customers
+        Comunidades
       </Link>
       <Link
-        href="/examples/dashboard"
+        href="/"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Products
+        Login
       </Link>
       <Link
-        href="/examples/dashboard"
+        href="/"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Settings
+        Regístrate
       </Link>
     </nav>
   )

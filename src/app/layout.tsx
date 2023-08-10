@@ -3,6 +3,7 @@ import "./globals.css";
 import { Inter, Roboto } from "next/font/google";
 import classNames from "classnames";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ThemeProvider } from "@/components/providers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -37,8 +38,15 @@ export default function RootLayout({
             "h-full overflow-hidden text-white",
           )}
         >
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
           <Nav />
           {children}
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
