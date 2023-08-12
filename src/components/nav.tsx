@@ -6,9 +6,66 @@ import { MainNavGuest } from "./Navbar/MainNavGuest";
 import { MobileNavGuest } from "./Navbar/MobileNavGuest";
 import { ThemeSwitcher } from "./Navbar/ThemeSwitcher";
 import { currentUser } from "@clerk/nextjs";
+import { LogOut, Settings, User } from "lucide-react";
 
 export const Nav = async () => {
   const user = await currentUser();
+
+  const guestItems = [
+    {
+      content: "Eventos",
+      link: "/",
+    },
+    {
+      content: "Comunidades",
+      link: "/",
+    },
+    {
+      content: "Login",
+      link: "/",
+    },
+    {
+      content: "Regístrate",
+      link: "/",
+    },
+  ];
+
+  const userItems = [
+    {
+      content: "Eventos",
+      link: "/",
+    },
+    {
+      content: "Comunidades",
+      link: "/",
+    },
+    {
+      content: "Perfil",
+      children: [
+        {
+          content: "Mi Cuenta",
+          icon: <User className="mr-2 h-4 w-4"  />,
+          link: "/",
+        },
+        {
+          content: "separator",
+        },
+        {
+          content: "Settings",
+          icon: <Settings className="mr-2 h-4 w-4"  />,
+          link: "/",
+        },
+        {
+          content: "separator",
+        },
+        {
+          content: "Salir",
+          icon: <LogOut className="mr-2 h-4 w-4"  />,
+          link: "/",
+        },
+      ],
+    },
+  ];
 
   return (
     <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
@@ -26,11 +83,11 @@ export const Nav = async () => {
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <div className="w-full flex-1 md:w-auto md:flex-none"></div>
           <nav className="flex items-center space-x-4 hidden md:flex ">
-            {user ? <MainNav /> : <MainNavGuest />}
+            <MainNav items={!user ? userItems : guestItems} />
             <ThemeSwitcher />
           </nav>
         </div>
-        {user ? <MobileNav /> : <MobileNavGuest />}
+        <MobileNav items={!user ? userItems : guestItems} />
       </div>
     </header>
   );

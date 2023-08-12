@@ -1,16 +1,16 @@
 "use client";
 
 import * as React from "react";
-import Link, { LinkProps } from "next/link";
-import { useRouter } from "next/navigation";
 
-import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { NavBarProps } from "./types";
+import { MobileNavbarItem } from "./MobileNavbarItem";
+import { MobileLink } from "./MobileLink";
 
-export function MobileNav() {
+export function MobileNav({ items }: NavBarProps) {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -37,75 +37,13 @@ export function MobileNav() {
         <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
           <div className="flex flex-col space-y-2">
             <div className="flex flex-col space-y-3 pt-6">
-              <MobileLink
-                href={"/"}
-                onOpenChange={setOpen}
-                className="text-muted-foreground"
-              >
-                Eventos
-              </MobileLink>
-              <MobileLink
-                href={"/"}
-                onOpenChange={setOpen}
-                className="text-muted-foreground"
-              >
-                Comunidades
-              </MobileLink>
-              <h4 className="font-medium text-muted-foreground">Perfil</h4>
-              <MobileLink
-                href={"/"}
-                onOpenChange={setOpen}
-                className="text-muted-foreground"
-              >
-                Mi Cuenta
-              </MobileLink>
-              <MobileLink
-                href={"/"}
-                onOpenChange={setOpen}
-                className="text-muted-foreground"
-              >
-                Settings
-              </MobileLink>
-              <MobileLink
-                href={"/"}
-                onOpenChange={setOpen}
-                className="text-muted-foreground"
-              >
-                Salir
-              </MobileLink>
+              {items.map((item) => (
+                <MobileNavbarItem key={`mobile-${item.content}`} item={item} setOpen={setOpen} />
+              ))}
             </div>
           </div>
         </ScrollArea>
       </SheetContent>
     </Sheet>
-  );
-}
-
-interface MobileLinkProps extends LinkProps {
-  onOpenChange?: (open: boolean) => void;
-  children: React.ReactNode;
-  className?: string;
-}
-
-function MobileLink({
-  href,
-  onOpenChange,
-  className,
-  children,
-  ...props
-}: MobileLinkProps) {
-  const router = useRouter();
-  return (
-    <Link
-      href={href}
-      onClick={() => {
-        router.push(href.toString());
-        onOpenChange?.(false);
-      }}
-      className={cn(className)}
-      {...props}
-    >
-      {children}
-    </Link>
   );
 }
