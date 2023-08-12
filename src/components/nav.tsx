@@ -83,11 +83,11 @@ export const Nav = async () => {
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <div className="w-full flex-1 md:w-auto md:flex-none"></div>
           <nav className="flex items-center space-x-4 hidden md:flex ">
-            <MainNav items={!user ? userItems : guestItems} />
+            <MainNav items={user ? userItems : guestItems} />
             <ThemeSwitcher />
           </nav>
         </div>
-        <MobileNav items={!user ? userItems : guestItems} />
+        <MobileNav items={user ? userItems : guestItems} />
       </div>
     </header>
   );
