@@ -45,7 +45,7 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Nav isLogged={user === null} />
+            <Nav isLogged={user !== null} />
             {children}
           </ThemeProvider>
         </body>
