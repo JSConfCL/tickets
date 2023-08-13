@@ -1,10 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import Link, { LinkProps } from "next/link";
 import { NavbarMenuItem } from "./types";
 import { MobileLink } from "./MobileLink";
-import { children } from "./NavbarItem";
 
 export const MobileNavbarItem = ({
   item,
@@ -13,35 +10,37 @@ export const MobileNavbarItem = ({
   item: NavbarMenuItem;
   setOpen: (open: boolean) => void;
 }) => {
+  const mobileItemMapper = (item: NavbarMenuItem) => {
+    if (item.link) {
+      return (
+        <MobileLink
+          key={`mobileitem-${item.content}`}
+          href={item.link}
+          onOpenChange={setOpen}
+          className="text-muted-foreground"
+        >
+          {item.content}
+        </MobileLink>
+      );
+    }
+
+    if (item.onClick) {
+      return <span className="text-muted-foreground cursor-pointer" onClick={item.onClick}>{item.content}</span>
+    }
+
+    return <h4 className="font-medium text-muted-foreground">{item.content}</h4>
+  }
+
   if (item.children) {
     return (
       <>
         <h4 className="font-medium text-muted-foreground">{item.content}</h4>
         {item.children
           .filter((children) => children.content !== "separator")
-          .filter((children) => children.link)
-          .map((children) => {
-            return (
-              <MobileLink
-                href={children.link}
-                onOpenChange={setOpen}
-                className="text-muted-foreground"
-              >
-                {children.content}
-              </MobileLink>
-            );
-          })}
+          .map(mobileItemMapper)}
       </>
     );
   }
 
-  return (
-    <MobileLink
-      href={item.link}
-      onOpenChange={setOpen}
-      className="text-muted-foreground"
-    >
-      {item.content}
-    </MobileLink>
-  );
+  return mobileItemMapper(item);
 };

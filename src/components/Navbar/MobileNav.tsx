@@ -2,13 +2,13 @@
 
 import * as React from "react";
 
-import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { NavBarProps } from "./types";
 import { MobileNavbarItem } from "./MobileNavbarItem";
 import { MobileLink } from "./MobileLink";
+import { Menu, PackageOpen } from "lucide-react";
 
 export function MobileNav({ items }: NavBarProps) {
   const [open, setOpen] = React.useState(false);
@@ -20,8 +20,7 @@ export function MobileNav({ items }: NavBarProps) {
           variant="ghost"
           className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
         >
-          <Icons.menu className="h-5 w-5 scale-100 dark:scale-0" />
-          <Icons.menuDark className="h-5 w-5 scale-0 dark:scale-100" />
+          <Menu className="h-5 w-5" />
           <span className="sr-only">Toggle Menu</span>
         </Button>
       </SheetTrigger>
@@ -31,8 +30,7 @@ export function MobileNav({ items }: NavBarProps) {
           className="flex items-center"
           onOpenChange={setOpen}
         >
-          <Icons.logo className="h-5 w-5 scale-100 dark:scale-0" />
-          <Icons.logoDark className="h-5 w-5 scale-0 dark:scale-100" />
+          <PackageOpen className="h-5 w-5" />
         </MobileLink>
         <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
           <div className="flex flex-col space-y-2">
