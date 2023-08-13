@@ -1,50 +1,89 @@
-import { UserButton, currentUser } from "@clerk/nextjs";
+'use client'
+
 import Link from "next/link";
+import { MainNav } from "./Navbar/MainNav";
+import { MobileNav } from "./Navbar/MobileNav";
+import { ThemeSwitcher } from "./Navbar/ThemeSwitcher";
+import { LogOut, Settings, User, PackageOpen } from "lucide-react";
+import { useClerk } from "@clerk/nextjs";
 
-export const Nav = async () => {
-  const user = await currentUser();
+export const Nav = ({ isLogged }: { isLogged: boolean }) => {
+  const { signOut } = useClerk();
+
+  const guestItems = [
+    {
+      content: "Eventos",
+      link: "/",
+    },
+    {
+      content: "Comunidades",
+      link: "/",
+    },
+    {
+      content: "Login",
+      link: "/sign-in",
+    },
+    {
+      content: "Regístrate",
+      link: "/sign-up",
+    },
+  ];
+
+  const userItems = [
+    {
+      content: "Eventos",
+      link: "/",
+    },
+    {
+      content: "Comunidades",
+      link: "/",
+    },
+    {
+      content: "Perfil",
+      children: [
+        {
+          content: "Mi Cuenta",
+          icon: <User className="mr-2 h-4 w-4" />,
+          link: "/",
+        },
+        {
+          content: "separator",
+        },
+        {
+          content: "Settings",
+          icon: <Settings className="mr-2 h-4 w-4" />,
+          link: "/",
+        },
+        {
+          content: "separator",
+        },
+        {
+          content: "Salir",
+          icon: <LogOut className="mr-2 h-4 w-4" />,
+          onClick: () => signOut()
+        },
+      ],
+    },
+  ];
+
   return (
-    <div className="fixed top-0 z-10 flex w-full justify-center py-4">
-      <div className="md: xl: flex w-full max-w-5xl flex-row items-center justify-between px-6 transition-all md:px-10 xl:px-0">
-        <Link
-          href={"/"}
-          className=" flex h-16 w-16 shrink-0 cursor-pointer items-center justify-center  px-4 py-2 font-bold  hover:no-underline"
-        >
-          🔥
-        </Link>
-
-        <div className="flex flex-1 justify-end ">
-          <div className="flex flex-1 items-center justify-end gap-6">
-            <Link
-              href={"/pregunta"}
-              className=" shrink-0 rounded border-b-4 border-amber-700  bg-amber-500 px-4 py-2 font-bold   transition-all hover:border-amber-700 hover:bg-amber-600 hover:no-underline"
-            >
-              Haz una pregunta!
-            </Link>
-            <Link
-              href={"/sponsors"}
-              className=" shrink-0 p-2 font-bold transition-all hover:no-underline"
-            >
-              Sponsors
-            </Link>
-            <Link
-              href={"/discord"}
-              className=" shrink-0 p-2 font-bold transition-all hover:no-underline"
-            >
-              Discord
-            </Link>
-            {!user && (
-              <Link
-                href={"/sign-in"}
-                className=" shrink-0 p-2 font-bold transition-all hover:no-underline"
-              >
-                Sign in
-              </Link>
-            )}
-            <UserButton afterSignOutUrl="/" />
+    <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
+      <div className="container flex h-14 items-center">
+        <Link href={"/"} target="_blank" rel="noreferrer">
+          <div className="px-0">
+            <PackageOpen className="h-5 w-5" />
+            <span className="sr-only">Devent</span>
           </div>
+        </Link>
+        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+          <div className="w-full flex-1 md:w-auto md:flex-none"></div>
+          <nav className="flex items-center space-x-4 hidden md:flex ">
+            <MainNav items={isLogged ? userItems : guestItems} />
+            <ThemeSwitcher />
+          </nav>
         </div>
+        <MobileNav items={isLogged ? userItems : guestItems} />
       </div>
-    </div>
+    </header>
   );
 };
