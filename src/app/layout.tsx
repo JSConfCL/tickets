@@ -31,14 +31,8 @@ export default async function RootLayout({
   const user = await currentUser();
   return (
     <ClerkProvider>
-      <html lang="es" className="h-screen overflow-hidden bg-slate-950">
-        <body
-          className={classNames(
-            inter.variable,
-            roboto.variable,
-            "h-full overflow-hidden",
-          )}
-        >
+      <html lang="es" className="h-screen">
+        <body className={classNames(inter.variable, roboto.variable, "h-full")}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
