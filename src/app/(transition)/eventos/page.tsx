@@ -1,4 +1,4 @@
-import Card from "@/components/Card/Card";
+import { EventCard } from "@/components/Card/EventCard";
 
 const sampleEventInfo = {
   id: "1",
@@ -16,13 +16,13 @@ const sampleEventInfo = {
 
 export default function Eventos() {
   return (
-    <main className="container">
+    <main className="container mx-auto px-4">
       <h1 className="text-5xl font-extrabold my-6 ">Próximos Eventos</h1>
       <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4">
-        <Card eventInfo={sampleEventInfo} isAdmin={false} />
-        <Card eventInfo={sampleEventInfo} isAdmin={true} />
-        <Card eventInfo={sampleEventInfo} isAdmin={true} />
-        <Card eventInfo={sampleEventInfo} isAdmin={true} />
+        <EventCard eventInfo={sampleEventInfo} isAdmin={false} />
+        <EventCard eventInfo={sampleEventInfo} isAdmin={true} />
+        <EventCard eventInfo={sampleEventInfo} isAdmin={true} />
+        <EventCard eventInfo={sampleEventInfo} isAdmin={true} />
       </section>
     </main>
   );

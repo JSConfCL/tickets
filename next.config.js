@@ -3,5 +3,3 @@ const nextConfig = {
   poweredByHeader: false,
   typedRoutes: true,
 };
-
-module.exports = nextConfig;

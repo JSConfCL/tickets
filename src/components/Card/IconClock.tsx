@@ -16,3 +16,5 @@ export default function IconClock() {
     </svg>
   );
 }
+
+//forma correcta de importar los iconos
