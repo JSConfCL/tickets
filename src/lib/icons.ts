@@ -1,0 +1,5 @@
+export { default as CalendarIcon }  from '@/assets/icons/calendar.svg'
+export { default as ClockIcon }  from '@/assets/icons/clock.svg'
+export { default as EditIcon }  from '@/assets/icons/edit.svg'
+export { default as MapIcon }  from '@/assets/icons/map.svg'
+export { default as ParticipantIcon }  from '@/assets/icons/participant.svg'

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import Link from "next/link";
 import { MainNav } from "./Navbar/MainNav";
@@ -13,7 +13,7 @@ export const Nav = ({ isLogged }: { isLogged: boolean }) => {
   const guestItems = [
     {
       content: "Eventos",
-      link: "/",
+      link: "/eventos",
     },
     {
       content: "Comunidades",
@@ -60,7 +60,7 @@ export const Nav = ({ isLogged }: { isLogged: boolean }) => {
         {
           content: "Salir",
           icon: <LogOut className="mr-2 h-4 w-4" />,
-          onClick: () => signOut()
+          onClick: () => signOut(),
         },
       ],
     },
