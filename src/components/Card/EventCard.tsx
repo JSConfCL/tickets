@@ -1,7 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { CalendarIcon, ClockIcon, EditIcon, MapIcon, ParticipantIcon } from "@/lib/icons";
+import {
+  CalendarIcon,
+  ClockIcon,
+  EditIcon,
+  MapIcon,
+  ParticipantIcon,
+} from "@/lib/icons";
 import { useTheme } from "next-themes";
 
 interface EventInfo {
@@ -36,16 +42,10 @@ const EventCard: React.FC<CardProps> = ({ eventInfo, isAdmin }) => {
           <div className="flex justify-center items-end h-full w-full pb-4">
             <Link className="flex" href={`/editar-evento/${eventInfo.id}`}>
               <span>
-                <EditIcon width='24px' />
+                <EditIcon className="text-black" width="24px" />
               </span>
 
-              <a
-                className={`ml-2 ${
-                  darkMode ? "text-black" : "dark:text-white"
-                }`}
-              >
-                Editar evento
-              </a>
+              <a className="text-black">Editar evento</a>
             </Link>
           </div>
         )}
@@ -58,25 +58,25 @@ const EventCard: React.FC<CardProps> = ({ eventInfo, isAdmin }) => {
         <ul className="pl-4 pb-4 lg:pl-0 lg:pb-0">
           <li className="flex gap-2">
             <span>
-              <CalendarIcon width='24px' />
+              <CalendarIcon width="24px" />
             </span>
             <p>{eventInfo.date}</p>
           </li>
           <li className="flex gap-2">
             <span>
-              <ClockIcon width='24px'/>
+              <ClockIcon width="24px" />
             </span>
             <p>{eventInfo.time}</p>
           </li>
           <li className="flex gap-2">
             <span>
-              <MapIcon width='24px'/>
+              <MapIcon width="24px" />
             </span>
             <p>{eventInfo.location}</p>
           </li>
           <li className="flex gap-2">
             <span>
-              <ParticipantIcon width='24px' />
+              <ParticipantIcon width="24px" />
             </span>
             <p>{eventInfo.participants} participantes</p>
           </li>
@@ -86,4 +86,4 @@ const EventCard: React.FC<CardProps> = ({ eventInfo, isAdmin }) => {
   );
 };
 
-export default EventCard
+export default EventCard;
