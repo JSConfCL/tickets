@@ -28,10 +28,9 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await currentUser();
   return (
     <ClerkProvider>
-      <html lang="es" className="h-screen overflow-hidden bg-slate-950">
+      <html lang="es" className="h-[100dvh] overflow-hidden bg-slate-950">
         <body
           className={classNames(
             inter.variable,
@@ -45,7 +44,6 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Nav isLogged={user !== null} />
             {children}
           </ThemeProvider>
         </body>
