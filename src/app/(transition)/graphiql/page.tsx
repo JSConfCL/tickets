@@ -108,8 +108,6 @@ export default function Pregunta() {
     if (!token) {
       return;
     }
-    window.localStorage.removeItem("graphiql:query");
-    window.localStorage.removeItem("graphiql:tabState");
     setIsLoggedIn(true);
     const fetcher = createGraphiQLFetcher({
       url: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT!,
@@ -119,7 +117,7 @@ export default function Pregunta() {
           ...init,
           headers: {
             ...init?.headers,
-            AUTH: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
       },
