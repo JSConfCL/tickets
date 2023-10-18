@@ -27,6 +27,78 @@ const useGetAuthToken = () => {
   return token;
 };
 
+const comunidades = `query TodasLasComunidades {
+  communities {
+    description
+    id
+    name
+    status
+  }
+}`;
+
+const comunidadesYEventos = `query ComunidadesYEventos {
+  communities {
+    id
+    name
+    status
+    events {
+      id
+      name
+      address
+      description
+      startDateTime
+      endDateTime
+    }
+  }
+}`;
+
+const comunidadesUsuariosYEventos = `query comunidadesUsuariosYEventos {
+  communities {
+    id
+    name
+    status
+    users {
+      id
+      username
+      lastName
+      name
+      bio
+    }
+    events {
+      id
+      name
+      address
+      description
+      startDateTime
+      endDateTime
+    }
+  }
+}`;
+
+const mutacionCrearComunidad = `# Esta mutación requiere un permiso especial.
+# Manda un mensaje en el discord
+# https://https://discord.jschile.org
+# Para que te asignen el permiso
+mutation CrearComunidad($input: CommunityCreateInput!) {
+  createCommunity(input: $input) {
+    id
+    description
+    name
+    status
+  }
+}`;
+
+const mutacionCrearEvento = `# Esta mutación requiere que seas Admin de una Comunidad.
+# Puedes permirle permisos al Admin de alguna comunidad
+# para que te haga admin
+mutation CrearEvento($input: EventCreateInput!) {
+  createEvent(input: $input) {
+    id
+    description
+    startDateTime
+    endDateTime
+  }
+}`;
 export default function Pregunta() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -36,6 +108,8 @@ export default function Pregunta() {
     if (!token) {
       return;
     }
+    window.localStorage.removeItem("graphiql:query");
+    window.localStorage.removeItem("graphiql:tabState");
     setIsLoggedIn(true);
     const fetcher = createGraphiQLFetcher({
       url: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT!,
@@ -75,7 +149,53 @@ export default function Pregunta() {
       </div>
     );
   }
-  return <GraphiQL fetcher={fetcherRef.current!} />;
+  return (
+    <GraphiQL
+      fetcher={fetcherRef.current!}
+      defaultEditorToolsVisibility="variables"
+      defaultTabs={[
+        {
+          query: comunidades,
+        },
+        {
+          query: comunidadesUsuariosYEventos,
+        },
+        {
+          query: comunidadesYEventos,
+        },
+        {
+          query: mutacionCrearComunidad,
+          variables: JSON.stringify(
+            {
+              input: {
+                description: "",
+                name: "",
+                slug: "",
+              },
+            },
+            null,
+            2,
+          ),
+        },
+        {
+          query: mutacionCrearEvento,
+          variables: JSON.stringify(
+            {
+              input: {
+                communityId: "",
+                description: "",
+                maxAttendees: 0,
+                name: "",
+                startDateTime: "",
+              },
+            },
+            null,
+            2,
+          ),
+        },
+      ]}
+    />
+  );
 }
 
 export const runtime = "edge";
