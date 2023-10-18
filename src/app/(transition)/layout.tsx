@@ -11,6 +11,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       const token = await getToken({
         template: "API_AUTH",
       });
+      const localStorageKey = process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY;
+      if (!token || !localStorageKey) {
+        return;
+      }
+      window.localStorage.setItem(
+        process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY!,
+        token,
+      );
       console.log({ token });
     };
     start().catch((e) => {
@@ -18,11 +26,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     });
   }, []);
   return (
-    <div className="h-full overflow-hidden">
-      <LazyMotion features={domAnimation}>
-        <AnimatePresence mode="sync">{children}</AnimatePresence>
-      </LazyMotion>
-    </div>
+    <LazyMotion features={domAnimation}>
+      <AnimatePresence mode="sync">{children}</AnimatePresence>
+    </LazyMotion>
   );
 }
 

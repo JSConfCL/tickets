@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import Link from "next/link";
 import { MainNav } from "./Navbar/MainNav";
@@ -6,65 +6,78 @@ import { MobileNav } from "./Navbar/MobileNav";
 import { ThemeSwitcher } from "./Navbar/ThemeSwitcher";
 import { LogOut, Settings, User, PackageOpen } from "lucide-react";
 import { useClerk } from "@clerk/nextjs";
+import { useMemo } from "react";
 
 export const Nav = ({ isLogged }: { isLogged: boolean }) => {
   const { signOut } = useClerk();
 
-  const guestItems = [
-    {
-      content: "Eventos",
-      link: "/",
-    },
-    {
-      content: "Comunidades",
-      link: "/",
-    },
-    {
-      content: "Login",
-      link: "/sign-in",
-    },
-    {
-      content: "Regístrate",
-      link: "/sign-up",
-    },
-  ];
+  const guestItems = useMemo(
+    () => [
+      {
+        content: "Eventos",
+        link: "/",
+      },
+      {
+        content: "Comunidades",
+        link: "/",
+      },
+      {
+        content: "Login",
+        link: "/sign-in",
+      },
+      {
+        content: "Regístrate",
+        link: "/sign-up",
+      },
+    ],
+    [],
+  );
 
-  const userItems = [
-    {
-      content: "Eventos",
-      link: "/",
-    },
-    {
-      content: "Comunidades",
-      link: "/",
-    },
-    {
-      content: "Perfil",
-      children: [
-        {
-          content: "Mi Cuenta",
-          icon: <User className="mr-2 h-4 w-4" />,
-          link: "/",
-        },
-        {
-          content: "separator",
-        },
-        {
-          content: "Settings",
-          icon: <Settings className="mr-2 h-4 w-4" />,
-          link: "/",
-        },
-        {
-          content: "separator",
-        },
-        {
-          content: "Salir",
-          icon: <LogOut className="mr-2 h-4 w-4" />,
-          onClick: () => signOut()
-        },
-      ],
-    },
-  ];
+  const userItems = useMemo(
+    () => [
+      {
+        content: "Eventos",
+        link: "/",
+      },
+      {
+        content: "Comunidades",
+        link: "/",
+      },
+      {
+        content: "Perfil",
+        children: [
+          {
+            content: "Mi Cuenta",
+            icon: <User className="mr-2 h-4 w-4" />,
+            link: "/",
+          },
+          {
+            content: "separator",
+          },
+          {
+            content: "Settings",
+            icon: <Settings className="mr-2 h-4 w-4" />,
+            link: "/",
+          },
+          {
+            content: "separator",
+          },
+          {
+            content: "Salir",
+            icon: <LogOut className="mr-2 h-4 w-4" />,
+            onClick: () => {
+              const key = process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY;
+              if (key) {
+                window.localStorage.clear();
+              }
+              return signOut();
+            },
+          },
+        ],
+      },
+    ],
+    [signOut],
+  );
 
   return (
     <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
