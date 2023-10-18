@@ -13,11 +13,13 @@ const useGetAuthToken = () => {
   useEffect(() => {
     const key = process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY;
     if (!key) {
-      throw new Error("No token storage key");
+      console.error("No token storage key");
+      return;
     }
     const token = localStorage.getItem(key);
     if (!token) {
-      throw new Error("No token found");
+      console.error("No token found");
+      return;
     }
     const parsedToken = token;
     setToken(parsedToken);
