@@ -4,6 +4,7 @@ import { Inter, Roboto } from "next/font/google";
 import classNames from "classnames";
 import { ClerkProvider, currentUser } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/providers";
+import { ApolloWrapper } from "../api/ApolloWrapper";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -38,16 +39,20 @@ export default async function RootLayout({
             "h-full overflow-hidden",
           )}
         >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
+          <ApolloWrapper>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+          </ApolloWrapper>
         </body>
       </html>
     </ClerkProvider>
   );
 }
+
+export const runtime = "edge";

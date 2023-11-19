@@ -1,0 +1,468 @@
+"""Representation of a workEmail"""
+type AllowedCurrency {
+  currency: String!
+  id: String!
+}
+
+enum CommnunityStatus {
+  active
+  inactive
+}
+
+"""Representation of a Community"""
+type Community {
+  description: String
+  events: [Event!]!
+  id: String!
+  name: String
+  status: CommnunityStatus!
+  users: [User!]!
+}
+
+"""Representation of a workEmail"""
+type Company {
+  description: String
+  domain: String!
+  hasBeenUpdated: Boolean!
+  id: String!
+  logo: String
+  name: String
+  salarySubmissions: Int!
+
+  """Not available to users"""
+  status: CompanyStatus
+  website: String
+}
+
+enum CompanyStatus {
+  active
+  draft
+  inactive
+}
+
+input CreateCommunityInput {
+  description: String!
+  name: String!
+  slug: String!
+}
+
+input CreateCompanyInput {
+  description: String
+
+  """
+  The email domain of the company (What we'll use to match the company to the user on account-creation)
+  """
+  domain: String!
+  logo: String
+  name: String
+  status: CompanyStatus
+  website: String
+}
+
+input CreateSalaryInput {
+  amount: Int!
+  companyId: String!
+  confirmationToken: String!
+  countryCode: String!
+  currencyId: String!
+  gender: Gender!
+  genderOtherText: String!
+  typeOfEmployment: TypeOfEmployment!
+  workMetodology: WorkMetodology!
+  workRoleId: String!
+  yearsOfExperience: Int!
+}
+
+"""
+A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar Date
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
+input EnqueueGoogleAlbumImportInput {
+  albumId: String!
+  sanityEventInstanceId: String!
+  token: String!
+}
+
+"""
+Representation of an Event (Events and Users, is what tickets are linked to)
+"""
+type Event {
+  address: String
+  community: Community
+  description: String
+  endDateTime: DateTime
+  id: String!
+  latitude: String
+  longitude: String
+  maxAttendees: Int
+  meetingURL: String
+  name: String!
+  startDateTime: DateTime!
+  status: EventStatus!
+  tags: [Tag!]!
+  tickets(input: EventsTicketsSearchInput): [UserTicket!]!
+  users: [User!]!
+  visibility: EventVisibility!
+}
+
+input EventCreateInput {
+  address: String
+  communityId: String!
+  description: String!
+  endDateTime: DateTime
+  latitude: String
+  longitude: String
+  maxAttendees: Int!
+  meetingURL: String
+  name: String!
+  startDateTime: DateTime!
+  status: EventStatus
+  timeZone: String
+  visibility: EventVisibility
+}
+
+enum EventStatus {
+  active
+  inactive
+}
+
+enum EventVisibility {
+  private
+  public
+  unlisted
+}
+
+input EventsSearchInput {
+  id: String
+  name: String
+  startDateTimeFrom: DateTime
+  startDateTimeTo: DateTime
+  status: EventStatus
+  visibility: EventVisibility
+}
+
+input EventsTicketsSearchInput {
+  approvalStatus: TicketApprovalStatus
+  id: String
+  paymentStatus: TicketPaymentStatus
+  redemptionStatus: TicketRedemptionStatus
+  status: TicketStatus
+}
+
+enum Gender {
+  agender
+  female
+  genderfluid
+  genderqueer
+  male
+  non_binary
+  other
+  prefer_not_to_say
+  transgender_female
+  transgender_male
+  two_spirit
+}
+
+type Mutation {
+  """Approve a ticket"""
+  approvalUserTicket(userTicketId: String!): UserTicket!
+
+  """Cancel a ticket"""
+  cancelUserTicket(userTicketId: String!): UserTicket!
+
+  """Create an community"""
+  createCommunity(input: CreateCommunityInput!): Community!
+
+  """Create a company"""
+  createCompany(input: CreateCompanyInput!): Company!
+
+  """Create an event"""
+  createEvent(input: EventCreateInput!): Event!
+
+  """Create a salary"""
+  createSalary(input: CreateSalaryInput!): Salary!
+
+  """Edit an community"""
+  editCommunity(input: UpdateCommunityInput!): Community!
+
+  """Edit a ticket"""
+  editTicket(input: TicketEditInput!): Ticket!
+
+  """Enqueue images to import"""
+  enqueueGoogleAlbumImport(input: EnqueueGoogleAlbumImportInput!): Boolean!
+
+  """Redeem a ticket"""
+  redeemUserTicket(userTicketId: String!): UserTicket!
+
+  """
+  Kickoff the email validation flow. This flow will links an email to a user, create a company if it does not exist, and allows filling data for that email's position
+  """
+  startWorkEmailValidation(email: String!): WorkEmail!
+
+  """Update a company"""
+  updateCompany(input: UpdateCompanyInput!): Company!
+
+  """Create a salary"""
+  updateSalary(input: UpdateSalaryInput!): Salary!
+
+  """Update a user"""
+  updateUser(input: userEditInput!): User!
+
+  """Update a user role"""
+  updateUserRoleInCommunity(input: updateUserRoleInCommunityInput!): User!
+
+  """Validates work email for a user"""
+  validateWorkEmail(confirmationToken: String!): WorkEmail!
+}
+
+input MyTicketsSearchInput {
+  approvalStatus: TicketApprovalStatus
+  eventId: String
+  paymentStatus: TicketPaymentStatus
+  redemptionStatus: TicketRedemptionStatus
+  status: TicketStatus
+}
+
+type Query {
+  """Get a list of communities. Filter by name, id, or status"""
+  communities(id: String, name: String, status: CommnunityStatus): [Community!]!
+
+  """Get a community by id"""
+  community(id: String!): Community
+
+  """Get all available companies"""
+  companies(input: SearchCompaniesInput): [Company!]!
+
+  """Get all available companies"""
+  company(companyId: String!): Company!
+
+  """Get an event by id"""
+  event(id: String!): Event
+
+  """Get a list of events. Filter by name, id, status or date"""
+  events(input: EventsSearchInput): [Event!]!
+
+  """Get the current user"""
+  me: User!
+
+  """Get a list of tickets for the current user"""
+  myTickets(input: MyTicketsSearchInput): [UserTicket!]!
+  status(name: String): String!
+
+  """Get a list of tags"""
+  tags(input: TagSearchInput): [Tag!]!
+
+  """Get a list of users"""
+  users: [User!]!
+
+  """Get a workEmail and check if its validated for this user"""
+  workEmail(email: String!): WorkEmail!
+}
+
+"""Representation of a workEmail"""
+type Salary {
+  amount: Int!
+  company: Company!
+  countryCode: String!
+  currency: AllowedCurrency!
+  gender: Gender
+  genderOtherText: String
+  id: String!
+  typeOfEmployment: TypeOfEmployment!
+  workMetodology: WorkMetodology!
+  workRole: WorkRole!
+  yearsOfExperience: Int!
+}
+
+"""Representation of a Sanity Asset"""
+type SanityAssetRef {
+  assetId: String!
+  id: String!
+  originalFilename: String!
+  path: String!
+  size: Int!
+  url: String!
+}
+
+input SearchCompaniesInput {
+  companyName: String
+  description: String
+  domain: String
+  website: String
+}
+
+"""
+Representation of a tag. Tags can be associated to many things. An event, a community, etc.
+"""
+type Tag {
+  description: String
+  id: String!
+  name: String
+  slug: String!
+}
+
+input TagSearchInput {
+  description: String
+  id: String
+  name: String
+}
+
+"""Representation of a ticket"""
+type Ticket {
+  currencyId: String
+  description: String
+  endDateTime: DateTime
+  eventId: String!
+  id: ID!
+  name: String!
+  price: Int
+  quantity: Int
+  requiresApproval: Boolean
+  startDateTime: DateTime!
+  status: TicketTemplateStatus!
+  visibility: TicketTemplateVisibility!
+}
+
+enum TicketApprovalStatus {
+  approved
+  pending
+}
+
+input TicketEditInput {
+  currencyId: String
+  description: String
+  endDateTime: DateTime
+  eventId: String
+  name: String
+  price: Int
+  quantity: Int
+  requiresApproval: Boolean
+  startDateTime: DateTime
+  status: TicketTemplateStatus
+  ticketId: String!
+  visibility: TicketTemplateVisibility
+}
+
+enum TicketPaymentStatus {
+  paid
+  unpaid
+}
+
+enum TicketRedemptionStatus {
+  pending
+  redeemed
+}
+
+enum TicketStatus {
+  active
+  cancelled
+}
+
+enum TicketTemplateStatus {
+  active
+  inactive
+}
+
+enum TicketTemplateVisibility {
+  private
+  public
+  unlisted
+}
+
+enum TypeOfEmployment {
+  freelance
+  fullTime
+  partTime
+}
+
+input UpdateCommunityInput {
+  communityId: String!
+  description: String
+  name: String
+  slug: String
+  status: CommnunityStatus
+}
+
+input UpdateCompanyInput {
+  companyId: String!
+  description: String
+  domain: String
+  logo: String
+  name: String
+  website: String
+}
+
+input UpdateSalaryInput {
+  amount: Int!
+  companyId: String!
+  confirmationToken: String!
+  countryCode: String!
+  currencyId: String!
+  gender: Gender!
+  genderOtherText: String!
+  salaryId: String!
+  typeOfEmployment: TypeOfEmployment!
+  workMetodology: WorkMetodology!
+  workRoleId: String!
+  yearsOfExperience: Int!
+}
+
+"""Representation of a user"""
+type User {
+  bio: String
+  communities: [Community!]!
+  id: String!
+  isSuperAdmin: Boolean
+  lastName: String
+  name: String
+  username: String!
+}
+
+"""Representation of a User ticket"""
+type UserTicket {
+  approvalStatus: TicketApprovalStatus!
+  id: ID!
+  paymentStatus: TicketPaymentStatus!
+  redemptionStatus: TicketRedemptionStatus!
+  status: TicketStatus!
+}
+
+"""Representation of a workEmail"""
+type WorkEmail {
+  id: String!
+  isValidated: Boolean!
+}
+
+enum WorkMetodology {
+  hybrid
+  office
+  remote
+}
+
+"""Representation of a workEmail"""
+type WorkRole {
+  description: String!
+  id: String!
+  name: String!
+  seniority: String!
+}
+
+input updateUserRoleInCommunityInput {
+  communityId: String!
+  role: String!
+  userId: String!
+}
+
+input userEditInput {
+  bio: String
+  id: String!
+  lastName: String
+  name: String
+  username: String
+}
