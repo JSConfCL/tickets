@@ -1,4 +1,4 @@
-import { LandingPageEvents } from "../../../components/features/LandingPageEvents";
+import { LandingPageEvents } from "../../../src/components/features/LandingPageEvents";
 
 export default function Home() {
   return (

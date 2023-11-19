@@ -5,10 +5,12 @@ import { MainNav } from "./Navbar/MainNav";
 import { MobileNav } from "./Navbar/MobileNav";
 import { ThemeSwitcher } from "./Navbar/ThemeSwitcher";
 import { LogOut, Settings, User, PackageOpen } from "lucide-react";
-import { useClerk } from "@clerk/nextjs";
+import { useClerk, useUser } from "@clerk/clerk-react";
 import { useMemo } from "react";
 
-export const Nav = ({ isLogged }: { isLogged: boolean }) => {
+export const Nav = () => {
+  const { isLoaded, isSignedIn } = useUser();
+  const isLogged = useMemo(() => isLoaded && isSignedIn, []);
   const { signOut } = useClerk();
 
   const guestItems = useMemo(

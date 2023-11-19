@@ -1,10 +1,9 @@
-import { Nav } from "@/components/nav";
 import "./globals.css";
 import { Inter, Roboto } from "next/font/google";
 import classNames from "classnames";
-import { ClerkProvider, currentUser } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/providers";
-import { ApolloWrapper } from "../api/ApolloWrapper";
+import { ApolloWrapper } from "../src/api/ApolloWrapper";
+import { Clerk } from "../src/components/Auth/clerk";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,7 +29,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
+    <Clerk>
       <html lang="es" className="h-[100dvh] overflow-hidden bg-slate-950">
         <body
           className={classNames(
@@ -51,7 +50,7 @@ export default async function RootLayout({
           </ApolloWrapper>
         </body>
       </html>
-    </ClerkProvider>
+    </Clerk>
   );
 }
 
