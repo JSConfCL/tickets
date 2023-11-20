@@ -33,3 +33,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# # GQL / code-generation
+# src/api/gql/**/*
+# src/**/*.generated.*

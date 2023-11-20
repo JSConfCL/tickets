@@ -5,8 +5,8 @@ import { GraphiQL } from "graphiql";
 import { useEffect, useRef, useState } from "react";
 import "graphiql/graphiql.css";
 import Link from "next/link";
-import { urls } from "../../../lib/urls";
-import { Button } from "../../../components/ui/button";
+import { urls } from "../../../src/lib/urls";
+import { Button } from "../../../src/components/ui/button";
 
 const useGetAuthToken = () => {
   const [token, setToken] = useState<string | null>(null);

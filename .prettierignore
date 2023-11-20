@@ -1,1 +1,2 @@
-src/api/types.ts
+src/api/gql/**/*
+src/**/*.generated.*

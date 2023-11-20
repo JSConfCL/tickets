@@ -1,5 +1,5 @@
 "use client";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "@clerk/clerk-react";
 import { AnimatePresence, LazyMotion, domAnimation } from "framer-motion";
 import React, { useEffect } from "react";
 

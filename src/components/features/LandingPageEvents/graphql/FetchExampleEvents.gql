@@ -1,0 +1,18 @@
+query FetchExampleEvents {
+  events {
+    id
+    description
+    community {
+      id
+      name
+    }
+    users {
+      id
+    }
+    tags {
+      id
+      name
+      description
+    }
+  }
+}
