@@ -34,6 +34,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# eslint
+.eslintcache
+
 # # GQL / code-generation
 # src/api/gql/**/*
 # src/**/*.generated.*
