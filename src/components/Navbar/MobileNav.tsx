@@ -36,7 +36,11 @@ export function MobileNav({ items }: NavBarProps) {
           <div className="flex flex-col space-y-2">
             <div className="flex flex-col space-y-3 pt-6">
               {items.map((item) => (
-                <MobileNavbarItem key={`mobile-${item.content}`} item={item} setOpen={setOpen} />
+                <MobileNavbarItem
+                  key={`mobile-${item.content}`}
+                  item={item}
+                  setOpen={setOpen}
+                />
               ))}
             </div>
           </div>

@@ -1,31 +1,33 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Moon, Sun } from "lucide-react"
-import { useTheme } from "next-themes"
+import * as React from "react";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
 export function ThemeSwitcher() {
-  const { setTheme } = useTheme()
-  const themes = [{
-    name: 'Light',
-    type: 'light'
-  },
-  {
-    name: 'Dark',
-    type: 'dark',
-  },
-  {
-    name: 'System',
-    type: 'system'
-  }];
+  const { setTheme } = useTheme();
+  const themes = [
+    {
+      name: "Light",
+      type: "light",
+    },
+    {
+      name: "Dark",
+      type: "dark",
+    },
+    {
+      name: "System",
+      type: "system",
+    },
+  ];
 
   return (
     <DropdownMenu>
@@ -37,10 +39,16 @@ export function ThemeSwitcher() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {themes.map(({ name, type }) => <DropdownMenuItem key={name} className="cursor-pointer" onClick={() => setTheme(type)}>
-          {name}
-        </DropdownMenuItem>)}
+        {themes.map(({ name, type }) => (
+          <DropdownMenuItem
+            key={name}
+            className="cursor-pointer"
+            onClick={() => setTheme(type)}
+          >
+            {name}
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
-    </DropdownMenu >
-  )
+    </DropdownMenu>
+  );
 }
