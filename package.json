@@ -9,8 +9,10 @@
     "generate": "graphql-codegen",
     "prestart": "npm run generate",
     "predev": "npm run generate",
-    "lint": "next lint",
-    "prettier": "prettier ./src --write"
+    "typecheck": "tsc",
+    "lint": "eslint ./src --cache",
+    "prettier:ci": "prettier ./src --cache --check",
+    "prettier:fix": "prettier ./src --cache --write"
   },
   "dependencies": {
     "@apollo/client": "^3.9.0-alpha.4",
@@ -53,12 +55,13 @@
     "@graphql-codegen/typescript-operations": "^4.0.1",
     "@graphql-codegen/typescript-react-apollo": "^4.1.0",
     "@graphql-eslint/eslint-plugin": "^3.20.0",
-    "@next/eslint-plugin-next": "^13.4.9",
+    "@next/eslint-plugin-next": "^13.5.6",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
     "eslint": "^8.44.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-tailwindcss": "^3.13.0",
+    "graphql-config": "^5.0.3",
     "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.3.0",
     "ts-node": "^10.9.1",

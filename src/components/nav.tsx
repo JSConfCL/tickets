@@ -7,6 +7,7 @@ import { ThemeSwitcher } from "./Navbar/ThemeSwitcher";
 import { LogOut, Settings, User, PackageOpen } from "lucide-react";
 import { useClerk, useUser } from "@clerk/clerk-react";
 import { useMemo } from "react";
+import { NavbarMenuItem } from "./Navbar/types";
 
 export const Nav = () => {
   const { isLoaded, isSignedIn } = useUser();
@@ -14,70 +15,64 @@ export const Nav = () => {
   const { signOut } = useClerk();
 
   const guestItems = useMemo(
-    () => [
-      {
-        content: "Eventos",
-        link: "/",
-      },
-      {
-        content: "Comunidades",
-        link: "/",
-      },
-      {
-        content: "Login",
-        link: "/sign-in",
-      },
-      {
-        content: "Regístrate",
-        link: "/sign-up",
-      },
-    ],
+    () =>
+      [
+        {
+          content: "Eventos",
+          link: "/",
+        },
+        {
+          content: "Comunidades",
+          link: "/",
+        },
+      ] satisfies NavbarMenuItem[],
     [],
   );
 
   const userItems = useMemo(
-    () => [
-      {
-        content: "Eventos",
-        link: "/",
-      },
-      {
-        content: "Comunidades",
-        link: "/",
-      },
-      {
-        content: "Perfil",
-        children: [
-          {
-            content: "Mi Cuenta",
-            icon: <User className="mr-2 h-4 w-4" />,
-            link: "/",
-          },
-          {
-            content: "separator",
-          },
-          {
-            content: "Settings",
-            icon: <Settings className="mr-2 h-4 w-4" />,
-            link: "/",
-          },
-          {
-            content: "separator",
-          },
-          {
-            content: "Salir",
-            icon: <LogOut className="mr-2 h-4 w-4" />,
-            onClick: () => {
-              const key = process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY;
-              if (key) {
-                window.localStorage.clear();
-              }
-              return signOut();
+    () =>
+      [
+        {
+          content: "Eventos",
+          link: "/",
+        },
+        {
+          content: "Comunidades",
+          link: "/",
+        },
+        {
+          content: "Perfil",
+          children: [
+            {
+              content: "Mi Cuenta",
+              icon: <User className="mr-2 h-4 w-4" />,
+              link: "/",
             },
-          },
-        ],
-      },
-    ],
+            {
+              content: "separator",
+            },
+            {
+              content: "Settings",
+              icon: <Settings className="mr-2 h-4 w-4" />,
+              link: "/",
+            },
+            {
+              content: "separator",
+            },
+            {
+              content: "Salir",
+              icon: <LogOut className="mr-2 h-4 w-4" />,
+              onClick: () => {
+                const key = process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY;
+                if (key) {
+                  window.localStorage.clear();
+                }
+                signOut().catch((e) => console.error(e));
+              },
+            },
+          ],
+        },
+      ] satisfies NavbarMenuItem[],
     [signOut],
   );
 
@@ -92,7 +87,7 @@ export const Nav = () => {
         </Link>
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <div className="w-full flex-1 md:w-auto md:flex-none"></div>
-          <nav className="flex items-center space-x-4 hidden md:flex ">
+          <nav className="hidden items-center space-x-4 md:flex ">
             <MainNav items={isLogged ? userItems : guestItems} />
             <ThemeSwitcher />
           </nav>

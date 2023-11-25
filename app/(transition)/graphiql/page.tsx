@@ -110,7 +110,7 @@ export default function Pregunta() {
     }
     setIsLoggedIn(true);
     const fetcher = createGraphiQLFetcher({
-      url: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT!,
+      url: process.env.NEXT_PUBLIC_JSCL_API_URL!,
       enableIncrementalDelivery: true,
       fetch(input, init) {
         return fetch(input, {
@@ -149,7 +149,7 @@ export default function Pregunta() {
   }
   return (
     <GraphiQL
-      fetcher={fetcherRef.current!}
+      fetcher={fetcherRef.current}
       defaultEditorToolsVisibility="variables"
       defaultTabs={[
         {

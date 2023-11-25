@@ -17,7 +17,7 @@ const transition = {
 
 function PageTransition(
   { children, ...rest }: PageTransitionProps,
-  ref: PageTransitionRef
+  ref: PageTransitionRef,
 ) {
   return (
     <motion.div
@@ -28,7 +28,7 @@ function PageTransition(
       transition={transition}
       className={classNames(
         "flex h-full flex-col items-center overflow-auto",
-        rest.className
+        rest.className,
       )}
     >
       {children}

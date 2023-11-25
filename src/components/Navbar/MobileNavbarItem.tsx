@@ -25,11 +25,20 @@ export const MobileNavbarItem = ({
     }
 
     if (item.onClick) {
-      return <span className="text-muted-foreground cursor-pointer" onClick={item.onClick}>{item.content}</span>
+      return (
+        <span
+          className="cursor-pointer text-muted-foreground"
+          onClick={item.onClick}
+        >
+          {item.content}
+        </span>
+      );
     }
 
-    return <h4 className="font-medium text-muted-foreground">{item.content}</h4>
-  }
+    return (
+      <h4 className="font-medium text-muted-foreground">{item.content}</h4>
+    );
+  };
 
   if (item.children) {
     return (
