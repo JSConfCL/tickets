@@ -149,7 +149,7 @@ export default function Pregunta() {
   }
   return (
     <GraphiQL
-      fetcher={fetcherRef.current!}
+      fetcher={fetcherRef.current}
       defaultEditorToolsVisibility="variables"
       defaultTabs={[
         {
