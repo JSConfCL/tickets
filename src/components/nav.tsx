@@ -25,14 +25,6 @@ export const Nav = () => {
           content: "Comunidades",
           link: "/",
         },
-        {
-          content: "Login",
-          link: "/sign-in",
-        },
-        {
-          content: "Regístrate",
-          link: "/sign-up",
-        },
       ] satisfies NavbarMenuItem[],
     [],
   );
