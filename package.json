@@ -12,6 +12,9 @@
     "lint": "next lint",
     "prettier": "prettier ./src --write"
   },
+  "engines": {
+    "node": ">=18.17.0"
+  },
   "dependencies": {
     "@auth0/nextjs-auth0": "^2.6.3",
     "@clerk/nextjs": "^4.21.14",
