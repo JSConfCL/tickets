@@ -27,7 +27,7 @@ export const MobileNavbarItem = ({
     if (item.onClick) {
       return (
         <span
-          className="text-muted-foreground cursor-pointer"
+          className="cursor-pointer text-muted-foreground"
           onClick={item.onClick}
         >
           {item.content}
