@@ -5,6 +5,7 @@ import {
   FetchExampleEventsQuery,
 } from "../../../../../src/components/features/LandingPageEvents/graphql/FetchExampleEvents.generated";
 import { Hero } from "./_components/Hero/Hero";
+import { Location } from "./_components/Location/Location";
 import { Register } from "./_components/Register/Register";
 
 const event = {
@@ -20,11 +21,12 @@ export default async function Event() {
     query: FetchExampleEventsDocument,
   });
   return (
-    <main className="flex w-full flex-col items-center justify-between px-6 pt-7 transition-all md:px-10 lg:pt-14">
+    <main className="flex w-full flex-col items-center justify-between gap-6 px-6 pt-7 transition-all md:px-10 lg:pt-14">
       <div className="w-full">
         <Hero {...event} />
         <Register />
       </div>
+      <Location />
     </main>
   );
 }
