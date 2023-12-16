@@ -19,7 +19,7 @@ export const Hero: FC<HeroTypes> = ({ name, organizer, datetime, location }) => 
               <div className="hidden md:flex md:max-w-xs md:items-center md:gap-2">
                 <MapPinIcon className="h-8 w-8" />
                 <p>
-                  {location}
+                  {location?.address}
                 </p>
               </div>
             </div>
