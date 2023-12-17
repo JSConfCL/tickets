@@ -6,5 +6,7 @@ type Attendee = {
 }
 
 export type AttendeesTypes = {
+  title: string;
   attendees: Attendee[];
+  className?: string;
 };

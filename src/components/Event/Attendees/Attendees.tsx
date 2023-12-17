@@ -2,14 +2,22 @@ import { FC } from "react";
 import { AttendeesTypes } from "./types";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 
-export const Attendees: FC<AttendeesTypes> = ({ attendees }) => {
+export const Attendees: FC<AttendeesTypes> = ({
+  title,
+  attendees,
+  className,
+}) => {
   return (
-    <section className="flex w-full flex-col gap-4 bg-slate-900 p-6 dark:bg-slate-50">
+    <section
+      className={`flex w-full flex-col gap-4 bg-slate-900 p-6 dark:bg-slate-50 ${
+        className || ""
+      }`}
+    >
       <h2 className="text-xl text-slate-50 dark:text-slate-900 md:text-4xl">
-        {`Asistentes (${attendees?.length || 0})`}
+        {title}
       </h2>
       <ol className="flex flex-wrap">
-        {attendees?.map(({email}) => (
+        {attendees?.map(({ email }) => (
           <li className="text-slate-50 dark:text-slate-900" key={email}>
             <UserCircleIcon className="h-7 w-7 shrink-0" />
           </li>

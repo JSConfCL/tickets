@@ -4,5 +4,7 @@ type Location = {
 };
 
 export type LocationType = {
+  title: string;
   location: Location;
+  className?: string;
 };
