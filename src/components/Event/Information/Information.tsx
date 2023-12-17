@@ -17,7 +17,7 @@ export const Information: FC<InformationTypes> = ({
       {title}
     </h2>
     <Markdown
-      className="prose prose-sm prose-invert dark:prose lg:prose-base"
+      className="prose prose-sm prose-invert !max-w-full dark:prose lg:prose-base"
       remarkPlugins={[remarkGfm]}
     >
       {information}
