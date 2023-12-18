@@ -3,7 +3,7 @@ type Organizer = {
   lastname: string;
   email: string;
   image: string;
-}
+};
 
 export type OrganizersTypes = {
   title: string;

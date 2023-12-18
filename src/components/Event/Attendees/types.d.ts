@@ -3,7 +3,7 @@ type Attendee = {
   lastname: string;
   email: string;
   image: string;
-}
+};
 
 export type AttendeesTypes = {
   title: string;
