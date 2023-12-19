@@ -3,6 +3,8 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { InformationTypes } from "./types";
 
+const remarkPlugins = [remarkGfm];
+
 export const Information: FC<InformationTypes> = ({
   title,
   information,
@@ -18,7 +20,7 @@ export const Information: FC<InformationTypes> = ({
     </h2>
     <Markdown
       className="prose prose-sm prose-invert !max-w-full dark:prose lg:prose-base"
-      remarkPlugins={[remarkGfm]}
+      remarkPlugins={remarkPlugins}
     >
       {information}
     </Markdown>

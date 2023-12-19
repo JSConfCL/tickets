@@ -1,3 +1,5 @@
+import { gql } from "@apollo/client";
+import { getApolloClient } from "@/api/ApolloClient";
 import { MapPinIcon } from "@heroicons/react/24/outline";
 import { Attendees } from "@/components/Event/Attendees/Attendees";
 import { Hero } from "@/components/Event/Hero/Hero";
@@ -5,11 +7,31 @@ import { Information } from "@/components/Event/Information/Information";
 import { Location } from "@/components/Event/Location/Location";
 import { Organizers } from "@/components/Event/Organizers/Organizers";
 import { Register } from "@/components/Event/Register/Register";
+import { FetchExampleEventsQuery } from "@/api/gql/graphql";
 
 // TODO: Mock data, remove after connect this page with GraphQL service
 import { event } from "./fixture";
 
-export default function Event() {
+type Props = {
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export default async function Event({ searchParams }: Props) {
+  const c = getApolloClient();
+  const { id } = searchParams;
+
+  const response = await c.query<FetchExampleEventsQuery>({
+    query: gql`
+      {
+        event(id: "${id}") {
+          name
+        }
+      }
+    `,
+  });
+
+  console.log({ response });
+
   const {
     name,
     organizer,
