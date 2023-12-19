@@ -21,7 +21,7 @@ export default function Event() {
   } = event;
 
   return (
-    <main className="flex w-full flex-col items-center justify-between gap-6 px-6 py-7 transition-all md:px-10 lg:grid lg:grid-cols-5 lg:items-start lg:gap-8 lg:px-24 lg:pt-14 xl:grid-cols-6 xl:px-16">
+    <main className="flex w-full max-w-[1360px] flex-col items-center justify-between gap-6 px-6 py-7 transition-all md:px-10 lg:grid lg:grid-cols-5 lg:items-start lg:gap-8 lg:px-24 lg:pt-14 xl:grid-cols-6 xl:px-16">
       <div className="order-1 w-full lg:col-span-5 xl:col-span-4">
         <Hero>
           <div className="mr-auto flex w-full flex-col place-self-center">
