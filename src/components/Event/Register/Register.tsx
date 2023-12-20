@@ -1,15 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
-import { FC } from "react";
-import { RegisterType } from "./types";
 
-export const Register: FC<RegisterType> = ({ className }) => {
+export const Register = () => {
   return (
-    <section
-      className={`flex w-full flex-col gap-4 bg-slate-900 p-6 dark:bg-slate-50 ${
-        className ?? ""
-      }`}
-    >
+    <section className="flex w-full flex-col gap-4 bg-slate-900 p-6 dark:bg-slate-50">
       <h2 className="text-xl text-slate-50 dark:text-slate-900 md:text-4xl">
         Registro
       </h2>

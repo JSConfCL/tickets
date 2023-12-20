@@ -1,10 +1,9 @@
 type Location = {
-  address: string;
-  information: string;
+  address: string | null;
+  information: string | null;
 };
 
 export type LocationType = {
   title: string;
   location: Location;
-  className?: string;
 };

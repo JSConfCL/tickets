@@ -2,17 +2,11 @@ import { FC } from "react";
 import { OrganizersTypes } from "./types";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 
-export const Organizers: FC<OrganizersTypes> = ({
-  title,
-  organizers,
-  className,
-}) => {
+export const Organizers: FC<OrganizersTypes> = ({ title, organizers }) => {
+  if (!organizers?.length) return;
+
   return (
-    <section
-      className={`flex w-full flex-col gap-4 bg-slate-900 p-6 dark:bg-slate-50 ${
-        className ?? ""
-      }`}
-    >
+    <section className="flex w-full flex-col gap-4 bg-slate-900 p-6 dark:bg-slate-50">
       <h2 className="text-xl text-slate-50 dark:text-slate-900 md:text-4xl">
         {title}
       </h2>

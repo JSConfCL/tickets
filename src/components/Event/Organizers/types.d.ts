@@ -8,5 +8,4 @@ type Organizer = {
 export type OrganizersTypes = {
   title: string;
   organizers: Organizer[];
-  className?: string;
 };

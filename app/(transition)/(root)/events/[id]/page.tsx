@@ -7,40 +7,36 @@ import { Information } from "@/components/Event/Information/Information";
 import { Location } from "@/components/Event/Location/Location";
 import { Organizers } from "@/components/Event/Organizers/Organizers";
 import { Register } from "@/components/Event/Register/Register";
-import { FetchExampleEventsQuery } from "@/api/gql/graphql";
+import { EventType, PageProps } from "./types";
+import { GetEventDocument } from "./getEvent.generated";
 
-// TODO: Mock data, remove after connect this page with GraphQL service
-import { event } from "./fixture";
-
-type Props = {
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
-export default async function Event({ searchParams }: Props) {
+export default async function Event({ searchParams }: PageProps) {
   const c = getApolloClient();
   const { id } = searchParams;
 
-  const response = await c.query<FetchExampleEventsQuery>({
-    query: gql`
-      {
-        event(id: "${id}") {
-          name
-        }
-      }
-    `,
+  const { data, error } = await c.query<EventType>({
+    query: GetEventDocument,
+    variables: {
+      input: id
+    }
   });
 
-  console.log({ response });
+  if (error) return <h2>Ocurrió un error cargando el evento</h2>;
+  
+  const { event } = data;
+
+  if (!event) return <h2>No pudimos encontrar el evento que estás buscando</h2>;
 
   const {
+    address,
+    community,
+    description,
     name,
-    organizer,
-    datetime,
-    information,
-    organizers,
-    attendees,
-    location,
+    startDateTime,
+    users,
   } = event;
+
+  const eventDate = new Date(startDateTime).toLocaleString();
 
   return (
     <main className="flex w-full max-w-[1360px] flex-col items-center justify-between gap-6 px-6 py-7 transition-all md:px-10 lg:grid lg:grid-cols-5 lg:items-start lg:gap-8 lg:px-24 lg:pt-14 xl:grid-cols-6 xl:px-16">
@@ -53,34 +49,36 @@ export default async function Event({ searchParams }: Props) {
             <div className="flex w-full justify-between">
               <div className="flex grow flex-col">
                 <p className="font-thin">
-                  por <span className="underline">{organizer}</span>
+                  por <span className="underline">{community?.name}</span>
                 </p>
-                <p className="font-thin">{datetime}</p>
+                <p className="font-thin">{eventDate}</p>
               </div>
               <div className="hidden md:flex md:max-w-xs md:items-center md:gap-2">
                 <MapPinIcon className="h-8 w-8" />
-                <p className="font-thin">{location?.address}</p>
+                <p className="font-thin">{address}</p>
               </div>
             </div>
           </div>
         </Hero>
         <Register />
       </div>
-      <Information
-        className="order-2 lg:order-4 lg:col-span-3 xl:order-3 xl:col-span-4"
-        title="El evento"
-        information={information}
-      />
-      <Location
-        className="order-3 lg:order-2 lg:col-span-3 xl:col-span-2 xl:h-full"
-        title="Lugar"
-        location={location}
-      />
+      <div className="order-2 lg:order-4 lg:col-span-3 xl:order-3 xl:col-span-4">
+        <Information title="El evento" information={description} />
+      </div>
+      <div className="order-3 lg:order-2 lg:col-span-3 xl:col-span-2 xl:h-full">
+        <Location
+          title="Lugar"
+          location={{
+            address: "Calle falsa 123",
+            information: null,
+          }}
+        />
+      </div>
       <div className="order-4 flex w-full flex-col gap-6 lg:order-3 lg:col-span-2">
-        <Organizers title="Organizadores" organizers={organizers} />
+        <Organizers title="Organizadores" organizers={[]} />
         <Attendees
-          title={`Asistentes (${attendees?.length || 0})`}
-          attendees={attendees}
+          title={`Asistentes (${users?.length || 0})`}
+          attendees={users}
         />
       </div>
     </main>
