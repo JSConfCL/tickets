@@ -127,6 +127,22 @@ input EventCreateInput {
   visibility: EventVisibility
 }
 
+input EventEditInput {
+  address: String
+  description: String
+  endDateTime: DateTime
+  eventId: String!
+  latitude: String
+  longitude: String
+  maxAttendees: Int
+  meetingURL: String
+  name: String
+  startDateTime: DateTime
+  status: EventStatus
+  timeZone: String
+  visibility: EventVisibility
+}
+
 enum EventStatus {
   active
   inactive
@@ -190,6 +206,9 @@ type Mutation {
 
   """Edit an community"""
   editCommunity(input: UpdateCommunityInput!): Community!
+
+  """Edit an event"""
+  editEvent(input: EventEditInput!): Event!
 
   """Edit a ticket"""
   editTicket(input: TicketEditInput!): Ticket!

@@ -142,6 +142,22 @@ export type EventCreateInput = {
   visibility: InputMaybe<EventVisibility>;
 };
 
+export type EventEditInput = {
+  address: InputMaybe<Scalars['String']['input']>;
+  description: InputMaybe<Scalars['String']['input']>;
+  endDateTime: InputMaybe<Scalars['DateTime']['input']>;
+  eventId: Scalars['String']['input'];
+  latitude: InputMaybe<Scalars['String']['input']>;
+  longitude: InputMaybe<Scalars['String']['input']>;
+  maxAttendees: InputMaybe<Scalars['Int']['input']>;
+  meetingURL: InputMaybe<Scalars['String']['input']>;
+  name: InputMaybe<Scalars['String']['input']>;
+  startDateTime: InputMaybe<Scalars['DateTime']['input']>;
+  status: InputMaybe<EventStatus>;
+  timeZone: InputMaybe<Scalars['String']['input']>;
+  visibility: InputMaybe<EventVisibility>;
+};
+
 export enum EventStatus {
   Active = 'active',
   Inactive = 'inactive'
@@ -199,6 +215,8 @@ export type Mutation = {
   createSalary: Salary;
   /** Edit an community */
   editCommunity: Community;
+  /** Edit an event */
+  editEvent: Event;
   /** Edit a ticket */
   editTicket: Ticket;
   /** Enqueue images to import */
@@ -252,6 +270,11 @@ export type MutationCreateSalaryArgs = {
 
 export type MutationEditCommunityArgs = {
   input: UpdateCommunityInput;
+};
+
+
+export type MutationEditEventArgs = {
+  input: EventEditInput;
 };
 
 
