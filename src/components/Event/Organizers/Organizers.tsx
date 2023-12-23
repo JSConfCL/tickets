@@ -11,8 +11,8 @@ export const Organizers: FC<OrganizersTypes> = ({ title, organizers }) => {
         {title}
       </h2>
       <ol className="flex flex-col gap-4">
-        {organizers?.map(({ name, lastname, email }) => (
-          <li key={email}>
+        {organizers?.map(({ id, name, lastname }) => (
+          <li key={id}>
             <span className="flex gap-2 text-slate-50 dark:text-slate-900">
               <UserCircleIcon className="h-7 w-7 shrink-0" />
               {`${name} ${lastname}`}

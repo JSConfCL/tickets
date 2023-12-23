@@ -11,8 +11,8 @@ export const Attendees: FC<AttendeesTypes> = ({ title, attendees }) => {
         {title}
       </h2>
       <ol className="flex flex-wrap">
-        {attendees?.map(({ email }) => (
-          <li className="text-slate-50 dark:text-slate-900" key={email}>
+        {attendees?.map(({ id }) => (
+          <li className="text-slate-50 dark:text-slate-900" key={id}>
             <UserCircleIcon className="h-7 w-7 shrink-0" />
           </li>
         ))}
