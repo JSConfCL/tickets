@@ -1,5 +1,5 @@
 "use client";
-import { ClerkProvider } from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/clerk-react";
 import React from "react";
 
 type Props = {
@@ -19,7 +19,7 @@ export const Clerk = ({ children }: Props) => {
         const splitted = url.host.split(".");
         return [splitted.at(-2), splitted.at(-1)].join(".");
       }}
-      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || ""}
+      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY!}
     >
       {children}
     </ClerkProvider>
