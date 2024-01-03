@@ -127,6 +127,22 @@ input EventCreateInput {
   visibility: EventVisibility
 }
 
+input EventEditInput {
+  address: String
+  description: String
+  endDateTime: DateTime
+  eventId: String!
+  latitude: String
+  longitude: String
+  maxAttendees: Int
+  meetingURL: String
+  name: String
+  startDateTime: DateTime
+  status: EventStatus
+  timeZone: String
+  visibility: EventVisibility
+}
+
 enum EventStatus {
   active
   inactive
@@ -190,6 +206,9 @@ type Mutation {
 
   """Edit an community"""
   editCommunity(input: UpdateCommunityInput!): Community!
+
+  """Edit an event"""
+  editEvent(input: EventEditInput!): Event!
 
   """Edit a ticket"""
   editTicket(input: TicketEditInput!): Ticket!
@@ -259,6 +278,9 @@ type Query {
   tags(input: TagSearchInput): [Tag!]!
 
   """Get a list of users"""
+  userSearch(input: userSearchInput!): [User!]!
+
+  """Get a list of users"""
   users: [User!]!
 
   """Get a workEmail and check if its validated for this user"""
@@ -295,6 +317,12 @@ input SearchCompaniesInput {
   description: String
   domain: String
   website: String
+}
+
+enum SearchableUserTags {
+  CORE_TEAM
+  DEV_TEAM
+  DONOR
 }
 
 """
@@ -465,4 +493,8 @@ input userEditInput {
   lastName: String
   name: String
   username: String
+}
+
+input userSearchInput {
+  tags: [SearchableUserTags!]
 }

@@ -13,6 +13,7 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+    "query getEvent($input: String!) {\n  event(id: $input) {\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n      lastName\n    }\n  }\n}": types.GetEventDocument,
     "query FetchExampleEvents {\n  events {\n    id\n    description\n    community {\n      id\n      name\n    }\n    users {\n      id\n    }\n    tags {\n      id\n      name\n      description\n    }\n  }\n}": types.FetchExampleEventsDocument,
 };
 
@@ -30,6 +31,10 @@ const documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "query getEvent($input: String!) {\n  event(id: $input) {\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n      lastName\n    }\n  }\n}"): (typeof documents)["query getEvent($input: String!) {\n  event(id: $input) {\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n      lastName\n    }\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

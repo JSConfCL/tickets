@@ -1,0 +1,18 @@
+query getEvent($input: String!) {
+  event(id: $input) {
+    name
+    address
+    description
+    maxAttendees
+    startDateTime
+    status
+    community {
+      name
+    }
+    users {
+      id
+      name
+      lastName
+    }
+  }
+}

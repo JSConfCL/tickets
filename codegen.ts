@@ -4,6 +4,7 @@ import defaultConfig from "./graphql.config";
 const noTypeCheckingPlugin = {
   add: {
     content: [
+      "/* eslint-disable @typescript-eslint/ban-ts-comment */",
       "// @ts-nocheck",
       "/* eslint-disable */",
       "/* prettier-ignore */",

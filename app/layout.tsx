@@ -30,12 +30,11 @@ export default function RootLayout({
 }) {
   return (
     <Clerk>
-      <html lang="es" className="h-[100dvh] overflow-hidden bg-slate-950">
+      <html lang="es" className="h-[100dvh] bg-slate-950">
         <body
           className={classNames(
             inter.variable,
             roboto.variable,
-            "h-full overflow-hidden",
           )}
         >
           <ApolloWrapper>
