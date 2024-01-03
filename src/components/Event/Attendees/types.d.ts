@@ -1,11 +1,6 @@
-type Attendee = {
-  id: string;
-  name: string;
-  lastname: string;
-  image: string;
-};
+import { User } from "@/api/gql/graphql";
 
 export type AttendeesTypes = {
   title: string;
-  attendees: Attendee[];
+  attendees: User[];
 };

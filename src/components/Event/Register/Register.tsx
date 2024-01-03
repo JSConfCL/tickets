@@ -28,7 +28,7 @@ export const Register = () => {
         Para registrarte, por favor haz click en el botón.
       </p>
       <Button variant={"secondary"} size={"lg"} disabled={!isSignedIn}>
-        Registrarse
+        {isSignedIn ? "Registrarse" : "Inicia sesión para registrarte"}
       </Button>
     </section>
   );

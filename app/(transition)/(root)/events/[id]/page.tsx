@@ -1,4 +1,3 @@
-import { gql } from "@apollo/client";
 import { getApolloClient } from "@/api/ApolloClient";
 import { MapPinIcon } from "@heroicons/react/24/outline";
 import { Attendees } from "@/components/Event/Attendees/Attendees";
@@ -63,7 +62,7 @@ export default async function Event({ searchParams }: PageProps) {
         <Register />
       </div>
       <div className="order-2 lg:order-4 lg:col-span-3 xl:order-3 xl:col-span-4">
-        <Information title="El evento" information={description} />
+        <Information title="El evento" information={description || ''} />
       </div>
       <div className="order-3 lg:order-2 lg:col-span-3 xl:col-span-2 xl:h-full">
         <Location
