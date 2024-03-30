@@ -31,9 +31,10 @@ TechCon 2023 también ofrece amplias oportunidades para networking. Conéctate c
 `;
 
 const location = {
-  address: 'Los Jesuitas 881, 7501300 Providencia, Región Metropolitana',
-  information: 'Más descripción de como llegar al evento. Tocar la puerta X, subir por las escaleras de la derecha, etc.'
-}
+  address: "Los Jesuitas 881, 7501300 Providencia, Región Metropolitana",
+  information:
+    "Más descripción de como llegar al evento. Tocar la puerta X, subir por las escaleras de la derecha, etc.",
+};
 
 const organizers = [
   {
