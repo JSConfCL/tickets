@@ -14,6 +14,7 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  */
 const documents = {
     "query getEvent($input: String!) {\n  event(id: $input) {\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n      lastName\n    }\n  }\n}": types.GetEventDocument,
+    "query getEventAndTickets($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n      lastName\n    }\n    tickets {\n      id\n      name\n      description\n      quantity\n      isFree\n      prices {\n        id\n        amount\n        currency {\n          currency\n          id\n        }\n      }\n    }\n  }\n}": types.GetEventAndTicketsDocument,
     "query FetchExampleEvents {\n  events {\n    id\n    description\n    community {\n      id\n      name\n    }\n    users {\n      id\n    }\n    tags {\n      id\n      name\n      description\n    }\n  }\n}": types.FetchExampleEventsDocument,
 };
 
@@ -35,6 +36,10 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "query getEvent($input: String!) {\n  event(id: $input) {\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n      lastName\n    }\n  }\n}"): (typeof documents)["query getEvent($input: String!) {\n  event(id: $input) {\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n      lastName\n    }\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "query getEventAndTickets($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n      lastName\n    }\n    tickets {\n      id\n      name\n      description\n      quantity\n      isFree\n      prices {\n        id\n        amount\n        currency {\n          currency\n          id\n        }\n      }\n    }\n  }\n}"): (typeof documents)["query getEventAndTickets($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n      lastName\n    }\n    tickets {\n      id\n      name\n      description\n      quantity\n      isFree\n      prices {\n        id\n        amount\n        currency {\n          currency\n          id\n        }\n      }\n    }\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
