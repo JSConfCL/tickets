@@ -10,9 +10,10 @@
     "prestart": "npm run generate",
     "predev": "npm run generate",
     "typecheck": "tsc",
-    "lint": "eslint ./src --cache",
-    "prettier:ci": "prettier ./src --cache --check",
-    "prettier:fix": "prettier ./src --cache --write"
+    "lint": "eslint ./src ./app --cache",
+    "lint:fix": "eslint --fix ./src ./app --cache",
+    "prettier:ci": "prettier ./src ./app --cache --check",
+    "prettier:fix": "prettier ./src ./app --cache --write"
   },
   "engines": {
     "node": ">=18.17.0"

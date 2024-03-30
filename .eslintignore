@@ -1,3 +1,7 @@
 # # GQL / code-generation
 src/api/gql/**/*
 src/**/*.generated.*
+app/**/*.generated.*
+
+# # Shadcn UI Components
+src/components/ui/**/*
