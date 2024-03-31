@@ -1,48 +1,62 @@
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 import { NavBarProps } from "./types";
 import { NavbarItem } from "./NavbarItem";
-import {
-  SignInButton,
-  SignOutButton,
-  SignedIn,
-  SignedOut,
-} from "@clerk/clerk-react";
-import { Button } from "../ui/button";
-import { usePathname } from "next/navigation";
+import { Button, buttonVariants } from "../ui/button";
 import { useEffect, useState } from "react";
+import { User } from "@supabase/supabase-js";
+import { createClient } from "@/utils/supabase/client";
 
 export function MainNav({ items }: NavBarProps) {
-  const pathname = usePathname();
-  const [redirectUrl, setRedirectUrl] = useState("");
+  const supabase = createClient();
+  const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
+
   useEffect(() => {
-    setRedirectUrl(window.location.host);
+    const getUser = async () => {
+      const { data } = await supabase.auth.getSession();
+      setUser(data?.session?.user ?? null);
+    };
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    getUser();
   }, []);
+
+  const handleLogout = () => {
+    const signOut = async () => {
+      const { error } = await supabase.auth.signOut();
+      if (!error) {
+        router.push("/login");
+      }
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    signOut();
+  };
+
   return (
     <nav className={"items-center space-x-4 lg:space-x-6"}>
       {items.map((item) => (
         <NavbarItem key={`navbarItem-${item.content}`} item={item} />
       ))}
-      <SignedOut>
-        {process.env.NEXT_PUBLIC_SIGN_IN_URL ? (
-          <Button asChild variant="secondary">
-            <a
-              href={`${process.env.NEXT_PUBLIC_SIGN_IN_URL}?redirect_url=https://${redirectUrl}`}
-            >
-              Ingresar
-            </a>
-          </Button>
-        ) : (
-          <SignInButton mode="modal" redirectUrl={pathname}>
-            <Button variant="secondary">Ingresar</Button>
-          </SignInButton>
-        )}
-      </SignedOut>
-      <SignedIn>
-        <SignOutButton>
-          <Button variant={"link"} className="cursor-pointer">
-            Salir
-          </Button>
-        </SignOutButton>
-      </SignedIn>
+      {user ? (
+        <Button className="cursor-pointer" onClick={handleLogout}>
+          Salir
+        </Button>
+      ) : (
+        <Link className={buttonVariants({})} href="/login">
+          Ingresar
+        </Link>
+      )}
     </nav>
   );
 }
