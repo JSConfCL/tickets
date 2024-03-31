@@ -1,18 +1,52 @@
 "use client";
 
 import Link from "next/link";
+import { useMemo, useEffect, useState } from "react";
+import { LogOut, Settings, User as UserIcon, PackageOpen } from "lucide-react";
+import { User } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
+
+import { createClient } from "@/utils/supabase/client";
+
 import { MainNav } from "./Navbar/MainNav";
 import { MobileNav } from "./Navbar/MobileNav";
 import { ThemeSwitcher } from "./Navbar/ThemeSwitcher";
-import { LogOut, Settings, User, PackageOpen } from "lucide-react";
-import { useClerk, useUser } from "@clerk/clerk-react";
-import { useMemo } from "react";
 import { NavbarMenuItem } from "./Navbar/types";
 
 export const Nav = () => {
-  const { isLoaded, isSignedIn } = useUser();
-  const isLogged = useMemo(() => isLoaded && isSignedIn, []);
-  const { signOut } = useClerk();
+  const supabase = createClient();
+  const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
+  const isLogged = !!user?.id;
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data } = await supabase.auth.getSession();
+      setUser(data?.session?.user ?? null);
+    };
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    getUser();
+  }, []);
+
+  const handleLogout = () => {
+    const signOut = async () => {
+      const { error } = await supabase.auth.signOut();
+      if (!error) {
+        router.push("/login");
+      }
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    signOut();
+  };
 
   const guestItems = useMemo(
     () =>
@@ -45,7 +79,7 @@ export const Nav = () => {
           children: [
             {
               content: "Mi Cuenta",
-              icon: <User className="mr-2 h-4 w-4" />,
+              icon: <UserIcon className="mr-2 h-4 w-4" />,
               link: "/",
             },
             {
@@ -67,13 +101,14 @@ export const Nav = () => {
                 if (key) {
                   window.localStorage.clear();
                 }
-                signOut().catch((e) => console.error(e));
+                handleLogout();
               },
+              closeMenu: true,
             },
           ],
         },
       ] satisfies NavbarMenuItem[],
-    [signOut],
+    [handleLogout],
   );
 
   return (

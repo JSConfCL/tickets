@@ -1,29 +1,41 @@
 "use client";
 
-import * as React from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Menu, PackageOpen } from "lucide-react";
+import { User } from "@supabase/supabase-js";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { NavBarProps } from "./types";
 import { MobileNavbarItem } from "./MobileNavbarItem";
 import { MobileLink } from "./MobileLink";
-import { Menu, PackageOpen } from "lucide-react";
-import {
-  SignInButton,
-  SignOutButton,
-  SignedIn,
-  SignedOut,
-} from "@clerk/clerk-react";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { createClient } from "@/utils/supabase/client";
 
 export function MobileNav({ items }: NavBarProps) {
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
-  const [redirectUrl, setRedirectUrl] = useState("");
+  const supabase = createClient();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    setRedirectUrl(window.location.host);
+    const getUser = async () => {
+      const { data } = await supabase.auth.getSession();
+      setUser(data?.session?.user ?? null);
+      setLoading(false);
+    };
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    getUser();
+
+    return () => subscription.unsubscribe();
   }, []);
 
   return (
@@ -55,37 +67,17 @@ export function MobileNav({ items }: NavBarProps) {
                   setOpen={setOpen}
                 />
               ))}
-              <SignedOut>
-                {process.env.NEXT_PUBLIC_SIGN_IN_URL ? (
-                  <Button asChild variant="link">
-                    <a
-                      href={`${process.env.NEXT_PUBLIC_SIGN_IN_URL}?redirect_url=https://${redirectUrl}`}
-                    >
-                      Ingresar
-                    </a>
-                  </Button>
-                ) : (
-                  <SignInButton mode="modal" redirectUrl={pathname}>
-                    <Button variant="link" onClick={() => setOpen(false)}>
-                      Ingresar
-                    </Button>
-                  </SignInButton>
-                )}
-              </SignedOut>
-              <SignedIn>
-                <SignOutButton>
-                  <div
-                    className="cursor-pointer text-muted-foreground"
-                    onClick={() => {
-                      setOpen(false);
-                    }}
-                    // item={{ link: "#", content: "Salir" }}
-                    // setOpen={setOpen}
-                  >
-                    Salir
-                  </div>
-                </SignOutButton>
-              </SignedIn>
+              {!loading && !user ? (
+                <Link
+                  className={buttonVariants({})}
+                  href="/login"
+                  onClick={() => {
+                    setOpen(false);
+                  }}
+                >
+                  Ingresar
+                </Link>
+              ) : null}
             </div>
           </div>
         </ScrollArea>
