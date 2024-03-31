@@ -2,11 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
-import { useAuth } from "@clerk/clerk-react";
 
 export const Register = () => {
-  const { isSignedIn } = useAuth();
-
   return (
     <section className="flex w-full flex-col gap-4 bg-slate-900 p-6 dark:bg-slate-50">
       <h2 className="text-xl text-slate-50 dark:text-slate-900 md:text-4xl">
@@ -27,7 +24,7 @@ export const Register = () => {
       <p className="text-slate-50 dark:text-slate-900">
         Para registrarte, por favor haz click en el botón.
       </p>
-      <Button variant={"secondary"} size={"lg"} disabled={!isSignedIn}>
+      <Button variant={"secondary"} size={"lg"}>
         Registrarse
       </Button>
     </section>
