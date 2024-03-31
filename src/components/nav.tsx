@@ -79,7 +79,7 @@ export const Nav = () => {
   return (
     <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
       <div className="container flex h-14 items-center">
-        <Link href={"/"} target="_blank" rel="noreferrer">
+        <Link href="/">
           <div className="px-0">
             <PackageOpen className="h-5 w-5" />
             <span className="sr-only">Devent</span>
