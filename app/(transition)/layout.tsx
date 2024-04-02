@@ -26,7 +26,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {});
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      // TODO: handle token
+    });
 
     start().catch((e) => {
       console.error(e);

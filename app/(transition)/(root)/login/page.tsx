@@ -19,6 +19,8 @@ const AuthPage: NextPage = () => {
 
   useEffect(() => {
     const url = new URL(window.location.href);
+    url.pathname = "/";
+    url.hash = "";
     setUrl(url.toString());
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
