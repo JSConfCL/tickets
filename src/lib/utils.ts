@@ -1,5 +1,6 @@
 import classNames from "classnames";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: any[]) {
-  return classNames(inputs);
+  return twMerge(classNames(inputs));
 }
