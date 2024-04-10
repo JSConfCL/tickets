@@ -12,13 +12,14 @@ const { getClient } = registerApolloClient(() => {
         },
       }
     : {};
+  console.log("cookieValue", COOKIE_NAME, cookieValue);
+  console.log("headers", headers);
   return new ApolloClient({
     cache: new InMemoryCache(),
     link: new HttpLink({
       // this needs to be an absolute url, as relative urls cannot be used in SSR
       uri: process.env.NEXT_PUBLIC_JSCL_API_URL,
       fetch,
-      ...headers,
     }),
   });
 });

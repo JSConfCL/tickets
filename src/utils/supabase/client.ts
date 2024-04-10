@@ -30,7 +30,7 @@ export const getCookieOptions = (): OptionsType => {
   const expirationDate = Date.now() + oneYear;
   const cookieArguments = {
     httpOnly: false,
-    sameSite: "none",
+    sameSite: "lax",
     maxAge: expirationDate,
     expires: new Date(expirationDate),
     secure:

@@ -29,24 +29,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const { data } = await supabaseClient.auth.getSession();
       if (data?.session) {
         // We handle cookies, and session storage here.
-        setIsReady(true);
         setCookie(COOKIE_NAME, data.session, getCookieOptions());
         setUser(data?.session?.user ?? null);
         const accessToken = data?.session?.access_token;
         console.log({ accessToken });
       }
+      setIsReady(true);
     };
 
     const {
       data: { subscription },
     } = supabaseClient.auth.onAuthStateChange((_event, session) => {
-      if (_event === "SIGNED_OUT") {
-        setCookie(COOKIE_NAME, null, getCookieOptions());
-        setUser(null);
-      } else {
-        setCookie(COOKIE_NAME, session, getCookieOptions());
-        setUser(session?.user ?? null);
-      }
+      const parsedSession = JSON.stringify(session);
+      setCookie(COOKIE_NAME, parsedSession, getCookieOptions());
+      setUser(session?.user ?? null);
     });
 
     initialize().catch(console.error);
