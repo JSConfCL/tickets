@@ -5,7 +5,7 @@ import {
   getCookieOptions,
   supabaseClient,
 } from "@/utils/supabase/client";
-import { setCookie } from "cookies-next";
+import cookies from "js-cookie";
 
 export type AuthContextType = {
   user: User | null;
@@ -28,10 +28,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const initialize = async () => {
       const { data } = await supabaseClient.auth.getSession();
       if (data?.session) {
-        // We handle cookies, and session storage here.
-        setCookie(COOKIE_NAME, data.session, getCookieOptions());
         setUser(data?.session?.user ?? null);
-        const accessToken = data?.session?.access_token;
+        const accessToken = data?.session?.access_token ?? null;
+        cookies.set(COOKIE_NAME, accessToken, getCookieOptions());
         console.log({ accessToken });
       }
       setIsReady(true);
@@ -40,8 +39,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const {
       data: { subscription },
     } = supabaseClient.auth.onAuthStateChange((_event, session) => {
-      const parsedSession = JSON.stringify(session);
-      setCookie(COOKIE_NAME, parsedSession, getCookieOptions());
+      const access_token = session?.access_token ?? null;
+      if (!access_token) {
+        cookies.remove(COOKIE_NAME);
+      } else {
+        cookies.set(COOKIE_NAME, access_token, getCookieOptions());
+      }
       setUser(session?.user ?? null);
     });
 

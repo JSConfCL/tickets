@@ -1,4 +1,4 @@
-import { getApolloClient } from "../../../src/api/ApolloClient";
+import { getApolloClientForRSC } from "../../../src/api/ApolloClientForRSC";
 import { LandingPageEvents } from "../../../src/components/features/LandingPageEvents";
 import {
   FetchExampleEventsDocument,
@@ -6,7 +6,7 @@ import {
 } from "../../../src/components/features/LandingPageEvents/graphql/FetchExampleEvents.generated";
 
 export default async function Home() {
-  const c = getApolloClient();
+  const c = getApolloClientForRSC();
   const variable = await c.query<FetchExampleEventsQuery>({
     query: FetchExampleEventsDocument,
   });

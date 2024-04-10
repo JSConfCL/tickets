@@ -1,6 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { deleteCookie } from "cookies-next";
-import { OptionsType } from "cookies-next/lib/types";
+import cookies, { CookieAttributes } from "js-cookie";
 
 export const COOKIE_NAME = "community-os-access-token";
 
@@ -20,23 +19,22 @@ const oneYear = oneHour * 24 * 365;
 
 export const logout = async () => {
   const data = await supabaseClient.auth.signOut({ scope: "local" });
-  deleteCookie(COOKIE_NAME);
+  cookies.remove(COOKIE_NAME);
   if (!data.error) {
     throw new Error("Error logging out");
   }
 };
 
-export const getCookieOptions = (): OptionsType => {
+export const getCookieOptions = (): CookieAttributes => {
   const expirationDate = Date.now() + oneYear;
   const cookieArguments = {
     httpOnly: false,
     sameSite: "lax",
-    maxAge: expirationDate,
-    expires: new Date(expirationDate),
+    expires: expirationDate,
     secure:
       typeof document !== "undefined" &&
       (document.location?.protocol === "https" ||
         document.location?.hostname === "localhost"),
-  } satisfies OptionsType;
+  } satisfies CookieAttributes;
   return cookieArguments;
 };

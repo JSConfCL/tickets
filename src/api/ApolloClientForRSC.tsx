@@ -1,10 +1,10 @@
 import { COOKIE_NAME } from "@/utils/supabase/client";
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import { registerApolloClient } from "@apollo/experimental-nextjs-app-support/rsc";
-import { getCookie } from "cookies-next";
+import { cookies } from "next/headers";
 
 const { getClient } = registerApolloClient(() => {
-  const cookieValue = getCookie(COOKIE_NAME);
+  const cookieValue = cookies().get(COOKIE_NAME)?.value ?? "";
   const headers = cookieValue
     ? {
         headers: {
@@ -19,9 +19,10 @@ const { getClient } = registerApolloClient(() => {
     link: new HttpLink({
       // this needs to be an absolute url, as relative urls cannot be used in SSR
       uri: process.env.NEXT_PUBLIC_JSCL_API_URL,
-      fetch,
+      // fetch,
+      ...headers,
     }),
   });
 });
 
-export const getApolloClient = getClient;
+export const getApolloClientForRSC = getClient;
