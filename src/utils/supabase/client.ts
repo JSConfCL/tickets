@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { deleteCookie, getCookie, setCookie } from "cookies-next";
+import { deleteCookie } from "cookies-next";
 import { OptionsType } from "cookies-next/lib/types";
 
 export const COOKIE_NAME = "community-os-access-token";

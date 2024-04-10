@@ -7,7 +7,7 @@ import { useState } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useIsLoggedIn } from "@/utils/supabase/AuthProvider";
+import { useIsAuthReady, useIsLoggedIn } from "@/utils/supabase/AuthProvider";
 import { MobileLink } from "./MobileLink";
 import { MobileNavbarItem } from "./MobileNavbarItem";
 import { NavBarProps } from "./types";
@@ -15,7 +15,7 @@ import { NavBarProps } from "./types";
 export function MobileNav({ items }: NavBarProps) {
   const [open, setOpen] = useState(false);
   const isLoggedIn = useIsLoggedIn();
-
+  const isReady = useIsAuthReady();
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -45,7 +45,7 @@ export function MobileNav({ items }: NavBarProps) {
                   setOpen={setOpen}
                 />
               ))}
-              {!isLoggedIn ? (
+              {isReady && !isLoggedIn ? (
                 <Link
                   className={buttonVariants({})}
                   href="/login"
