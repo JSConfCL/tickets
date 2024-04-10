@@ -1,52 +1,21 @@
 "use client";
 
+import { LogOut, PackageOpen, Settings, User as UserIcon } from "lucide-react";
 import Link from "next/link";
-import { useMemo, useEffect, useState } from "react";
-import { LogOut, Settings, User as UserIcon, PackageOpen } from "lucide-react";
-import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 
-import { createClient } from "@/utils/supabase/client";
+import { logout } from "@/utils/supabase/client";
 
+import { useIsLoggedIn } from "@/utils/supabase/AuthProvider";
 import { MainNav } from "./Navbar/MainNav";
 import { MobileNav } from "./Navbar/MobileNav";
 import { ThemeSwitcher } from "./Navbar/ThemeSwitcher";
 import { NavbarMenuItem } from "./Navbar/types";
 
 export const Nav = () => {
-  const supabase = createClient();
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
-  const isLogged = !!user?.id;
-
-  useEffect(() => {
-    const getUser = async () => {
-      const { data } = await supabase.auth.getSession();
-      setUser(data?.session?.user ?? null);
-    };
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => subscription.unsubscribe();
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    getUser();
-  }, []);
-
-  const handleLogout = () => {
-    const signOut = async () => {
-      const { error } = await supabase.auth.signOut();
-      if (!error) {
-        router.push("/login");
-      }
-    };
-
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    signOut();
-  };
+  const isLogged = useIsLoggedIn();
 
   const guestItems = useMemo(
     () =>
@@ -97,18 +66,16 @@ export const Nav = () => {
               content: "Salir",
               icon: <LogOut className="mr-2 h-4 w-4" />,
               onClick: () => {
-                const key = process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY;
-                if (key) {
-                  window.localStorage.clear();
-                }
-                handleLogout();
+                logout().catch(() => {
+                  router.push("/login");
+                });
               },
               closeMenu: true,
             },
           ],
         },
       ] satisfies NavbarMenuItem[],
-    [handleLogout],
+    [],
   );
 
   return (

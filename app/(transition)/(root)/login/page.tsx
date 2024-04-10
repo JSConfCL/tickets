@@ -4,42 +4,24 @@ import { NextPage } from "next";
 
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Session } from "@supabase/supabase-js";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { createClient } from "@/utils/supabase/client";
+import { supabaseClient } from "@/utils/supabase/client";
 import { useTheme } from "next-themes";
-
-const supabase = createClient();
+import { useIsLoggedIn } from "@/utils/supabase/AuthProvider";
 
 const AuthPage: NextPage = () => {
-  const [session, setSession] = useState<Session | null>(null);
   const { resolvedTheme } = useTheme();
   const [url, setUrl] = useState<string | undefined>();
-
   useEffect(() => {
     const url = new URL(window.location.href);
     url.pathname = "/";
     url.hash = "";
     setUrl(url.toString());
-
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      setSession(session);
-      await supabase.auth.startAutoRefresh();
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      await supabase.auth.startAutoRefresh();
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
   }, []);
 
-  if (session) {
+  const isLoggedIn = useIsLoggedIn();
+  if (isLoggedIn) {
     redirect("/");
   }
 
@@ -55,7 +37,7 @@ const AuthPage: NextPage = () => {
 
         <Auth
           providers={["github", "twitter"]}
-          supabaseClient={supabase}
+          supabaseClient={supabaseClient}
           socialLayout="horizontal"
           showLinks={false}
           view="magic_link"
