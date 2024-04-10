@@ -18,13 +18,13 @@ export default async function Home() {
         </h1>
       </div>
       <div className="flex flex-col gap-4">
-        <h1>RSC</h1>
+        <h1 className="text-3xl">RSC</h1>
         {variable.data?.events?.map((event) => (
           <div key={event.id}>{event.id}</div>
         ))}
       </div>
       <div className="flex flex-col gap-4">
-        <h1>Client fetching</h1>
+        <h1 className="text-3xl">Client fetching</h1>
         <LandingPageEvents />
       </div>
     </main>
