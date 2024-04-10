@@ -1,5 +1,4 @@
-import { gql } from "@apollo/client";
-import { getApolloClient } from "@/api/ApolloClient";
+import { getApolloClientForRSC } from "@/api/ApolloClientForRSC";
 import { MapPinIcon } from "@heroicons/react/24/outline";
 import { Attendees } from "@/components/Event/Attendees/Attendees";
 import { Hero } from "@/components/Event/Hero/Hero";
@@ -11,30 +10,23 @@ import { EventType, PageProps } from "./types";
 import { GetEventDocument } from "./getEvent.generated";
 
 export default async function Event({ searchParams }: PageProps) {
-  const c = getApolloClient();
+  const c = getApolloClientForRSC();
   const { id } = searchParams;
 
   const { data, error } = await c.query<EventType>({
     query: GetEventDocument,
     variables: {
-      input: id
-    }
+      input: id,
+    },
   });
 
   if (error) return <h2>Ocurrió un error cargando el evento</h2>;
-  
+
   const { event } = data;
 
   if (!event) return <h2>No pudimos encontrar el evento que estás buscando</h2>;
 
-  const {
-    address,
-    community,
-    description,
-    name,
-    startDateTime,
-    users,
-  } = event;
+  const { address, community, description, name, startDateTime, users } = event;
 
   const eventDate = new Date(startDateTime).toLocaleString();
 

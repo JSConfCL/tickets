@@ -1,43 +1,21 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect, useState } from "react";
 import { Menu, PackageOpen } from "lucide-react";
-import { User } from "@supabase/supabase-js";
+import Link from "next/link";
+import { useState } from "react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { NavBarProps } from "./types";
-import { MobileNavbarItem } from "./MobileNavbarItem";
+import { useIsAuthReady, useIsLoggedIn } from "@/utils/supabase/AuthProvider";
 import { MobileLink } from "./MobileLink";
-import { createClient } from "@/utils/supabase/client";
+import { MobileNavbarItem } from "./MobileNavbarItem";
+import { NavBarProps } from "./types";
 
 export function MobileNav({ items }: NavBarProps) {
   const [open, setOpen] = useState(false);
-  const supabase = createClient();
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const getUser = async () => {
-      const { data } = await supabase.auth.getSession();
-      setUser(data?.session?.user ?? null);
-      setLoading(false);
-    };
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    getUser();
-
-    return () => subscription.unsubscribe();
-  }, []);
-
+  const isLoggedIn = useIsLoggedIn();
+  const isReady = useIsAuthReady();
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -67,7 +45,7 @@ export function MobileNav({ items }: NavBarProps) {
                   setOpen={setOpen}
                 />
               ))}
-              {!loading && !user ? (
+              {isReady && !isLoggedIn ? (
                 <Link
                   className={buttonVariants({})}
                   href="/login"
