@@ -1,0 +1,34 @@
+query getEventAndTickets($input: String!) {
+  event(id: $input) {
+    id
+    name
+    address
+    description
+    maxAttendees
+    startDateTime
+    status
+    community {
+      name
+    }
+    users {
+      id
+      name
+      lastName
+    }
+    tickets {
+      id
+      name
+      description
+      quantity
+      isFree
+      prices {
+        id
+        amount
+        currency {
+          currency
+          id
+        }
+      }
+    }
+  }
+}
