@@ -1,4 +1,4 @@
-import { getApolloClient } from "../../../src/api/ApolloClient";
+import { getApolloClientForRSC } from "../../../src/api/ApolloClientForRSC";
 import { LandingPageEvents } from "../../../src/components/features/LandingPageEvents";
 import {
   FetchExampleEventsDocument,
@@ -6,7 +6,7 @@ import {
 } from "../../../src/components/features/LandingPageEvents/graphql/FetchExampleEvents.generated";
 
 export default async function Home() {
-  const c = getApolloClient();
+  const c = getApolloClientForRSC();
   const variable = await c.query<FetchExampleEventsQuery>({
     query: FetchExampleEventsDocument,
   });
@@ -18,13 +18,13 @@ export default async function Home() {
         </h1>
       </div>
       <div className="flex flex-col gap-4">
-        <h1>RSC</h1>
+        <h1 className="text-3xl">RSC</h1>
         {variable.data?.events?.map((event) => (
           <div key={event.id}>{event.id}</div>
         ))}
       </div>
       <div className="flex flex-col gap-4">
-        <h1>Client fetching</h1>
+        <h1 className="text-3xl">Client fetching</h1>
         <LandingPageEvents />
       </div>
     </main>

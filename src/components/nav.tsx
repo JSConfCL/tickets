@@ -1,18 +1,21 @@
 "use client";
 
+import { LogOut, PackageOpen, Settings, User as UserIcon } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useMemo } from "react";
+
+import { logout } from "@/utils/supabase/client";
+
+import { useIsLoggedIn } from "@/utils/supabase/AuthProvider";
 import { MainNav } from "./Navbar/MainNav";
 import { MobileNav } from "./Navbar/MobileNav";
 import { ThemeSwitcher } from "./Navbar/ThemeSwitcher";
-import { LogOut, Settings, User, PackageOpen } from "lucide-react";
-import { useClerk, useUser } from "@clerk/clerk-react";
-import { useMemo } from "react";
 import { NavbarMenuItem } from "./Navbar/types";
 
 export const Nav = () => {
-  const { isLoaded, isSignedIn } = useUser();
-  const isLogged = useMemo(() => isLoaded && isSignedIn, []);
-  const { signOut } = useClerk();
+  const router = useRouter();
+  const isLogged = useIsLoggedIn();
 
   const guestItems = useMemo(
     () =>
@@ -45,7 +48,7 @@ export const Nav = () => {
           children: [
             {
               content: "Mi Cuenta",
-              icon: <User className="mr-2 h-4 w-4" />,
+              icon: <UserIcon className="mr-2 h-4 w-4" />,
               link: "/",
             },
             {
@@ -63,23 +66,22 @@ export const Nav = () => {
               content: "Salir",
               icon: <LogOut className="mr-2 h-4 w-4" />,
               onClick: () => {
-                const key = process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY;
-                if (key) {
-                  window.localStorage.clear();
-                }
-                signOut().catch((e) => console.error(e));
+                logout().catch(() => {
+                  router.push("/login");
+                });
               },
+              closeMenu: true,
             },
           ],
         },
       ] satisfies NavbarMenuItem[],
-    [signOut],
+    [],
   );
 
   return (
     <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
       <div className="container flex h-14 items-center">
-        <Link href={"/"} target="_blank" rel="noreferrer">
+        <Link href="/">
           <div className="px-0">
             <PackageOpen className="h-5 w-5" />
             <span className="sr-only">Devent</span>

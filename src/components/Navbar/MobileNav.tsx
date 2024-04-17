@@ -1,31 +1,21 @@
 "use client";
 
-import * as React from "react";
+import { Menu, PackageOpen } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { NavBarProps } from "./types";
-import { MobileNavbarItem } from "./MobileNavbarItem";
+import { useIsAuthReady, useIsLoggedIn } from "@/utils/supabase/AuthProvider";
 import { MobileLink } from "./MobileLink";
-import { Menu, PackageOpen } from "lucide-react";
-import {
-  SignInButton,
-  SignOutButton,
-  SignedIn,
-  SignedOut,
-} from "@clerk/clerk-react";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { MobileNavbarItem } from "./MobileNavbarItem";
+import { NavBarProps } from "./types";
 
 export function MobileNav({ items }: NavBarProps) {
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
-  const [redirectUrl, setRedirectUrl] = useState("");
-  useEffect(() => {
-    setRedirectUrl(window.location.host);
-  }, []);
-
+  const isLoggedIn = useIsLoggedIn();
+  const isReady = useIsAuthReady();
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -55,37 +45,17 @@ export function MobileNav({ items }: NavBarProps) {
                   setOpen={setOpen}
                 />
               ))}
-              <SignedOut>
-                {process.env.NEXT_PUBLIC_SIGN_IN_URL ? (
-                  <Button asChild variant="link">
-                    <a
-                      href={`${process.env.NEXT_PUBLIC_SIGN_IN_URL}?redirect_url=https://${redirectUrl}`}
-                    >
-                      Ingresar
-                    </a>
-                  </Button>
-                ) : (
-                  <SignInButton mode="modal" redirectUrl={pathname}>
-                    <Button variant="link" onClick={() => setOpen(false)}>
-                      Ingresar
-                    </Button>
-                  </SignInButton>
-                )}
-              </SignedOut>
-              <SignedIn>
-                <SignOutButton>
-                  <div
-                    className="cursor-pointer text-muted-foreground"
-                    onClick={() => {
-                      setOpen(false);
-                    }}
-                    // item={{ link: "#", content: "Salir" }}
-                    // setOpen={setOpen}
-                  >
-                    Salir
-                  </div>
-                </SignOutButton>
-              </SignedIn>
+              {isReady && !isLoggedIn ? (
+                <Link
+                  className={buttonVariants({})}
+                  href="/login"
+                  onClick={() => {
+                    setOpen(false);
+                  }}
+                >
+                  Ingresar
+                </Link>
+              ) : null}
             </div>
           </div>
         </ScrollArea>

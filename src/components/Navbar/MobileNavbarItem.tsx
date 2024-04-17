@@ -28,7 +28,16 @@ export const MobileNavbarItem = ({
       return (
         <span
           className="cursor-pointer text-muted-foreground"
-          onClick={item.onClick}
+          role="button"
+          aria-pressed="false"
+          onClick={(e) => {
+            if (item.onClick) {
+              item.onClick(e);
+            }
+            if (item.closeMenu) {
+              setOpen(false);
+            }
+          }}
         >
           {item.content}
         </span>
