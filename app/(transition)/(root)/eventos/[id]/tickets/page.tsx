@@ -1,7 +1,6 @@
 import { getApolloClientForRSC } from "@/api/ApolloClientForRSC";
-import { Event } from "@/api/gql/graphql";
 
-import { formatDate } from "@/lib/date";
+// import { formatDate } from "@/lib/date";
 
 import Tickets from "./tickets";
 

@@ -24,7 +24,7 @@ import { Input } from "@/components/ui/input";
 
 import { formatCurrency } from "@/lib/numbers";
 
-import { Ticket, AllowedCurrency as Currency } from "@/api/gql/graphql";
+import { AllowedCurrency as Currency } from "@/api/gql/graphql";
 import { Separator } from "@/components/ui/separator";
 import { EventTicketFragmentFragment } from "./EventTicketFragment.generated";
 

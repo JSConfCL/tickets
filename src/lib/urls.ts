@@ -1,5 +1,3 @@
-import { root } from "postcss";
-
 export const urls = {
   home: "/",
   eventos: {

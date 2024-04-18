@@ -5,7 +5,7 @@ import {
   HttpLink,
   InMemoryCache,
 } from "@apollo/client";
-import cookies from "js-cookie";
+// import cookies from "js-cookie";
 
 function useMakeClient() {
   const httpLink = new HttpLink({

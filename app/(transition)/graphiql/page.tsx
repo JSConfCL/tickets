@@ -173,9 +173,9 @@ export default function Pregunta() {
     return (
       <div className="p-4">
         <p>Woah! No estas logueado</p>
-        Para loguearte, ve a{" "}
-        <Link href={urls.signIn}>
-          <Button variant="outline">/sign-in</Button>
+        Para loguearte{" "}
+        <Link href={urls.login}>
+          <Button variant="outline">Haz click aquí</Button>
         </Link>
       </div>
     );

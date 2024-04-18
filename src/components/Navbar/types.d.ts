@@ -1,5 +1,3 @@
-import { DropdownMenuSeparatorProps } from "@radix-ui/react-dropdown-menu";
-
 export type NavbarMenuItem = {
   content: string;
   link?: string;
