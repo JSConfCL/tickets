@@ -14,7 +14,7 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  */
 const documents = {
     "query getEvent($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n      lastName\n    }\n  }\n}": types.GetEventDocument,
-    "fragment EventTicketFragment on Ticket {\n  id\n  name\n  description\n  quantity\n  isFree\n  prices {\n    id\n    amount\n    currency {\n      currency\n      id\n    }\n  }\n}": types.EventTicketFragmentFragmentDoc,
+    "fragment EventTicketFragment on Ticket {\n  id\n  name\n  description\n  quantity\n  isFree\n  startDateTime\n  status\n  isUnlimited\n  prices {\n    id\n    amount\n    currency {\n      currency\n      id\n    }\n  }\n}": types.EventTicketFragmentFragmentDoc,
     "query getEventAndTickets($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    endDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n    }\n    tickets {\n      ...EventTicketFragment\n    }\n  }\n}": types.GetEventAndTicketsDocument,
     "query getLatestEvents($input: EventsSearchInput) {\n  events(input: $input) {\n    id\n    name\n    description\n    startDateTime\n    endDateTime\n  }\n}": types.GetLatestEventsDocument,
     "query FetchExampleEvents {\n  events {\n    id\n    description\n    community {\n      id\n      name\n    }\n    tags {\n      id\n      name\n      description\n    }\n  }\n}": types.FetchExampleEventsDocument,
@@ -41,7 +41,7 @@ export function graphql(source: "query getEvent($input: String!) {\n  event(id: 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "fragment EventTicketFragment on Ticket {\n  id\n  name\n  description\n  quantity\n  isFree\n  prices {\n    id\n    amount\n    currency {\n      currency\n      id\n    }\n  }\n}"): (typeof documents)["fragment EventTicketFragment on Ticket {\n  id\n  name\n  description\n  quantity\n  isFree\n  prices {\n    id\n    amount\n    currency {\n      currency\n      id\n    }\n  }\n}"];
+export function graphql(source: "fragment EventTicketFragment on Ticket {\n  id\n  name\n  description\n  quantity\n  isFree\n  startDateTime\n  status\n  isUnlimited\n  prices {\n    id\n    amount\n    currency {\n      currency\n      id\n    }\n  }\n}"): (typeof documents)["fragment EventTicketFragment on Ticket {\n  id\n  name\n  description\n  quantity\n  isFree\n  startDateTime\n  status\n  isUnlimited\n  prices {\n    id\n    amount\n    currency {\n      currency\n      id\n    }\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

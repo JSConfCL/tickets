@@ -1,0 +1,22 @@
+query getEventAndTickets($input: String!) {
+  event(id: $input) {
+    id
+    name
+    address
+    description
+    maxAttendees
+    startDateTime
+    endDateTime
+    status
+    community {
+      name
+    }
+    users {
+      id
+      name
+    }
+    tickets {
+      ...EventTicketFragment
+    }
+  }
+}

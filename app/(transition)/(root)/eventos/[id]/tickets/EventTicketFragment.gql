@@ -4,6 +4,9 @@ fragment EventTicketFragment on Ticket {
   description
   quantity
   isFree
+  startDateTime
+  status
+  isUnlimited
   prices {
     id
     amount

@@ -92,10 +92,10 @@ const StepHeader = ({ activeStep, steps, step }: StepHeaderProps) => (
       <div>
         <CardTitle>{activeStep.longName}</CardTitle>
         <CardDescription>
-          <div>{activeStep.description}</div>
-          <div>
+          <span>{activeStep.description}</span>
+          <span>
             Paso {step + 1} de {steps.length}.
-          </div>
+          </span>
         </CardDescription>
       </div>
     </CardHeader>
@@ -277,7 +277,7 @@ export default function Tickets({
       <TabsContent value={steps[0].slug}>
         <Card>
           <StepHeader step={step} steps={steps} activeStep={activeStep} />
-          <CardContent>
+          <CardContent id="card-content">
             {/* "Tickets Main" */}
             <div>
               {tickets.map((ticket) => (

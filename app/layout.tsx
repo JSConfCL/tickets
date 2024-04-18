@@ -29,8 +29,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className="h-[100dvh] bg-slate-950">
-      <body className={classNames(inter.variable, roboto.variable)}>
+    <html lang="es" className={`h-[100dvh] bg-slate-950`}>
+      <body
+        className={classNames(
+          inter.variable,
+          roboto.variable,
+          "flex min-h-full flex-col",
+        )}
+      >
         <ApolloWrapper>
           <AuthProvider>
             <ThemeProvider
