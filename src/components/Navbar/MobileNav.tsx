@@ -11,6 +11,7 @@ import { useIsAuthReady, useIsLoggedIn } from "@/utils/supabase/AuthProvider";
 import { MobileLink } from "./MobileLink";
 import { MobileNavbarItem } from "./MobileNavbarItem";
 import { NavBarProps } from "./types";
+import { urls } from "../../lib/urls";
 
 export function MobileNav({ items }: NavBarProps) {
   const [open, setOpen] = useState(false);
@@ -48,7 +49,7 @@ export function MobileNav({ items }: NavBarProps) {
               {isReady && !isLoggedIn ? (
                 <Link
                   className={buttonVariants({})}
-                  href="/login"
+                  href={urls.login}
                   onClick={() => {
                     setOpen(false);
                   }}

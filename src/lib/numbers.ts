@@ -1,8 +1,8 @@
 export const formatCurrency = (
-  num: number | null | undefined,
-  currency: string,
+  num?: number | null,
+  currency?: string | null,
 ): string | null => {
-  if (num == null) {
+  if (num == null || currency == null) {
     return null;
   }
 

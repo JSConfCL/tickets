@@ -6,6 +6,7 @@
 import * as Types from '../../../../../../src/api/gql/graphql';
 
 import { gql } from '@apollo/client';
+import { EventTicketFragmentFragmentDoc } from './EventTicketFragment.generated';
 import * as Apollo from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/experimental-nextjs-app-support/ssr';
 const defaultOptions = {} as const;
@@ -14,7 +15,7 @@ export type GetEventAndTicketsQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetEventAndTicketsQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, name: string, address?: string | null, description?: string | null, maxAttendees?: number | null, startDateTime: any, status: Types.EventStatus, community?: { __typename?: 'Community', name?: string | null } | null, users: Array<{ __typename?: 'User', id: string, name?: string | null, lastName?: string | null }>, tickets: Array<{ __typename?: 'Ticket', id: string, name: string, description?: string | null, quantity?: number | null, isFree: boolean, prices?: Array<{ __typename?: 'Price', id: string, amount: number, currency: { __typename?: 'AllowedCurrency', currency: string, id: string } }> | null }> } | null };
+export type GetEventAndTicketsQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, name: string, address?: string | null, description?: string | null, maxAttendees?: number | null, startDateTime: any, endDateTime?: any | null, status: Types.EventStatus, community?: { __typename?: 'Community', name?: string | null } | null, users: Array<{ __typename?: 'User', id: string, name?: string | null }>, tickets: Array<{ __typename?: 'Ticket', id: string, name: string, description?: string | null, quantity?: number | null, isFree: boolean, prices?: Array<{ __typename?: 'Price', id: string, amount: number, currency: { __typename?: 'AllowedCurrency', currency: string, id: string } }> | null }> } | null };
 
 
 export const GetEventAndTicketsDocument = gql`
@@ -26,6 +27,7 @@ export const GetEventAndTicketsDocument = gql`
     description
     maxAttendees
     startDateTime
+    endDateTime
     status
     community {
       name
@@ -33,26 +35,13 @@ export const GetEventAndTicketsDocument = gql`
     users {
       id
       name
-      lastName
     }
     tickets {
-      id
-      name
-      description
-      quantity
-      isFree
-      prices {
-        id
-        amount
-        currency {
-          currency
-          id
-        }
-      }
+      ...EventTicketFragment
     }
   }
 }
-    `;
+    ${EventTicketFragmentFragmentDoc}`;
 
 /**
  * __useGetEventAndTicketsQuery__

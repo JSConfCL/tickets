@@ -6,17 +6,16 @@ import { Information } from "@/components/Event/Information/Information";
 import { Location } from "@/components/Event/Location/Location";
 import { Organizers } from "@/components/Event/Organizers/Organizers";
 import { Register } from "@/components/Event/Register/Register";
-import { EventType, PageProps } from "./types";
-import { GetEventDocument } from "./getEvent.generated";
+import { PageProps } from "./types";
+import { GetEventDocument, GetEventQuery } from "./getEvent.generated";
 
 export default async function Event({ searchParams }: PageProps) {
   const c = getApolloClientForRSC();
-  const { id } = searchParams;
 
-  const { data, error } = await c.query<EventType>({
+  const { data, error } = await c.query<GetEventQuery>({
     query: GetEventDocument,
     variables: {
-      input: id,
+      input: searchParams.id,
     },
   });
 
@@ -24,11 +23,13 @@ export default async function Event({ searchParams }: PageProps) {
 
   const { event } = data;
 
-  if (!event) return <h2>No pudimos encontrar el evento que estás buscando</h2>;
+  if (!event) {
+    return <h2>No pudimos encontrar el evento que estás buscando</h2>;
+  }
 
-  const { address, community, description, name, startDateTime, users } = event;
+  const { address, community, description, name, users, id } = event;
 
-  const eventDate = new Date(startDateTime).toLocaleString();
+  // const eventDate = new Date(startDateTime).toLocaleString();
 
   return (
     <main className="flex w-full max-w-[1360px] flex-col items-center justify-between gap-6 px-6 py-7 transition-all md:px-10 lg:grid lg:grid-cols-5 lg:items-start lg:gap-8 lg:px-24 lg:pt-14 xl:grid-cols-6 xl:px-16">
@@ -43,7 +44,7 @@ export default async function Event({ searchParams }: PageProps) {
                 <p className="font-thin">
                   por <span className="underline">{community?.name}</span>
                 </p>
-                <p className="font-thin">{eventDate}</p>
+                {/* <p className="font-thin">{eventDate}</p> */}
               </div>
               <div className="hidden md:flex md:max-w-xs md:items-center md:gap-2">
                 <MapPinIcon className="h-8 w-8" />
@@ -52,11 +53,13 @@ export default async function Event({ searchParams }: PageProps) {
             </div>
           </div>
         </Hero>
-        <Register />
+        <Register eventId={id} />
       </div>
-      <div className="order-2 lg:order-4 lg:col-span-3 xl:order-3 xl:col-span-4">
-        <Information title="El evento" information={description} />
-      </div>
+      {description && (
+        <div className="order-2 lg:order-4 lg:col-span-3 xl:order-3 xl:col-span-4">
+          <Information title="El evento" information={description} />
+        </div>
+      )}
       <div className="order-3 lg:order-2 lg:col-span-3 xl:col-span-2 xl:h-full">
         <Location
           title="Lugar"

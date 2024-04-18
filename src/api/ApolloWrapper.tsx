@@ -1,13 +1,13 @@
 "use client";
-import { ApolloLink, HttpLink } from "@apollo/client";
 import {
-  ApolloNextAppProvider,
-  NextSSRApolloClient,
-  NextSSRInMemoryCache,
-  SSRMultipartLink,
-} from "@apollo/experimental-nextjs-app-support/ssr";
+  ApolloClient,
+  ApolloProvider,
+  HttpLink,
+  InMemoryCache,
+} from "@apollo/client";
+import cookies from "js-cookie";
 
-function makeClient() {
+function useMakeClient() {
   const httpLink = new HttpLink({
     // this needs to be an absolute url, as relative urls cannot be used in SSR
     uri: process.env.NEXT_PUBLIC_JSCL_API_URL,
@@ -21,28 +21,26 @@ function makeClient() {
     // const { data } = useSuspenseQuery(MY_QUERY, { context: { fetchOptions: { cache: "force-cache" }}});
   });
 
-  return new NextSSRApolloClient({
+  return new ApolloClient({
     // use the `NextSSRInMemoryCache`, not the normal `InMemoryCache`
-    cache: new NextSSRInMemoryCache(),
-    link:
-      typeof window === "undefined"
-        ? ApolloLink.from([
-            // in a SSR environment, if you use multipart features like
-            // @defer, you need to decide how to handle these.
-            // This strips all interfaces with a `@defer` directive from your queries.
-            new SSRMultipartLink({
-              stripDefer: true,
-            }),
-            httpLink,
-          ])
-        : httpLink,
+    cache: new InMemoryCache(),
+    link: httpLink,
+    // link:
+    //   typeof window === "undefined"
+    //     ? ApolloLink.from([
+    //         // in a SSR environment, if you use multipart features like
+    //         // @defer, you need to decide how to handle these.
+    //         // This strips all interfaces with a `@defer` directive from your queries.
+    //         new SSRMultipartLink({
+    //           stripDefer: true,
+    //         }),
+    //         httpLink,
+    //       ])
+    //     : httpLink,
   });
 }
 
 export function ApolloWrapper({ children }: React.PropsWithChildren) {
-  return (
-    <ApolloNextAppProvider makeClient={makeClient}>
-      {children}
-    </ApolloNextAppProvider>
-  );
+  const client = useMakeClient();
+  return <ApolloProvider client={client}>{children}</ApolloProvider>;
 }

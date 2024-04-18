@@ -1,5 +1,6 @@
 query getEvent($input: String!) {
   event(id: $input) {
+    id
     name
     address
     description

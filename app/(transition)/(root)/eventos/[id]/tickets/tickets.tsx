@@ -26,6 +26,7 @@ import { formatCurrency } from "@/lib/numbers";
 
 import { Ticket, AllowedCurrency as Currency } from "@/api/gql/graphql";
 import { Separator } from "@/components/ui/separator";
+import { EventTicketFragmentFragment } from "./EventTicketFragment.generated";
 
 type TicketsState = {
   [key: string]: number;
@@ -125,7 +126,11 @@ const StepFooter = ({
   </>
 );
 
-export default function Tickets({ tickets }: { tickets: Ticket[] }) {
+export default function Tickets({
+  tickets,
+}: {
+  tickets: EventTicketFragmentFragment[];
+}) {
   const [step, setStep] = useState(0);
   const [maxStep, setMaxStep] = useState(0);
   const activeStep = steps[step];
@@ -193,7 +198,7 @@ export default function Tickets({ tickets }: { tickets: Ticket[] }) {
     setSelectedCurrencyId(id);
   };
 
-  const getTicketCurrency = (ticket: Ticket) => {
+  const getTicketCurrency = (ticket: EventTicketFragmentFragment) => {
     return ticket.prices?.find(
       (price) => price.currency.id == selectedCurrencyId,
     );
@@ -211,15 +216,21 @@ export default function Tickets({ tickets }: { tickets: Ticket[] }) {
     }, 0);
   };
 
-  const getFormattedTotal = () => formatCurrency(getTotal(), getCurrentCurrency().currency)
-  
-  const getFormmatedTicketPrice = (ticket: Ticket) => {
-    const ticketCurrency = getTicketCurrency(ticket)
-    if (!ticket || !ticketCurrency) { return null }
-    
-    return formatCurrency(ticketCurrency.amount, ticketCurrency.currency.currency)
-  }
-  
+  const getFormattedTotal = () =>
+    formatCurrency(getTotal(), getCurrentCurrency()?.currency);
+
+  const getFormmatedTicketPrice = (ticket: EventTicketFragmentFragment) => {
+    const ticketCurrency = getTicketCurrency(ticket);
+    if (!ticket || !ticketCurrency) {
+      return null;
+    }
+
+    return formatCurrency(
+      ticketCurrency.amount,
+      ticketCurrency.currency.currency,
+    );
+  };
+
   return (
     <Tabs
       defaultValue={steps[0].slug}

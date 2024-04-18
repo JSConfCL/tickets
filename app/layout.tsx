@@ -3,6 +3,7 @@ import { Inter, Roboto } from "next/font/google";
 import classNames from "classnames";
 import { ThemeProvider } from "@/components/providers";
 import { ApolloWrapper } from "../src/api/ApolloWrapper";
+import { AuthProvider } from "../src/utils/supabase/AuthProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,14 +32,16 @@ export default function RootLayout({
     <html lang="es" className="h-[100dvh] bg-slate-950">
       <body className={classNames(inter.variable, roboto.variable)}>
         <ApolloWrapper>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
+          <AuthProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+          </AuthProvider>
         </ApolloWrapper>
       </body>
     </html>

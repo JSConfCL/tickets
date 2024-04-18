@@ -6,9 +6,6 @@ query FetchExampleEvents {
       id
       name
     }
-    users {
-      id
-    }
     tags {
       id
       name

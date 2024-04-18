@@ -33,8 +33,7 @@ export const getCookieOptions = (): CookieAttributes => {
     expires: expirationDate,
     secure:
       typeof document !== "undefined" &&
-      (document.location?.protocol === "https" ||
-        document.location?.hostname === "localhost"),
+      document.location?.protocol === "https",
   } satisfies CookieAttributes;
   return cookieArguments;
 };

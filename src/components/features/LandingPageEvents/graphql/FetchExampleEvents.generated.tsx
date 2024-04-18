@@ -12,7 +12,7 @@ const defaultOptions = {} as const;
 export type FetchExampleEventsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type FetchExampleEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, description?: string | null, community?: { __typename?: 'Community', id: string, name?: string | null } | null, users: Array<{ __typename?: 'User', id: string }>, tags: Array<{ __typename?: 'Tag', id: string, name?: string | null, description?: string | null }> }> };
+export type FetchExampleEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, description?: string | null, community?: { __typename?: 'Community', id: string, name?: string | null } | null, tags: Array<{ __typename?: 'Tag', id: string, name?: string | null, description?: string | null }> }> };
 
 
 export const FetchExampleEventsDocument = gql`
@@ -23,9 +23,6 @@ export const FetchExampleEventsDocument = gql`
     community {
       id
       name
-    }
-    users {
-      id
     }
     tags {
       id

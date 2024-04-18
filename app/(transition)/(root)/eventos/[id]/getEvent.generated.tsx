@@ -14,12 +14,13 @@ export type GetEventQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', name: string, address?: string | null, description?: string | null, maxAttendees?: number | null, startDateTime: any, status: Types.EventStatus, community?: { __typename?: 'Community', name?: string | null } | null, users: Array<{ __typename?: 'User', id: string, name?: string | null, lastName?: string | null }> } | null };
+export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, name: string, address?: string | null, description?: string | null, maxAttendees?: number | null, startDateTime: any, status: Types.EventStatus, community?: { __typename?: 'Community', name?: string | null } | null, users: Array<{ __typename?: 'User', id: string, name?: string | null, lastName?: string | null }> } | null };
 
 
 export const GetEventDocument = gql`
     query getEvent($input: String!) {
   event(id: $input) {
+    id
     name
     address
     description

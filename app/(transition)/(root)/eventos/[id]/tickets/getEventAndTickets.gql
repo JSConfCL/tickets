@@ -6,6 +6,7 @@ query getEventAndTickets($input: String!) {
     description
     maxAttendees
     startDateTime
+    endDateTime
     status
     community {
       name
@@ -13,22 +14,9 @@ query getEventAndTickets($input: String!) {
     users {
       id
       name
-      lastName
     }
     tickets {
-      id
-      name
-      description
-      quantity
-      isFree
-      prices {
-        id
-        amount
-        currency {
-          currency
-          id
-        }
-      }
+      ...EventTicketFragment
     }
   }
 }

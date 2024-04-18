@@ -1,3 +1,4 @@
+"use client";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { User } from "@supabase/supabase-js";
 import {
@@ -21,17 +22,18 @@ export const AuthContext = createContext<AuthContextType>({
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const isLogged = !!user?.id;
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     const initialize = async () => {
-      const { data } = await supabaseClient.auth.getSession();
-      if (data?.session) {
-        setUser(data?.session?.user ?? null);
-        const accessToken = data?.session?.access_token ?? null;
+      const {
+        data: { session },
+      } = await supabaseClient.auth.getSession();
+      console.log("session", session);
+      if (session) {
+        setUser(session?.user ?? null);
+        const accessToken = session?.access_token ?? null;
         cookies.set(COOKIE_NAME, accessToken, getCookieOptions());
-        console.log({ accessToken });
       }
       setIsReady(true);
     };
@@ -39,6 +41,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const {
       data: { subscription },
     } = supabaseClient.auth.onAuthStateChange((_event, session) => {
+      console.log("session onAuthStateChange", session);
       const access_token = session?.access_token ?? null;
       if (!access_token) {
         cookies.remove(COOKIE_NAME);
@@ -53,8 +56,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const value = useMemo(
-    () => ({ user, isLogged, isReady }),
-    [user, isLogged, isReady],
+    () => ({ user, isLogged: Boolean(user?.id), isReady }),
+    [user, isReady],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
