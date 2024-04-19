@@ -7,8 +7,6 @@ import { NavBarProps } from "./types";
 import { urls } from "../../lib/urls";
 import { buttonVariants } from "../ui/button";
 
-
-
 export function MainNav({ items }: NavBarProps) {
   const user = useIsLoggedIn();
   const isReady = useIsAuthReady();

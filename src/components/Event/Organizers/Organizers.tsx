@@ -4,7 +4,9 @@ import { FC } from "react";
 import { OrganizersTypes } from "./types";
 
 export const Organizers: FC<OrganizersTypes> = ({ title, organizers }) => {
-  if (!organizers?.length) {return;}
+  if (!organizers?.length) {
+    return;
+  }
 
   return (
     <section className="flex w-full flex-col gap-4 bg-slate-900 p-6 dark:bg-slate-50">

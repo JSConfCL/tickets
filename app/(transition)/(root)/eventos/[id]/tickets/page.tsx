@@ -8,7 +8,6 @@ import {
 } from "./getEventAndTickets.generated";
 import Tickets from "./tickets";
 
-
 interface SearchParams {
   id: string;
 }

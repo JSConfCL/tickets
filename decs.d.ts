@@ -1,1 +1,1 @@
-declare module "@next/third-parties/google"
+declare module "@next/third-parties/google";

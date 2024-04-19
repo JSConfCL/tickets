@@ -6,7 +6,6 @@ import React, { useEffect, useState } from "react";
 
 import { supabaseClient } from "@/utils/supabase/client";
 
-
 export const Login = () => {
   const { resolvedTheme } = useTheme();
   const [url, setUrl] = useState<string | undefined>();

@@ -40,6 +40,7 @@ import { EventTicketFragmentFragment } from "./EventTicketFragment.generated";
 
 const MIN_NUMBER_OF_TICKETS = 0;
 const MAX_NUMBER_OF_TICKETS = 100;
+const MAX_STEP = 0;
 
 type TicketsState = {
   [key: string]: number;
@@ -326,7 +327,6 @@ export default function Tickets({
   tickets: EventTicketFragmentFragment[];
 }) {
   const [step, setStep] = useState(0);
-  const [maxStep, setMaxStep] = useState(0);
   const activeStep = steps[step];
 
   const customStep = (stepSlug: string) => {
@@ -469,7 +469,7 @@ export default function Tickets({
             <TabsTrigger
               key={step.id}
               value={step.slug}
-              disabled={index > maxStep}
+              disabled={index > MAX_STEP}
             >
               {step.shortName}
             </TabsTrigger>
