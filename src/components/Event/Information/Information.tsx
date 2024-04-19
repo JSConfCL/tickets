@@ -1,6 +1,7 @@
 import { FC } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+
 import { InformationTypes } from "./types";
 
 const remarkPlugins = [remarkGfm];

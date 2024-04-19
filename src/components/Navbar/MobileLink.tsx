@@ -1,28 +1,24 @@
-import { useRouter } from "next/navigation";
-import Link, { LinkProps } from "next/link";
 import classNames from "classnames";
+import Link, { LinkProps } from "next/link";
+import { MouseEventHandler } from "react";
 
 interface MobileLinkProps extends LinkProps {
-  onOpenChange?: (open: boolean) => void;
+  onClick?: MouseEventHandler<HTMLAnchorElement> | undefined;
   children: React.ReactNode;
   className?: string;
 }
 
 export function MobileLink({
   href,
-  onOpenChange,
+  onClick,
   className,
   children,
   ...props
 }: MobileLinkProps) {
-  const router = useRouter();
   return (
     <Link
       href={href}
-      onClick={() => {
-        router.push(href.toString());
-        onOpenChange?.(false);
-      }}
+      onClick={onClick}
       className={classNames(className)}
       {...props}
     >

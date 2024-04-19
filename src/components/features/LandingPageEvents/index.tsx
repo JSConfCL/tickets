@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+
 import { useFetchExampleEventsQuery } from "./graphql/FetchExampleEvents.generated";
 
 export const LandingPageEvents = () => {

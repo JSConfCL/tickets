@@ -7,12 +7,11 @@ import * as Types from '../../../../api/gql/graphql';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-import * as ApolloReactHooks from '@apollo/experimental-nextjs-app-support/ssr';
 const defaultOptions = {} as const;
 export type FetchExampleEventsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type FetchExampleEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, description?: string | null, community?: { __typename?: 'Community', id: string, name?: string | null } | null, users: Array<{ __typename?: 'User', id: string }>, tags: Array<{ __typename?: 'Tag', id: string, name?: string | null, description?: string | null }> }> };
+export type FetchExampleEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, description?: string | null, community?: { __typename?: 'Community', id: string, name?: string | null } | null, tags: Array<{ __typename?: 'Tag', id: string, name?: string | null, description?: string | null }> }> };
 
 
 export const FetchExampleEventsDocument = gql`
@@ -23,9 +22,6 @@ export const FetchExampleEventsDocument = gql`
     community {
       id
       name
-    }
-    users {
-      id
     }
     tags {
       id
@@ -51,17 +47,17 @@ export const FetchExampleEventsDocument = gql`
  *   },
  * });
  */
-export function useFetchExampleEventsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FetchExampleEventsQuery, FetchExampleEventsQueryVariables>) {
+export function useFetchExampleEventsQuery(baseOptions?: Apollo.QueryHookOptions<FetchExampleEventsQuery, FetchExampleEventsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useQuery<FetchExampleEventsQuery, FetchExampleEventsQueryVariables>(FetchExampleEventsDocument, options);
+        return Apollo.useQuery<FetchExampleEventsQuery, FetchExampleEventsQueryVariables>(FetchExampleEventsDocument, options);
       }
-export function useFetchExampleEventsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FetchExampleEventsQuery, FetchExampleEventsQueryVariables>) {
+export function useFetchExampleEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchExampleEventsQuery, FetchExampleEventsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useLazyQuery<FetchExampleEventsQuery, FetchExampleEventsQueryVariables>(FetchExampleEventsDocument, options);
+          return Apollo.useLazyQuery<FetchExampleEventsQuery, FetchExampleEventsQueryVariables>(FetchExampleEventsDocument, options);
         }
-export function useFetchExampleEventsSuspenseQuery(baseOptions?: ApolloReactHooks.SuspenseQueryHookOptions<FetchExampleEventsQuery, FetchExampleEventsQueryVariables>) {
+export function useFetchExampleEventsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<FetchExampleEventsQuery, FetchExampleEventsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useSuspenseQuery<FetchExampleEventsQuery, FetchExampleEventsQueryVariables>(FetchExampleEventsDocument, options);
+          return Apollo.useSuspenseQuery<FetchExampleEventsQuery, FetchExampleEventsQueryVariables>(FetchExampleEventsDocument, options);
         }
 export type FetchExampleEventsQueryHookResult = ReturnType<typeof useFetchExampleEventsQuery>;
 export type FetchExampleEventsLazyQueryHookResult = ReturnType<typeof useFetchExampleEventsLazyQuery>;

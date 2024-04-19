@@ -1,9 +1,12 @@
-import { FC } from "react";
 import { GoogleMapsEmbed } from "@next/third-parties/google";
+import { FC } from "react";
+
 import { LocationType } from "./types";
 
 export const Location: FC<LocationType> = ({ title, location }) => {
-  if (!location?.address) return null;
+  if (!location?.address) {
+    return null;
+  }
 
   return (
     <section className="flex w-full flex-col gap-4 bg-slate-900 p-6 dark:bg-slate-50">

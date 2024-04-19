@@ -1,9 +1,11 @@
 import Link from "next/link";
 
-import { NavBarProps } from "./types";
-import { NavbarItem } from "./NavbarItem";
-import { buttonVariants } from "../ui/button";
 import { useIsAuthReady, useIsLoggedIn } from "@/utils/supabase/AuthProvider";
+
+import { NavbarItem } from "./NavbarItem";
+import { NavBarProps } from "./types";
+import { urls } from "../../lib/urls";
+import { buttonVariants } from "../ui/button";
 
 export function MainNav({ items }: NavBarProps) {
   const user = useIsLoggedIn();
@@ -14,7 +16,7 @@ export function MainNav({ items }: NavBarProps) {
         <NavbarItem key={`navbarItem-${item.content}`} item={item} />
       ))}
       {isReady && !user ? (
-        <Link className={buttonVariants({})} href="/login">
+        <Link className={buttonVariants({})} href={urls.login}>
           Ingresar
         </Link>
       ) : null}

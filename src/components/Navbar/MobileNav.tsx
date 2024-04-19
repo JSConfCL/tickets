@@ -8,14 +8,17 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useIsAuthReady, useIsLoggedIn } from "@/utils/supabase/AuthProvider";
+
 import { MobileLink } from "./MobileLink";
 import { MobileNavbarItem } from "./MobileNavbarItem";
 import { NavBarProps } from "./types";
+import { urls } from "../../lib/urls";
 
 export function MobileNav({ items }: NavBarProps) {
   const [open, setOpen] = useState(false);
   const isLoggedIn = useIsLoggedIn();
   const isReady = useIsAuthReady();
+  const closeNav = () => setOpen(false);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -28,11 +31,7 @@ export function MobileNav({ items }: NavBarProps) {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="pr-0">
-        <MobileLink
-          href="/"
-          className="flex items-center"
-          onOpenChange={setOpen}
-        >
+        <MobileLink href="/" className="flex items-center" onClick={closeNav}>
           <PackageOpen className="h-5 w-5" />
         </MobileLink>
         <ScrollArea className="my-4 h-[calc(100vh-8rem)] px-6 pb-10">
@@ -42,16 +41,14 @@ export function MobileNav({ items }: NavBarProps) {
                 <MobileNavbarItem
                   key={`mobile-${item.content}`}
                   item={item}
-                  setOpen={setOpen}
+                  onNavItemClick={closeNav}
                 />
               ))}
               {isReady && !isLoggedIn ? (
                 <Link
                   className={buttonVariants({})}
-                  href="/login"
-                  onClick={() => {
-                    setOpen(false);
-                  }}
+                  href={urls.login}
+                  onClick={closeNav}
                 >
                   Ingresar
                 </Link>

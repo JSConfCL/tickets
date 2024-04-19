@@ -1,14 +1,14 @@
 "use client";
 
-import { NavbarMenuItem } from "./types";
 import { MobileLink } from "./MobileLink";
+import { NavbarMenuItem } from "./types";
 
 export const MobileNavbarItem = ({
   item,
-  setOpen,
+  onNavItemClick,
 }: {
   item: NavbarMenuItem;
-  setOpen: (open: boolean) => void;
+  onNavItemClick: () => void;
 }) => {
   const mobileItemMapper = (item: NavbarMenuItem) => {
     if (item.link) {
@@ -16,7 +16,10 @@ export const MobileNavbarItem = ({
         <MobileLink
           key={`mobileitem-${item.content}`}
           href={item.link}
-          onOpenChange={setOpen}
+          onClick={(e) => {
+            item.onClick?.(e);
+            onNavItemClick();
+          }}
           className="text-muted-foreground"
         >
           {item.content}
@@ -31,12 +34,7 @@ export const MobileNavbarItem = ({
           role="button"
           aria-pressed="false"
           onClick={(e) => {
-            if (item.onClick) {
-              item.onClick(e);
-            }
-            if (item.closeMenu) {
-              setOpen(false);
-            }
+            item.onClick?.(e);
           }}
         >
           {item.content}

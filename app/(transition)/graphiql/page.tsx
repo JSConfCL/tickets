@@ -2,23 +2,22 @@
 
 import { createGraphiQLFetcher, Fetcher } from "@graphiql/toolkit";
 import { GraphiQL } from "graphiql";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import "graphiql/graphiql.css";
-import Link from "next/link";
-import { urls } from "../../../src/lib/urls";
+
 import { Button } from "../../../src/components/ui/button";
+import { urls } from "../../../src/lib/urls";
 
 const useGetAuthToken = () => {
   const [token, setToken] = useState<string | null>(null);
   useEffect(() => {
     const key = process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY;
     if (!key) {
-      console.error("No token storage key");
       return;
     }
     const token = localStorage.getItem(key);
     if (!token) {
-      console.error("No token found");
       return;
     }
     const parsedToken = token;
@@ -173,9 +172,9 @@ export default function Pregunta() {
     return (
       <div className="p-4">
         <p>Woah! No estas logueado</p>
-        Para loguearte, ve a{" "}
-        <Link href={urls.signIn}>
-          <Button variant="outline">/sign-in</Button>
+        Para loguearte{" "}
+        <Link href={urls.login}>
+          <Button variant="outline">Haz click aquí</Button>
         </Link>
       </div>
     );

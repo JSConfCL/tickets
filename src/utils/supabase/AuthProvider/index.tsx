@@ -1,11 +1,13 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+"use client";
 import { User } from "@supabase/supabase-js";
+import cookies from "js-cookie";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+
 import {
   COOKIE_NAME,
   getCookieOptions,
   supabaseClient,
 } from "@/utils/supabase/client";
-import cookies from "js-cookie";
 
 export type AuthContextType = {
   user: User | null;
@@ -21,17 +23,17 @@ export const AuthContext = createContext<AuthContextType>({
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const isLogged = !!user?.id;
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     const initialize = async () => {
-      const { data } = await supabaseClient.auth.getSession();
-      if (data?.session) {
-        setUser(data?.session?.user ?? null);
-        const accessToken = data?.session?.access_token ?? null;
+      const {
+        data: { session },
+      } = await supabaseClient.auth.getSession();
+      if (session) {
+        setUser(session?.user ?? null);
+        const accessToken = session?.access_token ?? null;
         cookies.set(COOKIE_NAME, accessToken, getCookieOptions());
-        console.log({ accessToken });
       }
       setIsReady(true);
     };
@@ -48,13 +50,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(session?.user ?? null);
     });
 
+    // eslint-disable-next-line no-console
     initialize().catch(console.error);
     return () => subscription.unsubscribe();
   }, []);
 
   const value = useMemo(
-    () => ({ user, isLogged, isReady }),
-    [user, isLogged, isReady],
+    () => ({ user, isLogged: Boolean(user?.id), isReady }),
+    [user, isReady],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

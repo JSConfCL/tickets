@@ -1,0 +1,18 @@
+fragment EventTicketFragment on Ticket {
+  id
+  name
+  description
+  quantity
+  isFree
+  startDateTime
+  status
+  isUnlimited
+  prices {
+    id
+    amount
+    currency {
+      currency
+      id
+    }
+  }
+}

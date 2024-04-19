@@ -1,0 +1,9 @@
+query getLatestEvents($input: EventsSearchInput) {
+  events(input: $input) {
+    id
+    name
+    description
+    startDateTime
+    endDateTime
+  }
+}

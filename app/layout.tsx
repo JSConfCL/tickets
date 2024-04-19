@@ -1,8 +1,12 @@
 import "./globals.css";
-import { Inter, Roboto } from "next/font/google";
 import classNames from "classnames";
+import { Inter, Roboto } from "next/font/google";
+
 import { ThemeProvider } from "@/components/providers";
+import { Toaster } from "@/components/ui/sonner";
+
 import { ApolloWrapper } from "../src/api/ApolloWrapper";
+import { AuthProvider } from "../src/utils/supabase/AuthProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,17 +32,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className="h-[100dvh] bg-slate-950">
-      <body className={classNames(inter.variable, roboto.variable)}>
+    <html lang="es" className={`h-[100dvh] bg-slate-950`}>
+      <body
+        className={classNames(
+          inter.variable,
+          roboto.variable,
+          "flex min-h-full flex-col",
+        )}
+      >
         <ApolloWrapper>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
+          <AuthProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+              <Toaster />
+            </ThemeProvider>
+          </AuthProvider>
         </ApolloWrapper>
       </body>
     </html>

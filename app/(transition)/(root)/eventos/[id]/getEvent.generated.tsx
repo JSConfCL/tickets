@@ -7,19 +7,19 @@ import * as Types from '../../../../../src/api/gql/graphql';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-import * as ApolloReactHooks from '@apollo/experimental-nextjs-app-support/ssr';
 const defaultOptions = {} as const;
 export type GetEventQueryVariables = Types.Exact<{
   input: Types.Scalars['String']['input'];
 }>;
 
 
-export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', name: string, address?: string | null, description?: string | null, maxAttendees?: number | null, startDateTime: any, status: Types.EventStatus, community?: { __typename?: 'Community', name?: string | null } | null, users: Array<{ __typename?: 'User', id: string, name?: string | null, lastName?: string | null }> } | null };
+export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, name: string, address?: string | null, description?: string | null, maxAttendees?: number | null, startDateTime: any, status: Types.EventStatus, community?: { __typename?: 'Community', name?: string | null } | null, users: Array<{ __typename?: 'User', id: string, name?: string | null, lastName?: string | null }> } | null };
 
 
 export const GetEventDocument = gql`
     query getEvent($input: String!) {
   event(id: $input) {
+    id
     name
     address
     description
@@ -54,17 +54,17 @@ export const GetEventDocument = gql`
  *   },
  * });
  */
-export function useGetEventQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetEventQuery, GetEventQueryVariables>) {
+export function useGetEventQuery(baseOptions: Apollo.QueryHookOptions<GetEventQuery, GetEventQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
+        return Apollo.useQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
       }
-export function useGetEventLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetEventQuery, GetEventQueryVariables>) {
+export function useGetEventLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEventQuery, GetEventQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useLazyQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
+          return Apollo.useLazyQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
         }
-export function useGetEventSuspenseQuery(baseOptions?: ApolloReactHooks.SuspenseQueryHookOptions<GetEventQuery, GetEventQueryVariables>) {
+export function useGetEventSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetEventQuery, GetEventQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useSuspenseQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
+          return Apollo.useSuspenseQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
         }
 export type GetEventQueryHookResult = ReturnType<typeof useGetEventQuery>;
 export type GetEventLazyQueryHookResult = ReturnType<typeof useGetEventLazyQuery>;

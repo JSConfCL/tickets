@@ -5,13 +5,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 
+import { useIsLoggedIn } from "@/utils/supabase/AuthProvider";
 import { logout } from "@/utils/supabase/client";
 
-import { useIsLoggedIn } from "@/utils/supabase/AuthProvider";
 import { MainNav } from "./Navbar/MainNav";
 import { MobileNav } from "./Navbar/MobileNav";
 import { ThemeSwitcher } from "./Navbar/ThemeSwitcher";
 import { NavbarMenuItem } from "./Navbar/types";
+import { urls } from "../lib/urls";
 
 export const Nav = () => {
   const router = useRouter();
@@ -22,11 +23,11 @@ export const Nav = () => {
       [
         {
           content: "Eventos",
-          link: "/",
+          link: urls.eventos.root,
         },
         {
           content: "Comunidades",
-          link: "/",
+          link: urls.comunidades,
         },
       ] satisfies NavbarMenuItem[],
     [],
@@ -37,11 +38,11 @@ export const Nav = () => {
       [
         {
           content: "Eventos",
-          link: "/",
+          link: urls.eventos.root,
         },
         {
           content: "Comunidades",
-          link: "/",
+          link: urls.comunidades,
         },
         {
           content: "Perfil",
@@ -49,7 +50,7 @@ export const Nav = () => {
             {
               content: "Mi Cuenta",
               icon: <UserIcon className="mr-2 h-4 w-4" />,
-              link: "/",
+              link: urls.home,
             },
             {
               content: "separator",
@@ -57,7 +58,7 @@ export const Nav = () => {
             {
               content: "Settings",
               icon: <Settings className="mr-2 h-4 w-4" />,
-              link: "/",
+              link: urls.home,
             },
             {
               content: "separator",
@@ -67,15 +68,14 @@ export const Nav = () => {
               icon: <LogOut className="mr-2 h-4 w-4" />,
               onClick: () => {
                 logout().catch(() => {
-                  router.push("/login");
+                  router.push(urls.login);
                 });
               },
-              closeMenu: true,
             },
           ],
         },
       ] satisfies NavbarMenuItem[],
-    [],
+    [router],
   );
 
   return (

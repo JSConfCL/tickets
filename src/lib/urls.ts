@@ -1,6 +1,10 @@
 export const urls = {
   home: "/",
-  about: "/about",
-  signIn: "/sign-in",
-  signUp: "/sign-up",
+  eventos: {
+    root: "/eventos",
+    evento: (id: string) => `/eventos/${id}`,
+    tickets: (id: string) => `/eventos/${id}/tickets`,
+  },
+  comunidades: "/comunidades",
+  login: "/login",
 };

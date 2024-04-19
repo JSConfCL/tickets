@@ -1,9 +1,8 @@
 "use client";
-import React, { forwardRef } from "react";
 import { motion, HTMLMotionProps, AnimationProps } from "framer-motion";
-import classNames from "classnames";
+import React, { forwardRef } from "react";
 
-type PageTransitionProps = HTMLMotionProps<"div">;
+type PageTransitionProps = Omit<HTMLMotionProps<"div">, "className">;
 type PageTransitionRef = React.ForwardedRef<HTMLDivElement>;
 
 const initial = { y: "5vh", opacity: 0 } satisfies AnimationProps["initial"];
@@ -16,7 +15,7 @@ const transition = {
 } satisfies AnimationProps["transition"];
 
 function PageTransition(
-  { children, ...rest }: PageTransitionProps,
+  { children }: PageTransitionProps,
   ref: PageTransitionRef,
 ) {
   return (
@@ -26,10 +25,7 @@ function PageTransition(
       animate={animate}
       exit={exit}
       transition={transition}
-      className={classNames(
-        "flex h-full flex-col items-center overflow-auto",
-        rest.className,
-      )}
+      className="flex h-full flex-1 flex-col items-center overflow-auto"
     >
       {children}
     </motion.div>
