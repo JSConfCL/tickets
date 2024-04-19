@@ -1,10 +1,11 @@
 "use client";
 import React from "react";
+
+import { Login } from "../../../../../../src/components/features/Login/Login";
 import {
   useIsAuthReady,
   useIsLoggedIn,
 } from "../../../../../../src/utils/supabase/AuthProvider";
-import { Login } from "../../../../../../src/components/features/Login/Login";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const isLoggedIn = useIsLoggedIn();

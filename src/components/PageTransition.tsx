@@ -1,6 +1,6 @@
 "use client";
-import React, { forwardRef } from "react";
 import { motion, HTMLMotionProps, AnimationProps } from "framer-motion";
+import React, { forwardRef } from "react";
 
 type PageTransitionProps = Omit<HTMLMotionProps<"div">, "className">;
 type PageTransitionRef = React.ForwardedRef<HTMLDivElement>;
@@ -15,7 +15,7 @@ const transition = {
 } satisfies AnimationProps["transition"];
 
 function PageTransition(
-  { children, ...rest }: PageTransitionProps,
+  { children }: PageTransitionProps,
   ref: PageTransitionRef,
 ) {
   return (

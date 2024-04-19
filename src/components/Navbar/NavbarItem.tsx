@@ -1,7 +1,8 @@
 "use client";
 
+import classNames from "classnames";
 import Link from "next/link";
-import { NavbarMenuItem } from "./types";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,7 +10,8 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import classNames from "classnames";
+
+import { NavbarMenuItem } from "./types";
 
 export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
   if (item.children) {

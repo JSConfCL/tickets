@@ -1,12 +1,13 @@
 "use client";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { User } from "@supabase/supabase-js";
+import cookies from "js-cookie";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+
 import {
   COOKIE_NAME,
   getCookieOptions,
   supabaseClient,
 } from "@/utils/supabase/client";
-import cookies from "js-cookie";
 
 export type AuthContextType = {
   user: User | null;
@@ -29,7 +30,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const {
         data: { session },
       } = await supabaseClient.auth.getSession();
-      console.log("session", session);
       if (session) {
         setUser(session?.user ?? null);
         const accessToken = session?.access_token ?? null;
@@ -41,7 +41,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const {
       data: { subscription },
     } = supabaseClient.auth.onAuthStateChange((_event, session) => {
-      console.log("session onAuthStateChange", session);
       const access_token = session?.access_token ?? null;
       if (!access_token) {
         cookies.remove(COOKIE_NAME);
@@ -51,6 +50,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(session?.user ?? null);
     });
 
+    // eslint-disable-next-line no-console
     initialize().catch(console.error);
     return () => subscription.unsubscribe();
   }, []);

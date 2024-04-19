@@ -1,8 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
+
 import { urls } from "../../../lib/urls";
 
 export const Register = (props: { eventId: string }) => {

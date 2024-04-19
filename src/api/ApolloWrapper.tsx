@@ -6,8 +6,9 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { COOKIE_NAME } from "../utils/supabase/client";
 import cookies from "js-cookie";
+
+import { COOKIE_NAME } from "../utils/supabase/client";
 
 const authLink = setContext((_, context) => {
   // get the authentication token from local storage if it exists

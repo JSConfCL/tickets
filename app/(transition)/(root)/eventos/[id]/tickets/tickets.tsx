@@ -1,6 +1,7 @@
 "use client";
 
-import {
+import { useRouter } from "next/navigation";
+import React, {
   ChangeEventHandler,
   MouseEventHandler,
   useCallback,
@@ -8,8 +9,10 @@ import {
   useRef,
   useState,
 } from "react";
-import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { v4 } from "uuid";
 
+import { AllowedCurrency as Currency } from "@/api/gql/graphql";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,6 +22,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -27,20 +31,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-
 import { formatCurrency } from "@/lib/numbers";
 
-import { AllowedCurrency as Currency } from "@/api/gql/graphql";
-import { Separator } from "@/components/ui/separator";
-import { EventTicketFragmentFragment } from "./EventTicketFragment.generated";
-import { cx } from "class-variance-authority";
 import { useCreatePurchaseOrderMutation } from "./createPurchaseOrder.generated";
-import { randomUUID } from "crypto";
-import { v4 } from "uuid";
-import React from "react";
-import { toast } from "sonner";
+import { EventTicketFragmentFragment } from "./EventTicketFragment.generated";
 
 const MIN_NUMBER_OF_TICKETS = 0;
 const MAX_NUMBER_OF_TICKETS = 100;
@@ -272,7 +268,7 @@ const ConfirmationTab = ({
                 <React.Fragment key={ticket.id}>
                   <div className="flex w-full flex-row items-center justify-between gap-4 md:w-auto md:flex-row md:gap-8">
                     <div className="flex w-full grow flex-col gap-1">
-                      <div className="text-md w-aulg font-bold text-slate-900 dark:text-white">
+                      <div className="font-bold text-slate-900 dark:text-white">
                         {ticket.name}
                       </div>
                       {ticket.description ? (
@@ -311,6 +307,7 @@ const ConfirmationTab = ({
         onClickPrevious={previousStep}
         onClickNext={() => {
           createPurchaseOrder().catch((error) => {
+            // eslint-disable-next-line no-console
             console.error(error);
           });
         }}

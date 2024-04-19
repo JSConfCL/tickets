@@ -1,10 +1,13 @@
 import Link from "next/link";
 
-import { NavBarProps } from "./types";
-import { NavbarItem } from "./NavbarItem";
-import { buttonVariants } from "../ui/button";
 import { useIsAuthReady, useIsLoggedIn } from "@/utils/supabase/AuthProvider";
+
+import { NavbarItem } from "./NavbarItem";
+import { NavBarProps } from "./types";
 import { urls } from "../../lib/urls";
+import { buttonVariants } from "../ui/button";
+
+
 
 export function MainNav({ items }: NavBarProps) {
   const user = useIsLoggedIn();

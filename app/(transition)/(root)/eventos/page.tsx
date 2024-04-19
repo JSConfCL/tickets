@@ -1,11 +1,11 @@
 "use client";
+import { useGetLatestEventsQuery } from "./getLatestEvents.generated";
 import {
   CardHeader,
   CardLink,
   CardTitle,
 } from "../../../../src/components/ui/card";
 import { urls } from "../../../../src/lib/urls";
-import { useGetLatestEventsQuery } from "./getLatestEvents.generated";
 
 export default function Eventos() {
   const { data, loading, error } = useGetLatestEventsQuery();

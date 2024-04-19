@@ -1,4 +1,5 @@
 import { FC } from "react";
+
 import { HeroTypes } from "./types";
 
 export const Hero: FC<HeroTypes> = ({ children }) => {

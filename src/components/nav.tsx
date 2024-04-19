@@ -5,9 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 
+import { useIsLoggedIn } from "@/utils/supabase/AuthProvider";
 import { logout } from "@/utils/supabase/client";
 
-import { useIsLoggedIn } from "@/utils/supabase/AuthProvider";
 import { MainNav } from "./Navbar/MainNav";
 import { MobileNav } from "./Navbar/MobileNav";
 import { ThemeSwitcher } from "./Navbar/ThemeSwitcher";
@@ -71,12 +71,11 @@ export const Nav = () => {
                   router.push(urls.login);
                 });
               },
-              closeMenu: true,
             },
           ],
         },
       ] satisfies NavbarMenuItem[],
-    [],
+    [router],
   );
 
   return (

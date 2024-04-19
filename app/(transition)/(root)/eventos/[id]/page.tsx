@@ -1,13 +1,15 @@
-import { getApolloClientForRSC } from "@/api/ApolloClientForRSC";
 import { MapPinIcon } from "@heroicons/react/24/outline";
+
+import { getApolloClientForRSC } from "@/api/ApolloClientForRSC";
 import { Attendees } from "@/components/Event/Attendees/Attendees";
 import { Hero } from "@/components/Event/Hero/Hero";
 import { Information } from "@/components/Event/Information/Information";
 import { Location } from "@/components/Event/Location/Location";
 import { Organizers } from "@/components/Event/Organizers/Organizers";
 import { Register } from "@/components/Event/Register/Register";
-import { PageProps } from "./types";
+
 import { GetEventDocument, GetEventQuery } from "./getEvent.generated";
+import { PageProps } from "./types";
 
 export default async function Event({ searchParams }: PageProps) {
   const c = getApolloClientForRSC();
@@ -19,7 +21,9 @@ export default async function Event({ searchParams }: PageProps) {
     },
   });
 
-  if (error) return <h2>Ocurrió un error cargando el evento</h2>;
+  if (error) {
+    return <h2>Ocurrió un error cargando el evento</h2>;
+  }
 
   const { event } = data;
 

@@ -1,7 +1,8 @@
-import { COOKIE_NAME } from "@/utils/supabase/client";
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import { registerApolloClient } from "@apollo/experimental-nextjs-app-support/rsc";
 import { cookies } from "next/headers";
+
+import { COOKIE_NAME } from "@/utils/supabase/client";
 
 const { getClient } = registerApolloClient(() => {
   const cookieValue = cookies().get(COOKIE_NAME)?.value ?? "";

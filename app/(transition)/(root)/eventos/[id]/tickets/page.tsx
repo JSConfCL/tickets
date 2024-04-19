@@ -2,12 +2,12 @@ import { getApolloClientForRSC } from "@/api/ApolloClientForRSC";
 
 // import { formatDate } from "@/lib/date";
 
-import Tickets from "./tickets";
-
 import {
   GetEventAndTicketsDocument,
   GetEventAndTicketsQuery,
 } from "./getEventAndTickets.generated";
+import Tickets from "./tickets";
+
 
 interface SearchParams {
   id: string;

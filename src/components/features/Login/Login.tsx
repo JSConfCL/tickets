@@ -1,10 +1,11 @@
 "use client";
-import React from "react";
-import { useEffect, useState } from "react";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { supabaseClient } from "@/utils/supabase/client";
 import { useTheme } from "next-themes";
+import React, { useEffect, useState } from "react";
+
+import { supabaseClient } from "@/utils/supabase/client";
+
 
 export const Login = () => {
   const { resolvedTheme } = useTheme();

@@ -1,8 +1,10 @@
-import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
-import { Inter, Roboto } from "next/font/google";
 import classNames from "classnames";
+import { Inter, Roboto } from "next/font/google";
+
 import { ThemeProvider } from "@/components/providers";
+import { Toaster } from "@/components/ui/sonner";
+
 import { ApolloWrapper } from "../src/api/ApolloWrapper";
 import { AuthProvider } from "../src/utils/supabase/AuthProvider";
 

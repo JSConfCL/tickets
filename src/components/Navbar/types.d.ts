@@ -4,7 +4,6 @@ export type NavbarMenuItem = {
   icon?: React.ReactNode;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   children?: Array<NavbarMenuItem>;
-  closeMenu?: boolean;
 };
 
 export type NavBarProps = {
