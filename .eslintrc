@@ -3,6 +3,7 @@
   "overrides": [
     {
       "files": ["*.js", "*.jsx"],
+      "plugins": ["react-hooks"],
       "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
@@ -17,11 +18,14 @@
         }
       },
       "rules": {
-        "react/react-in-jsx-scope": "off"
-      },
+        "react/react-in-jsx-scope": "off",
+        "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+        "react-hooks/exhaustive-deps": "error" // Checks effect dependencies
+      }
     },
     {
       "files": ["*.ts", "*.tsx"],
+      "plugins": ["react-hooks"],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
         "project": "./tsconfig.json"
@@ -40,7 +44,9 @@
         }
       },
       "rules": {
-        "react/react-in-jsx-scope": "off"
+        "react/react-in-jsx-scope": "off",
+        "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+        "react-hooks/exhaustive-deps": "error" // Checks effect dependencies
       }
     },
     {

@@ -12,8 +12,6 @@ const { getClient } = registerApolloClient(() => {
         },
       }
     : {};
-  console.log("cookieValue", COOKIE_NAME, cookieValue);
-  console.log("headers", headers);
   return new ApolloClient({
     cache: new InMemoryCache(),
     link: new HttpLink({

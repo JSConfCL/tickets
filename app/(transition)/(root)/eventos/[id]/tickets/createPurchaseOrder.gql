@@ -1,22 +1,27 @@
-query getEventAndTickets($input: String!) {
-  event(id: $input) {
-    id
-    name
-    address
-    description
-    maxAttendees
-    startDateTime
-    endDateTime
-    status
-    community {
-      name
-    }
-    users {
+mutation createPurchaseOrder($input: TicketClaimInput!) {
+  claimUserTicket(input: $input) {
+    __typename
+    ... on PurchaseOrder {
+      __typename
       id
-      name
+      currency {
+        id
+      }
+      finalPrice
+      paymentLink
+      status
+      tickets {
+        id
+        approvalStatus
+        status
+        redemptionStatus
+        paymentStatus
+      }
     }
-    tickets {
-      ...EventTicketFragment
+    ... on RedeemUserTicketError {
+      __typename
+      error
+      errorMessage
     }
   }
 }

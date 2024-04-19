@@ -8,7 +8,6 @@ import * as Types from '../../../../../../src/api/gql/graphql';
 import { gql } from '@apollo/client';
 import { EventTicketFragmentFragmentDoc } from './EventTicketFragment.generated';
 import * as Apollo from '@apollo/client';
-import * as ApolloReactHooks from '@apollo/experimental-nextjs-app-support/ssr';
 const defaultOptions = {} as const;
 export type GetEventAndTicketsQueryVariables = Types.Exact<{
   input: Types.Scalars['String']['input'];
@@ -59,17 +58,17 @@ export const GetEventAndTicketsDocument = gql`
  *   },
  * });
  */
-export function useGetEventAndTicketsQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetEventAndTicketsQuery, GetEventAndTicketsQueryVariables>) {
+export function useGetEventAndTicketsQuery(baseOptions: Apollo.QueryHookOptions<GetEventAndTicketsQuery, GetEventAndTicketsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useQuery<GetEventAndTicketsQuery, GetEventAndTicketsQueryVariables>(GetEventAndTicketsDocument, options);
+        return Apollo.useQuery<GetEventAndTicketsQuery, GetEventAndTicketsQueryVariables>(GetEventAndTicketsDocument, options);
       }
-export function useGetEventAndTicketsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetEventAndTicketsQuery, GetEventAndTicketsQueryVariables>) {
+export function useGetEventAndTicketsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEventAndTicketsQuery, GetEventAndTicketsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useLazyQuery<GetEventAndTicketsQuery, GetEventAndTicketsQueryVariables>(GetEventAndTicketsDocument, options);
+          return Apollo.useLazyQuery<GetEventAndTicketsQuery, GetEventAndTicketsQueryVariables>(GetEventAndTicketsDocument, options);
         }
-export function useGetEventAndTicketsSuspenseQuery(baseOptions?: ApolloReactHooks.SuspenseQueryHookOptions<GetEventAndTicketsQuery, GetEventAndTicketsQueryVariables>) {
+export function useGetEventAndTicketsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetEventAndTicketsQuery, GetEventAndTicketsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useSuspenseQuery<GetEventAndTicketsQuery, GetEventAndTicketsQueryVariables>(GetEventAndTicketsDocument, options);
+          return Apollo.useSuspenseQuery<GetEventAndTicketsQuery, GetEventAndTicketsQueryVariables>(GetEventAndTicketsDocument, options);
         }
 export type GetEventAndTicketsQueryHookResult = ReturnType<typeof useGetEventAndTicketsQuery>;
 export type GetEventAndTicketsLazyQueryHookResult = ReturnType<typeof useGetEventAndTicketsLazyQuery>;

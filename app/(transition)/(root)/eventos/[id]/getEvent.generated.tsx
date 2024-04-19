@@ -7,7 +7,6 @@ import * as Types from '../../../../../src/api/gql/graphql';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-import * as ApolloReactHooks from '@apollo/experimental-nextjs-app-support/ssr';
 const defaultOptions = {} as const;
 export type GetEventQueryVariables = Types.Exact<{
   input: Types.Scalars['String']['input'];
@@ -55,17 +54,17 @@ export const GetEventDocument = gql`
  *   },
  * });
  */
-export function useGetEventQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetEventQuery, GetEventQueryVariables>) {
+export function useGetEventQuery(baseOptions: Apollo.QueryHookOptions<GetEventQuery, GetEventQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
+        return Apollo.useQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
       }
-export function useGetEventLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetEventQuery, GetEventQueryVariables>) {
+export function useGetEventLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEventQuery, GetEventQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useLazyQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
+          return Apollo.useLazyQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
         }
-export function useGetEventSuspenseQuery(baseOptions?: ApolloReactHooks.SuspenseQueryHookOptions<GetEventQuery, GetEventQueryVariables>) {
+export function useGetEventSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetEventQuery, GetEventQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useSuspenseQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
+          return Apollo.useSuspenseQuery<GetEventQuery, GetEventQueryVariables>(GetEventDocument, options);
         }
 export type GetEventQueryHookResult = ReturnType<typeof useGetEventQuery>;
 export type GetEventLazyQueryHookResult = ReturnType<typeof useGetEventLazyQuery>;

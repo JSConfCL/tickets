@@ -30,10 +30,8 @@ export const getCookieOptions = (): CookieAttributes => {
   const cookieArguments = {
     httpOnly: false,
     sameSite: "lax",
-    expires: expirationDate,
-    secure:
-      typeof document !== "undefined" &&
-      document.location?.protocol === "https",
+    expires: new Date(expirationDate),
+    secure: false,
   } satisfies CookieAttributes;
   return cookieArguments;
 };

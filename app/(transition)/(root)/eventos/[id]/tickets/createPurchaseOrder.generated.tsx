@@ -6,72 +6,68 @@
 import * as Types from '../../../../../../src/api/gql/graphql';
 
 import { gql } from '@apollo/client';
-import { EventTicketFragmentFragmentDoc } from './EventTicketFragment.generated';
 import * as Apollo from '@apollo/client';
-import * as ApolloReactHooks from '@apollo/experimental-nextjs-app-support/ssr';
 const defaultOptions = {} as const;
-export type GetEventAndTicketsQueryVariables = Types.Exact<{
-  input: Types.Scalars['String']['input'];
+export type CreatePurchaseOrderMutationVariables = Types.Exact<{
+  input: Types.TicketClaimInput;
 }>;
 
 
-export type GetEventAndTicketsQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, name: string, address?: string | null, description?: string | null, maxAttendees?: number | null, startDateTime: any, endDateTime?: any | null, status: Types.EventStatus, community?: { __typename?: 'Community', name?: string | null } | null, users: Array<{ __typename?: 'User', id: string, name?: string | null }>, tickets: Array<{ __typename?: 'Ticket', id: string, name: string, description?: string | null, quantity?: number | null, isFree: boolean, startDateTime: any, status: Types.TicketTemplateStatus, isUnlimited: boolean, prices?: Array<{ __typename?: 'Price', id: string, amount: number, currency: { __typename?: 'AllowedCurrency', currency: string, id: string } }> | null }> } | null };
+export type CreatePurchaseOrderMutation = { __typename?: 'Mutation', claimUserTicket: { __typename: 'PurchaseOrder', id: string, finalPrice?: number | null, paymentLink?: string | null, status?: Types.PurchaseOrderStatusEnum | null, currency?: { __typename?: 'AllowedCurrency', id: string } | null, tickets: Array<{ __typename?: 'UserTicket', id: string, approvalStatus: Types.TicketApprovalStatus, status: Types.TicketStatus, redemptionStatus: Types.TicketRedemptionStatus, paymentStatus: Types.TicketPaymentStatus }> } | { __typename: 'RedeemUserTicketError', error: boolean, errorMessage: string } };
 
 
-export const GetEventAndTicketsDocument = gql`
-    query getEventAndTickets($input: String!) {
-  event(id: $input) {
-    id
-    name
-    address
-    description
-    maxAttendees
-    startDateTime
-    endDateTime
-    status
-    community {
-      name
-    }
-    users {
+export const CreatePurchaseOrderDocument = gql`
+    mutation createPurchaseOrder($input: TicketClaimInput!) {
+  claimUserTicket(input: $input) {
+    __typename
+    ... on PurchaseOrder {
+      __typename
       id
-      name
+      currency {
+        id
+      }
+      finalPrice
+      paymentLink
+      status
+      tickets {
+        id
+        approvalStatus
+        status
+        redemptionStatus
+        paymentStatus
+      }
     }
-    tickets {
-      ...EventTicketFragment
+    ... on RedeemUserTicketError {
+      __typename
+      error
+      errorMessage
     }
   }
 }
-    ${EventTicketFragmentFragmentDoc}`;
+    `;
+export type CreatePurchaseOrderMutationFn = Apollo.MutationFunction<CreatePurchaseOrderMutation, CreatePurchaseOrderMutationVariables>;
 
 /**
- * __useGetEventAndTicketsQuery__
+ * __useCreatePurchaseOrderMutation__
  *
- * To run a query within a React component, call `useGetEventAndTicketsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetEventAndTicketsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
+ * To run a mutation, you first call `useCreatePurchaseOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePurchaseOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const { data, loading, error } = useGetEventAndTicketsQuery({
+ * const [createPurchaseOrderMutation, { data, loading, error }] = useCreatePurchaseOrderMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useGetEventAndTicketsQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetEventAndTicketsQuery, GetEventAndTicketsQueryVariables>) {
+export function useCreatePurchaseOrderMutation(baseOptions?: Apollo.MutationHookOptions<CreatePurchaseOrderMutation, CreatePurchaseOrderMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useQuery<GetEventAndTicketsQuery, GetEventAndTicketsQueryVariables>(GetEventAndTicketsDocument, options);
+        return Apollo.useMutation<CreatePurchaseOrderMutation, CreatePurchaseOrderMutationVariables>(CreatePurchaseOrderDocument, options);
       }
-export function useGetEventAndTicketsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetEventAndTicketsQuery, GetEventAndTicketsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useLazyQuery<GetEventAndTicketsQuery, GetEventAndTicketsQueryVariables>(GetEventAndTicketsDocument, options);
-        }
-export function useGetEventAndTicketsSuspenseQuery(baseOptions?: ApolloReactHooks.SuspenseQueryHookOptions<GetEventAndTicketsQuery, GetEventAndTicketsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useSuspenseQuery<GetEventAndTicketsQuery, GetEventAndTicketsQueryVariables>(GetEventAndTicketsDocument, options);
-        }
-export type GetEventAndTicketsQueryHookResult = ReturnType<typeof useGetEventAndTicketsQuery>;
-export type GetEventAndTicketsLazyQueryHookResult = ReturnType<typeof useGetEventAndTicketsLazyQuery>;
-export type GetEventAndTicketsSuspenseQueryHookResult = ReturnType<typeof useGetEventAndTicketsSuspenseQuery>;
-export type GetEventAndTicketsQueryResult = Apollo.QueryResult<GetEventAndTicketsQuery, GetEventAndTicketsQueryVariables>;
+export type CreatePurchaseOrderMutationHookResult = ReturnType<typeof useCreatePurchaseOrderMutation>;
+export type CreatePurchaseOrderMutationResult = Apollo.MutationResult<CreatePurchaseOrderMutation>;
+export type CreatePurchaseOrderMutationOptions = Apollo.BaseMutationOptions<CreatePurchaseOrderMutation, CreatePurchaseOrderMutationVariables>;

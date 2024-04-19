@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import { Inter, Roboto } from "next/font/google";
 import classNames from "classnames";
@@ -46,6 +47,7 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               {children}
+              <Toaster />
             </ThemeProvider>
           </AuthProvider>
         </ApolloWrapper>

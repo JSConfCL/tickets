@@ -4,7 +4,7 @@ import {
   useIsAuthReady,
   useIsLoggedIn,
 } from "../../../../../../src/utils/supabase/AuthProvider";
-import { Login } from "../../../../../../src/components/features/Auth/Login";
+import { Login } from "../../../../../../src/components/features/Login/Login";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const isLoggedIn = useIsLoggedIn();
@@ -28,7 +28,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     );
   }
 
-  return <div>{children}</div>;
+  return <>{children}</>;
 }
 
 export const runtime = "edge";

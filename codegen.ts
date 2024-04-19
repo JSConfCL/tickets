@@ -48,10 +48,6 @@ const config = {
         "typescript-react-apollo",
         noTypeCheckingPlugin,
       ],
-      config: {
-        apolloReactHooksImportFrom:
-          "@apollo/experimental-nextjs-app-support/ssr",
-      },
     },
   },
 } satisfies CodegenConfig;

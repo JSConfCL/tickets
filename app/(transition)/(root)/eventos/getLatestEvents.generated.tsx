@@ -7,7 +7,6 @@ import * as Types from '../../../../src/api/gql/graphql';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-import * as ApolloReactHooks from '@apollo/experimental-nextjs-app-support/ssr';
 const defaultOptions = {} as const;
 export type GetLatestEventsQueryVariables = Types.Exact<{
   input?: Types.InputMaybe<Types.EventsSearchInput>;
@@ -45,17 +44,17 @@ export const GetLatestEventsDocument = gql`
  *   },
  * });
  */
-export function useGetLatestEventsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetLatestEventsQuery, GetLatestEventsQueryVariables>) {
+export function useGetLatestEventsQuery(baseOptions?: Apollo.QueryHookOptions<GetLatestEventsQuery, GetLatestEventsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useQuery<GetLatestEventsQuery, GetLatestEventsQueryVariables>(GetLatestEventsDocument, options);
+        return Apollo.useQuery<GetLatestEventsQuery, GetLatestEventsQueryVariables>(GetLatestEventsDocument, options);
       }
-export function useGetLatestEventsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetLatestEventsQuery, GetLatestEventsQueryVariables>) {
+export function useGetLatestEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetLatestEventsQuery, GetLatestEventsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useLazyQuery<GetLatestEventsQuery, GetLatestEventsQueryVariables>(GetLatestEventsDocument, options);
+          return Apollo.useLazyQuery<GetLatestEventsQuery, GetLatestEventsQueryVariables>(GetLatestEventsDocument, options);
         }
-export function useGetLatestEventsSuspenseQuery(baseOptions?: ApolloReactHooks.SuspenseQueryHookOptions<GetLatestEventsQuery, GetLatestEventsQueryVariables>) {
+export function useGetLatestEventsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetLatestEventsQuery, GetLatestEventsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useSuspenseQuery<GetLatestEventsQuery, GetLatestEventsQueryVariables>(GetLatestEventsDocument, options);
+          return Apollo.useSuspenseQuery<GetLatestEventsQuery, GetLatestEventsQueryVariables>(GetLatestEventsDocument, options);
         }
 export type GetLatestEventsQueryHookResult = ReturnType<typeof useGetLatestEventsQuery>;
 export type GetLatestEventsLazyQueryHookResult = ReturnType<typeof useGetLatestEventsLazyQuery>;
