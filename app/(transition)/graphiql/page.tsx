@@ -4,10 +4,10 @@ import { createGraphiQLFetcher, Fetcher } from "@graphiql/toolkit";
 import { GraphiQL } from "graphiql";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import "graphiql/graphiql.css";
 
-import { Button } from "../../../src/components/ui/button";
-import { urls } from "../../../src/lib/urls";
+import "graphiql/graphiql.css";
+import { Button } from "@/components/ui/button";
+import { urls } from "@/lib/urls";
 
 const useGetAuthToken = () => {
   const [token, setToken] = useState<string | null>(null);

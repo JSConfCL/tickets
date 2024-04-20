@@ -3,9 +3,8 @@
 import { NextPage } from "next";
 import { redirect } from "next/navigation";
 
+import { Login } from "@/components/features/Login/Login";
 import { useIsLoggedIn } from "@/utils/supabase/AuthProvider";
-
-import { Login } from "../../../../src/components/features/Login/Login";
 
 const AuthPage: NextPage = () => {
   const isLoggedIn = useIsLoggedIn();
