@@ -5,8 +5,8 @@ import { getApolloClientForRSC } from "@/api/ApolloClientForRSC";
 import {
   GetEventAndTicketsDocument,
   GetEventAndTicketsQuery,
-} from "./getEventAndTickets.generated";
-import Tickets from "./tickets";
+} from "../../../../../../src/features/TicketsSaleFlow/graphql/getEventAndTickets.generated";
+import Tickets from "../../../../../../src/features/TicketsSaleFlow/ticketSaleFlow";
 
 interface SearchParams {
   id: string;

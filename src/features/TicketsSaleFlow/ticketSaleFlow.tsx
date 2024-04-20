@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import React, {
-  ChangeEventHandler,
   MouseEventHandler,
   useCallback,
   useMemo,
@@ -12,17 +11,7 @@ import React, {
 import { toast } from "sonner";
 import { v4 } from "uuid";
 
-import { AllowedCurrency as Currency } from "@/api/gql/graphql";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -35,20 +24,14 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatCurrency } from "@/lib/numbers";
 
-import { useCreatePurchaseOrderMutation } from "./createPurchaseOrder.generated";
-import { EventTicketFragmentFragment } from "./EventTicketFragment.generated";
-
+import { useCreatePurchaseOrderMutation } from "./graphql/createPurchaseOrder.generated";
+import { EventTicketFragmentFragment } from "./graphql/EventTicketFragment.generated";
+import { SecondStepFooter, StepHeader } from "./Stepper";
+import { TicketSelectionTab } from "./TicketSelectionTab";
+import { Currencies, Step, TicketsState } from "./types";
 const MIN_NUMBER_OF_TICKETS = 0;
 const MAX_NUMBER_OF_TICKETS = 100;
 const MAX_STEP = 0;
-
-type TicketsState = {
-  [key: string]: number;
-};
-
-type Currencies = {
-  [key: string]: Currency;
-};
 
 // Stepper
 const steps = [
@@ -66,128 +49,7 @@ const steps = [
     longName: "Confirmación",
     description: "Revisa tu pedido antes de continuar.",
   },
-  // {
-  //   id: 2,
-  //   slug: "confirm",
-  //   shortName: "Pago",
-  //   longName: "Pago",
-  //   description:
-  //     "Nulla facilisis, risus a rhoncus fermentum, tellus tellus lacinia purus, et dictum nunc justo sit amet elit.",
-  // },
 ];
-
-interface Step {
-  id: number;
-  slug: string;
-  shortName: string;
-  longName: string;
-  description: string;
-}
-
-interface StepHeaderProps {
-  activeStep: Step;
-  steps: Step[];
-  step: number;
-}
-
-interface FirstStepFooterProps {
-  onClickNext: MouseEventHandler<HTMLButtonElement>;
-  isDisabled: boolean;
-  steps: Step[];
-  step: number;
-  total: string | null;
-}
-
-interface SecondStepFooterProps {
-  onClickPrevious: MouseEventHandler<HTMLButtonElement>;
-  onClickNext: MouseEventHandler<HTMLButtonElement>;
-  isDisabled: boolean;
-  total: string | null;
-}
-
-const StepHeader = ({ activeStep, steps, step }: StepHeaderProps) => (
-  <>
-    <CardHeader className="flex flex-col items-start justify-between gap-2">
-      <CardTitle>{activeStep.longName}</CardTitle>
-      <CardDescription>
-        <span>
-          Paso {step + 1} de {steps.length}.
-        </span>
-        <br />
-        <span>{activeStep.description}</span>
-      </CardDescription>
-    </CardHeader>
-    <Separator className="my-4" />
-  </>
-);
-
-const PriceBlock = ({ total }: { total: string | null }) => {
-  return (
-    <span className="mr-4 flex gap-8 text-center text-2xl font-bold leading-none">
-      <span>{total ?? 0}</span>
-    </span>
-  );
-};
-const FirstStepFooter = ({
-  onClickNext,
-  isDisabled,
-  total,
-}: FirstStepFooterProps) => (
-  <>
-    <Separator className="my-4" />
-    <CardFooter className="flex justify-end">
-      <div className="flex items-center gap-2">
-        <PriceBlock total={total} />
-        <Button disabled={isDisabled} onClick={onClickNext}>
-          Siguiente
-        </Button>
-      </div>
-    </CardFooter>
-  </>
-);
-
-const SecondStepFooter = ({
-  onClickPrevious,
-  onClickNext,
-  isDisabled,
-  total,
-}: SecondStepFooterProps) => (
-  <>
-    <Separator className="my-4" />
-    <CardFooter className="flex justify-between">
-      <div>
-        <Button variant="outline" onClick={onClickPrevious}>
-          Anterior
-        </Button>
-      </div>
-      <div className="flex items-center gap-2">
-        <PriceBlock total={total} />
-        <Button disabled={isDisabled} onClick={onClickNext}>
-          Comprar
-        </Button>
-      </div>
-    </CardFooter>
-  </>
-);
-
-const TicketAmountInput = ({
-  value,
-  onChange,
-}: {
-  value: number;
-  onChange: ChangeEventHandler<HTMLInputElement>;
-}) => {
-  return (
-    <Input
-      type="number"
-      className="appearance-none"
-      value={value}
-      min={0}
-      max={100}
-      onChange={onChange}
-    />
-  );
-};
 
 const ConfirmationTab = ({
   step,
@@ -383,7 +245,14 @@ export default function Tickets({
   }, [selectedTickets, tickets]);
 
   const handleChange = (ticketId: string, number: number) => {
-    setSelectedTickets((tmpTickets) => ({ ...tmpTickets, [ticketId]: number }));
+    const clampNumber = Math.min(
+      Math.max(number, MIN_NUMBER_OF_TICKETS),
+      MAX_NUMBER_OF_TICKETS,
+    );
+    setSelectedTickets((tmpTickets) => ({
+      ...tmpTickets,
+      [ticketId]: clampNumber,
+    }));
   };
 
   const handleAdd = (ticketId: string) => {
@@ -501,81 +370,19 @@ export default function Tickets({
       </div>
 
       <TabsContent value={steps[0].slug}>
-        <Card>
-          <StepHeader step={step} steps={steps} activeStep={activeStep} />
-          <CardContent id="card-content">
-            {/* "Tickets Main" */}
-            <div className="flex flex-col gap-4 pt-4">
-              {tickets.map((ticket, index, originalArr) => (
-                <>
-                  <div
-                    key={ticket.id}
-                    className="flex flex-col items-center justify-between last:border-0 md:flex-row md:gap-0"
-                  >
-                    <div className="flex flex-col gap-2">
-                      <div className="w-auto font-bold text-slate-900 dark:text-white">
-                        {ticket.name}
-                      </div>
-                      {ticket.description ? (
-                        <div className="w-auto">{ticket.description}</div>
-                      ) : null}
-                      <div className="flex w-auto gap-2 font-medium text-muted-foreground">
-                        {ticket.prices?.length
-                          ? ticket.prices
-                              .map((price) =>
-                                formatCurrency(
-                                  price.amount,
-                                  price.currency.currency,
-                                ),
-                              )
-                              .join(" | ")
-                          : "Gratis"}
-                      </div>
-                    </div>
-                    <div className="flex flex-row items-center justify-between gap-3 font-medium">
-                      <Button
-                        className="h-8"
-                        size="sm"
-                        disabled={!selectedTickets[ticket.id]}
-                        onClick={() => handleSubtract(ticket.id)}
-                      >
-                        -
-                      </Button>
-                      <div className="w-16">
-                        <TicketAmountInput
-                          value={selectedTickets[ticket.id] ?? 0}
-                          onChange={(e) => {
-                            handleChange(
-                              ticket.id,
-                              parseInt(e.target.value, 10),
-                            );
-                          }}
-                        />
-                      </div>
-                      <Button
-                        className="h-8"
-                        size="sm"
-                        onClick={() => handleAdd(ticket.id)}
-                      >
-                        +
-                      </Button>
-                    </div>
-                  </div>
-                  {originalArr.at(-1)?.id !== ticket.id && (
-                    <Separator className="my-2" />
-                  )}
-                </>
-              ))}
-            </div>
-          </CardContent>
-          <FirstStepFooter
-            onClickNext={nextStep}
-            isDisabled={numberOfTickets === 0}
-            steps={steps}
-            step={step}
-            total={formattedTotal}
-          />
-        </Card>
+        <TicketSelectionTab
+          step={step}
+          steps={steps}
+          activeStep={activeStep}
+          tickets={tickets}
+          selectedTickets={selectedTickets}
+          numberOfTickets={numberOfTickets}
+          nextStep={nextStep}
+          formattedTotal={formattedTotal}
+          onMinusButtonClick={handleSubtract}
+          onPlusButtonClick={handleAdd}
+          onInputChange={handleChange}
+        />
       </TabsContent>
       <TabsContent value={steps[1].slug}>
         <ConfirmationTab
