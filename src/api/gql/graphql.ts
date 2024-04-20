@@ -38,9 +38,11 @@ export enum CommnunityStatus {
 
 /** Representation of a Community */
 export type Community = {
+  banner: Maybe<Scalars['String']['output']>;
   description: Maybe<Scalars['String']['output']>;
   events: Array<Event>;
   id: Scalars['String']['output'];
+  logo: Maybe<Scalars['String']['output']>;
   name: Maybe<Scalars['String']['output']>;
   status: CommnunityStatus;
   users: Array<User>;
@@ -638,6 +640,8 @@ export enum TicketApprovalStatus {
 }
 
 export type TicketClaimInput = {
+  /** If this field is passed, a purchase order payment link will be generated right away */
+  generatePaymentLink: Scalars['Boolean']['input'];
   /** A unique key to prevent duplicate requests, it's optional to send, but it's recommended to send it to prevent duplicate requests. If not sent, it will be created by the server. */
   idempotencyUUIDKey: InputMaybe<Scalars['String']['input']>;
   purchaseOrder: Array<PurchaseOrderInput>;

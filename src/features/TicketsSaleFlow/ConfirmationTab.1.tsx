@@ -1,5 +1,4 @@
 "use client";
-
 import { useRouter } from "next/navigation";
 import React, { MouseEventHandler, useCallback, useRef } from "react";
 import { toast } from "sonner";
@@ -67,7 +66,14 @@ export const ConfirmationTab = ({
           if (paymentLink) {
             toast("Tu orden esta lista, redirigiéndote al portal de pago.");
             setTimeout(() => {
-              router.push(paymentLink);
+              const newWindow = window.open(
+                paymentLink,
+                "_blank",
+                "noopener,noreferrer",
+              );
+              if (newWindow) {
+                newWindow.opener = null;
+              }
             }, 2000);
           }
         } else {

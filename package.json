@@ -44,6 +44,7 @@
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.3.2",
     "cookies-next": "^4.1.1",
+    "dotenv": "^16.4.5",
     "easymde": "^2.18.0",
     "eslint-config-next": "13.4.9",
     "framer-motion": "^10.12.18",

@@ -13,7 +13,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatCurrency } from "@/lib/numbers";
 
-import { ConfirmationTab } from "./ConfirmationTab";
+import { ConfirmationTab } from "./ConfirmationTab.1";
 import { EventTicketFragmentFragment } from "./graphql/EventTicketFragment.generated";
 import { TicketSelectionTab } from "./TicketSelectionTab";
 import { Currencies, TicketsState } from "./types";
