@@ -22,6 +22,8 @@ export const TicketSelectionTab = ({
   onMinusButtonClick,
   onPlusButtonClick,
   onInputChange,
+  isActive,
+  hasFinished,
 }: {
   step: number;
   nextStep: () => void;
@@ -34,6 +36,8 @@ export const TicketSelectionTab = ({
   onMinusButtonClick: (ticketId: string) => void;
   onPlusButtonClick: (ticketId: string) => void;
   onInputChange: (ticketId: string, value: number) => void;
+  isActive: boolean;
+  hasFinished: boolean;
 }) => {
   return (
     <Card>
@@ -103,10 +107,19 @@ export const TicketSelectionTab = ({
       </CardContent>
       <FirstStepFooter
         onClickNext={nextStep}
-        isDisabled={numberOfTickets === 0}
+        isDisabled={numberOfTickets === 0 || !isActive || hasFinished}
         steps={steps}
         step={step}
         total={formattedTotal}
+        hoverText={
+          !isActive
+            ? "Este evento no está activo"
+            : hasFinished
+              ? "Este evento ya ha finalizado"
+              : numberOfTickets === 0
+                ? "No puedes continuar si no seleccionas al menos un ticket"
+                : null
+        }
       />
     </Card>
   );

@@ -113,12 +113,16 @@ export const ConfirmationTab = ({
                           : ""}
                       </div>
                     </div>
-                    <div className="flex flex-row items-center justify-center gap-2 font-bold md:w-40">
+                    <div className="flex flex-row items-center justify-end gap-2 font-bold md:w-40">
                       <div className="flex flex-row items-center gap-3">
                         {selectedTickets[ticket.id]}
                       </div>
                       <div className="">×</div>
-                      <div className="">{getFormmatedTicketPrice(ticket)}</div>
+                      <div className="">
+                        {ticket.isFree
+                          ? "Gratis"
+                          : getFormmatedTicketPrice(ticket)}
+                      </div>
                     </div>
                   </div>
                   {originalArr.at(-1)?.id !== ticket.id && (

@@ -1,17 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import React, {
-  MouseEventHandler,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { toast } from "sonner";
-import { v4 } from "uuid";
+import { useCallback, useMemo, useState } from "react";
 
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -20,15 +10,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatCurrency } from "@/lib/numbers";
 
-import { useCreatePurchaseOrderMutation } from "./graphql/createPurchaseOrder.generated";
+import { ConfirmationTab } from "./ConfirmationTab";
 import { EventTicketFragmentFragment } from "./graphql/EventTicketFragment.generated";
-import { SecondStepFooter, StepHeader } from "./Stepper";
 import { TicketSelectionTab } from "./TicketSelectionTab";
-import { Currencies, Step, TicketsState } from "./types";
+import { Currencies, TicketsState } from "./types";
 const MIN_NUMBER_OF_TICKETS = 0;
 const MAX_NUMBER_OF_TICKETS = 100;
 const MAX_STEP = 0;
@@ -47,146 +35,18 @@ const steps = [
     slug: "info",
     shortName: "Confirmación",
     longName: "Confirmación",
-    description: "Revisa tu pedido antes de continuar.",
+    description: "Revisa tus tickets antes de continuar.",
   },
 ];
 
-const ConfirmationTab = ({
-  step,
-  steps,
-  activeStep,
-  tickets,
-  selectedTickets,
-  numberOfTickets,
-  formattedTotal,
-  previousStep,
-  getFormmatedTicketPrice,
-}: {
-  step: number;
-  steps: Step[];
-  activeStep: Step;
-  tickets: EventTicketFragmentFragment[];
-  selectedTickets: TicketsState;
-  numberOfTickets: number;
-  formattedTotal: string | null;
-  previousStep: MouseEventHandler<HTMLButtonElement>;
-  getFormmatedTicketPrice: (
-    ticket: EventTicketFragmentFragment,
-  ) => string | null;
-}) => {
-  const router = useRouter();
-  const idempotencyUUIDKey = useRef<string>(v4());
-  const [purchaseOrderMutation, purchaseOrderMutationResults] =
-    useCreatePurchaseOrderMutation();
-  const createPurchaseOrder = useCallback(async () => {
-    // calls the mutation
-    const purchaseOrder = Object.entries(selectedTickets).map(
-      ([ticketId, quantity]) => ({
-        ticketId,
-        quantity,
-      }),
-    );
-
-    await purchaseOrderMutation({
-      variables: {
-        input: {
-          idempotencyUUIDKey: idempotencyUUIDKey.current,
-          purchaseOrder,
-        },
-      },
-      onCompleted(data) {
-        // Redirect to payment page
-        if (data.claimUserTicket.__typename === "RedeemUserTicketError") {
-          toast.error(data.claimUserTicket.errorMessage);
-        } else if (data.claimUserTicket.__typename === "PurchaseOrder") {
-          const { paymentLink } = data.claimUserTicket;
-          if (paymentLink) {
-            toast("Tu orden esta lista, redirigiéndote al portal de pago.");
-            setTimeout(() => {
-              router.push(paymentLink);
-            }, 2000);
-          }
-        } else {
-          toast.error(
-            "Ocurrió un error al intentar comprar tus tickets. Por favor intenta de nuevo.",
-          );
-        }
-      },
-      onError() {
-        toast.error(
-          "Ocurrió un error al intentar comprar tus tickets. Por favor intenta de nuevo.",
-        );
-      },
-    });
-  }, [purchaseOrderMutation, router, selectedTickets]);
-  return (
-    <Card>
-      <StepHeader steps={steps} step={step} activeStep={activeStep} />
-      <CardContent>
-        <div className="flex flex-col gap-4 pt-4">
-          {tickets
-            .filter((ticket) => selectedTickets[ticket.id])
-            .map((ticket, index, originalArr) => {
-              return (
-                <React.Fragment key={ticket.id}>
-                  <div className="flex w-full flex-row items-center justify-between gap-4 md:w-auto md:flex-row md:gap-8">
-                    <div className="flex w-full grow flex-col gap-1">
-                      <div className="font-bold text-slate-900 dark:text-white">
-                        {ticket.name}
-                      </div>
-                      {ticket.description ? (
-                        <div className="w-auto ">{ticket.description}</div>
-                      ) : null}
-                      <div className="flex w-auto gap-2 font-medium text-muted-foreground">
-                        {ticket.prices?.length
-                          ? ticket.prices
-                              .map((price) =>
-                                formatCurrency(
-                                  price.amount,
-                                  price.currency.currency,
-                                ),
-                              )
-                              .join(" | ")
-                          : ""}
-                      </div>
-                    </div>
-                    <div className="flex flex-row items-center justify-center gap-2 font-bold md:w-40">
-                      <div className="flex flex-row items-center gap-3">
-                        {selectedTickets[ticket.id]}
-                      </div>
-                      <div className="">×</div>
-                      <div className="">{getFormmatedTicketPrice(ticket)}</div>
-                    </div>
-                  </div>
-                  {originalArr.at(-1)?.id !== ticket.id && (
-                    <Separator className="my-3" />
-                  )}
-                </React.Fragment>
-              );
-            })}
-        </div>
-      </CardContent>
-      <SecondStepFooter
-        onClickPrevious={previousStep}
-        onClickNext={() => {
-          createPurchaseOrder().catch((error) => {
-            // eslint-disable-next-line no-console
-            console.error(error);
-          });
-        }}
-        isDisabled={
-          numberOfTickets === 0 || purchaseOrderMutationResults.loading
-        }
-        total={formattedTotal}
-      />
-    </Card>
-  );
-};
-
 export default function Tickets({
   tickets,
+  isActive,
+  hasFinished,
 }: {
   tickets: EventTicketFragmentFragment[];
+  isActive: boolean;
+  hasFinished: boolean;
 }) {
   const [step, setStep] = useState(0);
   const activeStep = steps[step];
@@ -382,6 +242,8 @@ export default function Tickets({
           onMinusButtonClick={handleSubtract}
           onPlusButtonClick={handleAdd}
           onInputChange={handleChange}
+          isActive={isActive}
+          hasFinished={hasFinished}
         />
       </TabsContent>
       <TabsContent value={steps[1].slug}>

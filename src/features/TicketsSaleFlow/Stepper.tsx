@@ -7,6 +7,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 
 import {
@@ -63,19 +68,41 @@ const PriceBlock = ({ total }: { total: string | null }) => {
   );
 };
 
+const ConditionalPopoverWrapper = ({
+  popoverText,
+  children,
+}: {
+  popoverText: string | undefined | null;
+  children: React.ReactNode;
+}) => {
+  if (popoverText) {
+    return (
+      <Popover>
+        <PopoverTrigger>{children}</PopoverTrigger>
+        <PopoverContent>{popoverText}.</PopoverContent>
+      </Popover>
+    );
+  } else {
+    return <>{children}</>;
+  }
+};
+
 export const FirstStepFooter = ({
   onClickNext,
   isDisabled,
   total,
+  hoverText,
 }: FirstStepFooterProps) => (
   <>
     <Separator className="my-4" />
     <CardFooter className="flex justify-end">
       <div className="flex items-center gap-2">
         <PriceBlock total={total} />
-        <Button disabled={isDisabled} onClick={onClickNext}>
-          Siguiente
-        </Button>
+        <ConditionalPopoverWrapper popoverText={hoverText}>
+          <Button disabled={isDisabled} onClick={onClickNext}>
+            Siguiente
+          </Button>
+        </ConditionalPopoverWrapper>
       </div>
     </CardFooter>
   </>

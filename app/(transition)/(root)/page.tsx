@@ -1,9 +1,9 @@
-import { getApolloClientForRSC } from "../../../src/api/ApolloClientForRSC";
-import { LandingPageEvents } from "../../../src/components/features/LandingPageEvents";
+import { getApolloClientForRSC } from "@/api/ApolloClientForRSC";
+import { LandingPageEvents } from "@/components/features/LandingPageEvents";
 import {
   FetchExampleEventsDocument,
   FetchExampleEventsQuery,
-} from "../../../src/components/features/LandingPageEvents/graphql/FetchExampleEvents.generated";
+} from "@/components/features/LandingPageEvents/graphql/FetchExampleEvents.generated";
 
 export default async function Home() {
   const c = getApolloClientForRSC();

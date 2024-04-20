@@ -30,6 +30,7 @@ export type FirstStepFooterProps = {
   steps: Step[];
   step: number;
   total: string | null;
+  hoverText?: string | null;
 };
 
 export type SecondStepFooterProps = {
