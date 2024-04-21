@@ -14,7 +14,7 @@ export type GetEventAndTicketsQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetEventAndTicketsQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, name: string, address?: string | null, description?: string | null, maxAttendees?: number | null, startDateTime: any, endDateTime?: any | null, status: Types.EventStatus, community?: { __typename?: 'Community', name?: string | null } | null, users: Array<{ __typename?: 'User', id: string, name?: string | null }>, tickets: Array<{ __typename?: 'Ticket', id: string, name: string, description?: string | null, quantity?: number | null, isFree: boolean, startDateTime: any, status: Types.TicketTemplateStatus, isUnlimited: boolean, prices?: Array<{ __typename?: 'Price', id: string, amount: number, currency: { __typename?: 'AllowedCurrency', currency: string, id: string } }> | null }> } | null };
+export type GetEventAndTicketsQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, name: string, address?: string | null, description?: string | null, maxAttendees?: number | null, startDateTime: any, endDateTime?: any | null, status: Types.EventStatus, community?: { __typename?: 'Community', name?: string | null } | null, users: Array<{ __typename?: 'User', id: string, name?: string | null }>, tickets: Array<{ __typename?: 'Ticket', id: string, name: string, description?: string | null, quantity?: number | null, isFree: boolean, startDateTime: any, isUnlimited: boolean, prices?: Array<{ __typename?: 'Price', id: string, amount: number, currency: { __typename?: 'AllowedCurrency', currency: string, id: string } }> | null }> } | null };
 
 
 export const GetEventAndTicketsDocument = gql`

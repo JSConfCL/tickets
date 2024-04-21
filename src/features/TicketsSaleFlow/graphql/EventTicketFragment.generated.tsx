@@ -6,7 +6,7 @@
 import * as Types from '../../../api/gql/graphql';
 
 import { gql } from '@apollo/client';
-export type EventTicketFragmentFragment = { __typename?: 'Ticket', id: string, name: string, description?: string | null, quantity?: number | null, isFree: boolean, startDateTime: any, status: Types.TicketTemplateStatus, isUnlimited: boolean, prices?: Array<{ __typename?: 'Price', id: string, amount: number, currency: { __typename?: 'AllowedCurrency', currency: string, id: string } }> | null };
+export type EventTicketFragmentFragment = { __typename?: 'Ticket', id: string, name: string, description?: string | null, quantity?: number | null, isFree: boolean, startDateTime: any, isUnlimited: boolean, prices?: Array<{ __typename?: 'Price', id: string, amount: number, currency: { __typename?: 'AllowedCurrency', currency: string, id: string } }> | null };
 
 export const EventTicketFragmentFragmentDoc = gql`
     fragment EventTicketFragment on Ticket {
@@ -16,7 +16,6 @@ export const EventTicketFragmentFragmentDoc = gql`
   quantity
   isFree
   startDateTime
-  status
   isUnlimited
   prices {
     id

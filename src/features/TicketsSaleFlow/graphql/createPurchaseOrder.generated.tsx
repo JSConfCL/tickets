@@ -13,7 +13,7 @@ export type CreatePurchaseOrderMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreatePurchaseOrderMutation = { __typename?: 'Mutation', claimUserTicket: { __typename: 'PurchaseOrder', id: string, finalPrice?: number | null, paymentLink?: string | null, status?: Types.PurchaseOrderStatusEnum | null, currency?: { __typename?: 'AllowedCurrency', id: string } | null, tickets: Array<{ __typename?: 'UserTicket', id: string, approvalStatus: Types.TicketApprovalStatus, status: Types.TicketStatus, redemptionStatus: Types.TicketRedemptionStatus, paymentStatus: Types.TicketPaymentStatus }> } | { __typename: 'RedeemUserTicketError', error: boolean, errorMessage: string } };
+export type CreatePurchaseOrderMutation = { __typename?: 'Mutation', claimUserTicket: { __typename: 'PurchaseOrder', id: string, finalPrice?: number | null, paymentLink?: string | null, status?: Types.PurchaseOrderStatusEnum | null, currency?: { __typename?: 'AllowedCurrency', id: string } | null, tickets: Array<{ __typename?: 'UserTicket', id: string, approvalStatus: Types.TicketApprovalStatus, redemptionStatus: Types.TicketRedemptionStatus, paymentStatus: Types.TicketPaymentStatus }> } | { __typename: 'RedeemUserTicketError', error: boolean, errorMessage: string } };
 
 
 export const CreatePurchaseOrderDocument = gql`
@@ -32,7 +32,6 @@ export const CreatePurchaseOrderDocument = gql`
       tickets {
         id
         approvalStatus
-        status
         redemptionStatus
         paymentStatus
       }

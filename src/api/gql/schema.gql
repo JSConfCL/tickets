@@ -5,6 +5,10 @@ type AllowedCurrency {
   validPaymentMethods: ValidPaymentMethods!
 }
 
+input CheckForPurchaseOrderInput {
+  purchaseOrderId: String!
+}
+
 enum CommnunityStatus {
   active
   inactive
@@ -198,7 +202,6 @@ input EventsTicketsSearchInput {
   id: String
   paymentStatus: TicketPaymentStatus
   redemptionStatus: TicketRedemptionStatus
-  status: TicketStatus
 }
 
 enum Gender {
@@ -221,6 +224,9 @@ type Mutation {
 
   """Cancel a ticket"""
   cancelUserTicket(userTicketId: String!): UserTicket!
+
+  """Check the status of a purchase order"""
+  checkPurchaseOrderStatus(input: CheckForPurchaseOrderInput!): PurchaseOrder!
 
   """Attempt to claim a certain ammount of tickets"""
   claimUserTicket(input: TicketClaimInput!): RedeemUserTicketResponse!
@@ -284,7 +290,6 @@ input MyTicketsSearchInput {
   eventId: String
   paymentStatus: TicketPaymentStatus
   redemptionStatus: TicketRedemptionStatus
-  status: TicketStatus
 }
 
 input PayForPurchaseOrderInput {
@@ -334,7 +339,6 @@ input PurchaseOrderInput {
 }
 
 enum PurchaseOrderStatusEnum {
-  cancelled
   not_required
   paid
   unpaid
@@ -496,6 +500,7 @@ type Ticket {
 
 enum TicketApprovalStatus {
   approved
+  cancelled
   not_required
   pending
   rejected
@@ -555,7 +560,6 @@ input TicketEditInput {
 }
 
 enum TicketPaymentStatus {
-  cancelled
   not_required
   paid
   unpaid
@@ -564,12 +568,6 @@ enum TicketPaymentStatus {
 enum TicketRedemptionStatus {
   pending
   redeemed
-}
-
-enum TicketStatus {
-  active
-  expired
-  inactive
 }
 
 enum TicketTemplateStatus {
@@ -637,7 +635,6 @@ type UserTicket {
   id: ID!
   paymentStatus: TicketPaymentStatus!
   redemptionStatus: TicketRedemptionStatus!
-  status: TicketStatus!
 }
 
 enum ValidPaymentMethods {
