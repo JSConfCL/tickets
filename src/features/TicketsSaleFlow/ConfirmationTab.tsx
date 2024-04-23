@@ -24,6 +24,7 @@ export const ConfirmationTab = ({
   formattedTotal,
   previousStep,
   getFormmatedTicketPrice,
+  currencyId,
 }: {
   step: number;
   steps: Step[];
@@ -36,6 +37,7 @@ export const ConfirmationTab = ({
   getFormmatedTicketPrice: (
     ticket: EventTicketFragmentFragment,
   ) => string | null;
+  currencyId: string;
 }) => {
   const router = useRouter();
   const idempotencyUUIDKey = useRef<string>(v4());
@@ -53,7 +55,9 @@ export const ConfirmationTab = ({
     await purchaseOrderMutation({
       variables: {
         input: {
-          generatePaymentLink: true,
+          generatePaymentLink: {
+            currencyId,
+          },
           idempotencyUUIDKey: idempotencyUUIDKey.current,
           purchaseOrder,
         },
@@ -82,7 +86,7 @@ export const ConfirmationTab = ({
         );
       },
     });
-  }, [purchaseOrderMutation, router, selectedTickets]);
+  }, [currencyId, purchaseOrderMutation, router, selectedTickets]);
   return (
     <Card>
       <StepHeader steps={steps} step={step} activeStep={activeStep} />

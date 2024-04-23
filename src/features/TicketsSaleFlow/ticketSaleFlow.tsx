@@ -257,6 +257,7 @@ export default function Tickets({
           formattedTotal={formattedTotal}
           previousStep={previousStep}
           getFormmatedTicketPrice={getFormmatedTicketPrice}
+          currencyId={selectedCurrencyId}
         />
       </TabsContent>
     </Tabs>
