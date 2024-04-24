@@ -13,7 +13,6 @@ mutation createPurchaseOrder($input: TicketClaimInput!) {
       tickets {
         id
         approvalStatus
-        status
         redemptionStatus
         paymentStatus
       }

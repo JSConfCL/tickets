@@ -31,6 +31,10 @@ export type AllowedCurrency = {
   validPaymentMethods: ValidPaymentMethods;
 };
 
+export type CheckForPurchaseOrderInput = {
+  purchaseOrderId: Scalars['String']['input'];
+};
+
 export enum CommnunityStatus {
   Active = 'active',
   Inactive = 'inactive'
@@ -210,7 +214,6 @@ export type EventsTicketsSearchInput = {
   id: InputMaybe<Scalars['String']['input']>;
   paymentStatus: InputMaybe<TicketPaymentStatus>;
   redemptionStatus: InputMaybe<TicketRedemptionStatus>;
-  status: InputMaybe<TicketStatus>;
 };
 
 export enum Gender {
@@ -227,11 +230,17 @@ export enum Gender {
   TwoSpirit = 'two_spirit'
 }
 
+export type GeneratePaymentLinkInput = {
+  currencyId: Scalars['String']['input'];
+};
+
 export type Mutation = {
   /** Approve a ticket */
   approvalUserTicket: UserTicket;
   /** Cancel a ticket */
   cancelUserTicket: UserTicket;
+  /** Check the status of a purchase order */
+  checkPurchaseOrderStatus: PurchaseOrder;
   /** Attempt to claim a certain ammount of tickets */
   claimUserTicket: RedeemUserTicketResponse;
   /** Create an community */
@@ -278,6 +287,11 @@ export type MutationApprovalUserTicketArgs = {
 
 export type MutationCancelUserTicketArgs = {
   userTicketId: Scalars['String']['input'];
+};
+
+
+export type MutationCheckPurchaseOrderStatusArgs = {
+  input: CheckForPurchaseOrderInput;
 };
 
 
@@ -375,7 +389,6 @@ export type MyTicketsSearchInput = {
   eventId: InputMaybe<Scalars['String']['input']>;
   paymentStatus: InputMaybe<TicketPaymentStatus>;
   redemptionStatus: InputMaybe<TicketRedemptionStatus>;
-  status: InputMaybe<TicketStatus>;
 };
 
 export type PayForPurchaseOrderInput = {
@@ -422,7 +435,6 @@ export type PurchaseOrderInput = {
 };
 
 export enum PurchaseOrderStatusEnum {
-  Cancelled = 'cancelled',
   NotRequired = 'not_required',
   Paid = 'paid',
   Unpaid = 'unpaid'
@@ -634,6 +646,7 @@ export type Ticket = {
 
 export enum TicketApprovalStatus {
   Approved = 'approved',
+  Cancelled = 'cancelled',
   NotRequired = 'not_required',
   Pending = 'pending',
   Rejected = 'rejected'
@@ -641,7 +654,7 @@ export enum TicketApprovalStatus {
 
 export type TicketClaimInput = {
   /** If this field is passed, a purchase order payment link will be generated right away */
-  generatePaymentLink: Scalars['Boolean']['input'];
+  generatePaymentLink: InputMaybe<GeneratePaymentLinkInput>;
   /** A unique key to prevent duplicate requests, it's optional to send, but it's recommended to send it to prevent duplicate requests. If not sent, it will be created by the server. */
   idempotencyUUIDKey: InputMaybe<Scalars['String']['input']>;
   purchaseOrder: Array<PurchaseOrderInput>;
@@ -681,7 +694,6 @@ export type TicketEditInput = {
 };
 
 export enum TicketPaymentStatus {
-  Cancelled = 'cancelled',
   NotRequired = 'not_required',
   Paid = 'paid',
   Unpaid = 'unpaid'
@@ -690,12 +702,6 @@ export enum TicketPaymentStatus {
 export enum TicketRedemptionStatus {
   Pending = 'pending',
   Redeemed = 'redeemed'
-}
-
-export enum TicketStatus {
-  Active = 'active',
-  Expired = 'expired',
-  Inactive = 'inactive'
 }
 
 export enum TicketTemplateStatus {
@@ -763,7 +769,6 @@ export type UserTicket = {
   id: Scalars['ID']['output'];
   paymentStatus: TicketPaymentStatus;
   redemptionStatus: TicketRedemptionStatus;
-  status: TicketStatus;
 };
 
 export enum ValidPaymentMethods {
@@ -856,7 +861,7 @@ export type CreatePurchaseOrderMutationVariables = Exact<{
 }>;
 
 
-export type CreatePurchaseOrderMutation = { claimUserTicket: { __typename: 'PurchaseOrder', id: string, finalPrice: number | null, paymentLink: string | null, status: PurchaseOrderStatusEnum | null, currency: { id: string } | null, tickets: Array<{ id: string, approvalStatus: TicketApprovalStatus, status: TicketStatus, redemptionStatus: TicketRedemptionStatus, paymentStatus: TicketPaymentStatus }> } | { __typename: 'RedeemUserTicketError', error: boolean, errorMessage: string } };
+export type CreatePurchaseOrderMutation = { claimUserTicket: { __typename: 'PurchaseOrder', id: string, finalPrice: number | null, paymentLink: string | null, status: PurchaseOrderStatusEnum | null, currency: { id: string } | null, tickets: Array<{ id: string, approvalStatus: TicketApprovalStatus, redemptionStatus: TicketRedemptionStatus, paymentStatus: TicketPaymentStatus }> } | { __typename: 'RedeemUserTicketError', error: boolean, errorMessage: string } };
 
 export type GetEventAndTicketsQueryVariables = Exact<{
   input: Scalars['String']['input'];
@@ -869,5 +874,5 @@ export const EventTicketFragmentFragmentDoc = {"kind":"Document","definitions":[
 export const GetEventDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getEvent"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"event"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"maxAttendees"}},{"kind":"Field","name":{"kind":"Name","value":"startDateTime"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"community"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}}]}}]}}]}}]} as unknown as DocumentNode<GetEventQuery, GetEventQueryVariables>;
 export const GetLatestEventsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getLatestEvents"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"EventsSearchInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"events"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"startDateTime"}},{"kind":"Field","name":{"kind":"Name","value":"endDateTime"}}]}}]}}]} as unknown as DocumentNode<GetLatestEventsQuery, GetLatestEventsQueryVariables>;
 export const FetchExampleEventsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"FetchExampleEvents"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"events"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"community"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}}]}}]}}]} as unknown as DocumentNode<FetchExampleEventsQuery, FetchExampleEventsQueryVariables>;
-export const CreatePurchaseOrderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createPurchaseOrder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"TicketClaimInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"claimUserTicket"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PurchaseOrder"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"currency"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"finalPrice"}},{"kind":"Field","name":{"kind":"Name","value":"paymentLink"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"tickets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"approvalStatus"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"redemptionStatus"}},{"kind":"Field","name":{"kind":"Name","value":"paymentStatus"}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"RedeemUserTicketError"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"errorMessage"}}]}}]}}]}}]} as unknown as DocumentNode<CreatePurchaseOrderMutation, CreatePurchaseOrderMutationVariables>;
+export const CreatePurchaseOrderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createPurchaseOrder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"TicketClaimInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"claimUserTicket"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PurchaseOrder"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"currency"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"finalPrice"}},{"kind":"Field","name":{"kind":"Name","value":"paymentLink"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"tickets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"approvalStatus"}},{"kind":"Field","name":{"kind":"Name","value":"redemptionStatus"}},{"kind":"Field","name":{"kind":"Name","value":"paymentStatus"}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"RedeemUserTicketError"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"errorMessage"}}]}}]}}]}}]} as unknown as DocumentNode<CreatePurchaseOrderMutation, CreatePurchaseOrderMutationVariables>;
 export const GetEventAndTicketsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getEventAndTickets"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"event"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"maxAttendees"}},{"kind":"Field","name":{"kind":"Name","value":"startDateTime"}},{"kind":"Field","name":{"kind":"Name","value":"endDateTime"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"community"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"tickets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"EventTicketFragment"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"EventTicketFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Ticket"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"quantity"}},{"kind":"Field","name":{"kind":"Name","value":"isFree"}},{"kind":"Field","name":{"kind":"Name","value":"startDateTime"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"isUnlimited"}},{"kind":"Field","name":{"kind":"Name","value":"prices"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"currency"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currency"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<GetEventAndTicketsQuery, GetEventAndTicketsQueryVariables>;
