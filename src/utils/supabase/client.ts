@@ -6,12 +6,6 @@ export const COOKIE_NAME = "community-os-access-token";
 export const supabaseClient = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  {
-    auth: {
-      autoRefreshToken: true,
-      persistSession: true,
-    },
-  },
 );
 
 const oneHour = 1000 * 60 * 60;
