@@ -40,8 +40,8 @@ export default function RootLayout({
           "flex min-h-full flex-col",
         )}
       >
-        <ApolloWrapper>
-          <AuthProvider>
+        <AuthProvider>
+          <ApolloWrapper>
             <ThemeProvider
               attribute="class"
               defaultTheme="system"
@@ -51,8 +51,8 @@ export default function RootLayout({
               {children}
               <Toaster />
             </ThemeProvider>
-          </AuthProvider>
-        </ApolloWrapper>
+          </ApolloWrapper>
+        </AuthProvider>
       </body>
     </html>
   );
