@@ -1,6 +1,6 @@
-mutation CheckPurchaseOrderStatus ($input: CheckForPurchaseOrderInput!) {
-  checkPurchaseOrderStatus (input: $input) {
-		status
+mutation CheckPurchaseOrderStatus($input: CheckForPurchaseOrderInput!) {
+  checkPurchaseOrderStatus(input: $input) {
+    status
     tickets {
       approvalStatus
       paymentStatus
