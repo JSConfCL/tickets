@@ -1,0 +1,10 @@
+mutation CheckPurchaseOrderStatus ($input: CheckForPurchaseOrderInput!) {
+  checkPurchaseOrderStatus (input: $input) {
+		status
+    tickets {
+      approvalStatus
+      paymentStatus
+      redemptionStatus
+    }
+  }
+}
