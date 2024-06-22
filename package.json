@@ -48,7 +48,7 @@
     "dotenv": "^16.4.5",
     "easymde": "^2.18.0",
     "eslint-config-next": "13.4.9",
-    "framer-motion": "^10.12.18",
+    "framer-motion": "^10.18.0",
     "graphiql": "^3.0.6",
     "graphql": "^16.8.1",
     "graphql-request": "^6.1.0",

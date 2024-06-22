@@ -15,6 +15,7 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
 const documents = {
     "query getEvent($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n      lastName\n    }\n  }\n}": types.GetEventDocument,
     "query getLatestEvents($input: EventsSearchInput) {\n  events(input: $input) {\n    id\n    name\n    description\n    startDateTime\n    endDateTime\n  }\n}": types.GetLatestEventsDocument,
+    "mutation CheckPurchaseOrderStatus($input: CheckForPurchaseOrderInput!) {\n  checkPurchaseOrderStatus(input: $input) {\n    status\n    tickets {\n      approvalStatus\n      paymentStatus\n      redemptionStatus\n    }\n  }\n}": types.CheckPurchaseOrderStatusDocument,
     "query FetchExampleEvents {\n  events {\n    id\n    description\n    community {\n      id\n      name\n    }\n    tags {\n      id\n      name\n      description\n    }\n  }\n}": types.FetchExampleEventsDocument,
     "fragment EventTicketFragment on Ticket {\n  id\n  name\n  description\n  quantity\n  isFree\n  startDateTime\n  status\n  isUnlimited\n  prices {\n    id\n    amount\n    currency {\n      currency\n      id\n    }\n  }\n}": types.EventTicketFragmentFragmentDoc,
     "mutation createPurchaseOrder($input: TicketClaimInput!) {\n  claimUserTicket(input: $input) {\n    __typename\n    ... on PurchaseOrder {\n      __typename\n      id\n      currency {\n        id\n      }\n      finalPrice\n      paymentLink\n      status\n      tickets {\n        id\n        approvalStatus\n        redemptionStatus\n        paymentStatus\n      }\n    }\n    ... on RedeemUserTicketError {\n      __typename\n      error\n      errorMessage\n    }\n  }\n}": types.CreatePurchaseOrderDocument,
@@ -43,6 +44,10 @@ export function graphql(source: "query getEvent($input: String!) {\n  event(id: 
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "query getLatestEvents($input: EventsSearchInput) {\n  events(input: $input) {\n    id\n    name\n    description\n    startDateTime\n    endDateTime\n  }\n}"): (typeof documents)["query getLatestEvents($input: EventsSearchInput) {\n  events(input: $input) {\n    id\n    name\n    description\n    startDateTime\n    endDateTime\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation CheckPurchaseOrderStatus($input: CheckForPurchaseOrderInput!) {\n  checkPurchaseOrderStatus(input: $input) {\n    status\n    tickets {\n      approvalStatus\n      paymentStatus\n      redemptionStatus\n    }\n  }\n}"): (typeof documents)["mutation CheckPurchaseOrderStatus($input: CheckForPurchaseOrderInput!) {\n  checkPurchaseOrderStatus(input: $input) {\n    status\n    tickets {\n      approvalStatus\n      paymentStatus\n      redemptionStatus\n    }\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
