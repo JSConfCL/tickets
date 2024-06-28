@@ -11,8 +11,8 @@ import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import { RetryLink } from "@apollo/client/link/retry";
 
-import { useSetTokenRef, useTokenRef } from "../utils/supabase/AuthProvider";
-import { supabaseClient } from "../utils/supabase/client";
+import { useSetTokenRef, useTokenRef } from "@/utils/supabase/AuthProvider";
+import { supabaseClient } from "@/utils/supabase/client";
 
 const retryLink = new RetryLink();
 

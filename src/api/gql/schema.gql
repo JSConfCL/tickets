@@ -461,6 +461,10 @@ enum SearchableUserTags {
   DONOR
 }
 
+enum ServiceErrors {
+  UNAUTHENTICATED
+}
+
 """
 Representation of a tag. Tags can be associated to many things. An event, a community, etc.
 """
