@@ -11,9 +11,11 @@ export function MainNav({ items }: NavBarProps) {
 
   return (
     <nav className={"items-center space-x-4 lg:space-x-6"}>
-      {items.map((item) => (
-        <NavbarItem key={`navbarItem-${item.content}`} item={item} />
-      ))}
+      {items
+        .filter((item) => item.show)
+        .map((item) => (
+          <NavbarItem key={`navbarItem-${item.content}`} item={item} />
+        ))}
       {isReady && !user ? (
         <a className={buttonVariants({})} href={urls.login}>
           Ingresar
