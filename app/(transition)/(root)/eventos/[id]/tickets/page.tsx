@@ -1,15 +1,13 @@
-import { getApolloClientForRSC } from "@/api/ApolloClientForRSC";
+"use client";
+import { AnimatePresence, motion } from "framer-motion";
+import { useParams } from "next/navigation";
+import { Suspense } from "react";
+
 import { EventStatus } from "@/api/gql/graphql";
 import { Badge } from "@/components/ui/badge";
-import {
-  GetEventAndTicketsDocument,
-  GetEventAndTicketsQuery,
-} from "@/features/TicketsSaleFlow/graphql/getEventAndTickets.generated";
+import { useGetEventAndTicketsSuspenseQuery } from "@/features/TicketsSaleFlow/graphql/getEventAndTickets.generated";
+import { TicketsSaleFlowSkeleton } from "@/features/TicketsSaleFlow/skeleton";
 import Tickets from "@/features/TicketsSaleFlow/ticketSaleFlow";
-
-interface SearchParams {
-  id: string;
-}
 
 const StatusBadge = ({
   status,
@@ -27,55 +25,57 @@ const StatusBadge = ({
   return null;
 };
 
-export default async function EventPage({
-  searchParams,
-}: {
-  searchParams: SearchParams;
-}) {
-  const c = getApolloClientForRSC();
-  const { id } = searchParams;
-
-  const { data, error } = await c.query<GetEventAndTicketsQuery>({
-    query: GetEventAndTicketsDocument,
+const LoadTickets = ({ id }: { id: string | null }) => {
+  const { data, error } = useGetEventAndTicketsSuspenseQuery({
     variables: {
-      input: id,
+      input: id!,
     },
+    skip: !id,
   });
 
-  if (error) {
-    return <h2>Ocurrió un error cargando el evento</h2>;
-  }
-
   const { event } = data;
-
-  if (!event) {
-    return <h2>No pudimos encontrar el evento que estás buscando</h2>;
+  if (!event || error) {
+    throw new Error("No pudimos encontrar el evento que estás buscando");
   }
-
-  const { name, tickets = [], status: eventStatus } = event;
-
+  const isActive = event.status === EventStatus.Active;
   const parsedStartTimeStamp = new Date(
     event.startDateTime as string,
   ).getTime();
-  const isActive = event.status === EventStatus.Active;
   const hasFinished = parsedStartTimeStamp <= Date.now();
   return (
-    <main className="flex w-full max-w-[1360px] flex-col gap-10 px-6 py-12">
+    <>
       <h1 className="text-center text-5xl font-extrabold">
         <span className="inline-flex flex-wrap items-center justify-center gap-4">
-          {name}
-          <StatusBadge status={eventStatus} hasFinished={hasFinished} />
+          {event.name}
+          <StatusBadge status={event.status} hasFinished={hasFinished} />
         </span>
       </h1>
-      {/* <h2 className="mb-8 text-center text-2xl">
-          {formattedStartDate}{" "}
-          {formattedEndDate ? `- ${formattedEndDate}` : null}
-        </h2> */}
       <Tickets
         isActive={isActive}
         hasFinished={hasFinished}
-        tickets={tickets}
+        tickets={event.tickets}
       />
+    </>
+  );
+};
+
+export default function EventPage() {
+  const { id } = useParams<{ id: string }>();
+  return (
+    <main className="flex w-full max-w-[1360px] px-6 py-12">
+      <AnimatePresence mode="popLayout">
+        <Suspense fallback={<TicketsSaleFlowSkeleton />}>
+          <motion.div
+            className="flex flex-col gap-10"
+            key="lazyComponent"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+          >
+            <LoadTickets id={id} />
+          </motion.div>
+        </Suspense>
+      </AnimatePresence>
     </main>
   );
 }

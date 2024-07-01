@@ -610,6 +610,10 @@ export enum SearchableUserTags {
   Donor = 'DONOR'
 }
 
+export enum ServiceErrors {
+  Unauthenticated = 'UNAUTHENTICATED'
+}
+
 /** Representation of a tag. Tags can be associated to many things. An event, a community, etc. */
 export type Tag = {
   description: Maybe<Scalars['String']['output']>;
