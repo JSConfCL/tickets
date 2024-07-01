@@ -2,9 +2,9 @@ import {
   vitePlugin as remix,
   cloudflareDevProxyVitePlugin as remixCloudflareDevProxy,
 } from "@remix-run/dev";
+import { flatRoutes } from "remix-flat-routes";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
-import { flatRoutes } from "remix-flat-routes";
 
 export default defineConfig({
   plugins: [

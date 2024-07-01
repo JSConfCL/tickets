@@ -41,6 +41,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const setTokenRef = useCallback((token: string | null) => {
     tokenRef.current = token;
+
     if (!tokenRef.current) {
       cookies.remove(COOKIE_NAME);
     } else {
@@ -53,6 +54,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const {
         data: { session },
       } = await supabaseClient.auth.getSession();
+
       setSession(session);
       await supabaseClient.auth.startAutoRefresh();
     };
@@ -62,6 +64,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } = supabaseClient.auth.onAuthStateChange(async (_event, session) => {
       setSession(session);
       const token = session?.access_token ?? null;
+
       tokenRef.current = token;
       await supabaseClient.auth.startAutoRefresh();
     });
@@ -70,13 +73,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     initialize()
       .catch(console.error)
       .finally(() => setIsReady(true));
+
     return () => subscription.unsubscribe();
   }, []);
 
   useEffect(() => {
     if (supabaseSession) {
       const { user } = supabaseSession;
+
       setUser(user);
+
       if (!tokenRef.current) {
         cookies.remove(COOKIE_NAME);
       } else {

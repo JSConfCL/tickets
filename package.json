@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "remix vite:build",
+    "prebuild": "npm run generate",
     "deploy": "wrangler pages deploy ./build/client",
     "dev": "remix vite:dev",
     "generate": "graphql-codegen",

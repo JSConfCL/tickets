@@ -4,12 +4,12 @@ import { v4 } from "uuid";
 
 import { Card, CardContent } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
+import { formatCurrency } from "~/utils/numbers";
 
 import { useCreatePurchaseOrderMutation } from "./graphql/createPurchaseOrder.generated";
 import { EventTicketFragmentFragment } from "./graphql/EventTicketFragment.generated";
 import { SecondStepFooter, StepHeader } from "./Stepper";
 import { Step, TicketsState } from "./types";
-import { formatCurrency } from "~/utils/numbers";
 
 export const ConfirmationTab = ({
   step,
@@ -64,6 +64,7 @@ export const ConfirmationTab = ({
           toast.error(data.claimUserTicket.errorMessage);
         } else if (data.claimUserTicket.__typename === "PurchaseOrder") {
           const { paymentLink } = data.claimUserTicket;
+
           if (paymentLink) {
             toast("Tu orden esta lista, redirigiéndote al portal de pago.");
             setTimeout(() => {
@@ -83,6 +84,7 @@ export const ConfirmationTab = ({
       },
     });
   }, [currencyId, purchaseOrderMutation, selectedTickets]);
+
   return (
     <Card>
       <StepHeader steps={steps} step={step} activeStep={activeStep} />

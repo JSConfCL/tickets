@@ -5,11 +5,12 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+
 import "./tailwind.css";
-import { AuthProvider } from "~/utils/supabase/AuthProvider";
 import { ApolloWrapper } from "~/api/ApolloWrapper";
 import { Navbar } from "~/components/Navbar";
 import { Toaster } from "~/components/ui/sonner";
+import { AuthProvider } from "~/utils/supabase/AuthProvider";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (

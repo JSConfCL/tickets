@@ -15,6 +15,7 @@ import { ConfirmationTab } from "./ConfirmationTab";
 import { EventTicketFragmentFragment } from "./graphql/EventTicketFragment.generated";
 import { TicketSelectionTab } from "./TicketSelectionTab";
 import { Currencies, TicketsState } from "./types";
+
 const MIN_NUMBER_OF_TICKETS = 0;
 const MAX_NUMBER_OF_TICKETS = 100;
 const MAX_STEP = 0;
@@ -51,6 +52,7 @@ export default function Tickets({
 
   const customStep = (stepSlug: string) => {
     const stepIndex = steps.findIndex((step) => step.slug == stepSlug);
+
     if (stepIndex === null || stepIndex === undefined) {
       return;
     }
@@ -63,6 +65,7 @@ export default function Tickets({
   const nextStep = () => {
     setStep((tmpStep) => {
       const newStep = tmpStep + 1;
+
       return Math.min(newStep, steps.length - 1);
     });
   };
@@ -70,6 +73,7 @@ export default function Tickets({
   const previousStep = () => {
     setStep((tmpStep) => {
       const newStep = tmpStep - 1;
+
       return Math.max(newStep, 0);
     });
   };
@@ -83,6 +87,7 @@ export default function Tickets({
           if (currency) {
             return { ...acc, [currency.id]: currency };
           }
+
           return acc;
         }, {}),
     [tickets],
@@ -95,10 +100,13 @@ export default function Tickets({
 
   const numberOfTickets = useMemo(() => {
     let numberOfTickets = 0;
+
     for (const ticket of tickets) {
       const amountOfTickets = selectedTickets[ticket.id] ?? 0;
+
       numberOfTickets += amountOfTickets;
     }
+
     return numberOfTickets;
   }, [selectedTickets, tickets]);
 
@@ -107,6 +115,7 @@ export default function Tickets({
       Math.max(number, MIN_NUMBER_OF_TICKETS),
       MAX_NUMBER_OF_TICKETS,
     );
+
     setSelectedTickets((tmpTickets) => ({
       ...tmpTickets,
       [ticketId]: clampNumber,
@@ -117,9 +126,11 @@ export default function Tickets({
     setSelectedTickets((tmpTickets: TicketsState) => {
       const currentTicketCount = tmpTickets[ticketId] ?? MIN_NUMBER_OF_TICKETS;
       let newTicketCount = currentTicketCount + 1;
+
       if (currentTicketCount >= MAX_NUMBER_OF_TICKETS) {
         newTicketCount = MAX_NUMBER_OF_TICKETS;
       }
+
       return {
         ...tmpTickets,
         [ticketId]: newTicketCount,
@@ -131,9 +142,11 @@ export default function Tickets({
     setSelectedTickets((tmpTickets: TicketsState) => {
       const currentTicketCount = tmpTickets[ticketId] ?? MIN_NUMBER_OF_TICKETS;
       let newTicketCount = MIN_NUMBER_OF_TICKETS;
+
       if (currentTicketCount > MIN_NUMBER_OF_TICKETS) {
         newTicketCount = currentTicketCount - 1;
       }
+
       return {
         ...tmpTickets,
         [ticketId]: newTicketCount,
@@ -160,6 +173,7 @@ export default function Tickets({
         ? 0
         : getTicketCurrency(ticket)?.amount ?? 0;
       const amountOfTickets = selectedTickets[ticket.id] ?? 0;
+
       return acc + amountOfTickets * actualPrice;
     }, 0);
   }, [getTicketCurrency, selectedTickets, tickets]);
@@ -172,6 +186,7 @@ export default function Tickets({
   const getFormmatedTicketPrice = useCallback(
     (ticket: EventTicketFragmentFragment) => {
       const ticketCurrency = getTicketCurrency(ticket);
+
       if (!ticket || !ticketCurrency) {
         return null;
       }

@@ -1,4 +1,5 @@
 import type { MouseEventHandler, AnchorHTMLAttributes } from "react";
+
 import { cn } from "~/utils/utils";
 
 interface MobileLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {

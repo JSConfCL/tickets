@@ -1,8 +1,8 @@
 import { useIsAuthReady, useIsLoggedIn } from "~/utils/supabase/AuthProvider";
+import { urls } from "~/utils/urls";
 
 import { NavbarItem } from "./NavbarItem";
 import type { NavBarProps } from "./types";
-import { urls } from "~/utils/urls";
 import { buttonVariants } from "../ui/button";
 
 export function MainNav({ items }: NavBarProps) {

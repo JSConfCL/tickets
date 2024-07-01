@@ -5,9 +5,9 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "~/components/ui/dropdown-menu";
+import { cn } from "~/utils/utils";
 
 import type { NavbarMenuItem } from "./types";
-import { cn } from "~/utils/utils";
 
 export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
   if (item.children) {

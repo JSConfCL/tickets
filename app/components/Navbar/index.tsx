@@ -2,12 +2,12 @@ import { LogOut, PackageOpen, Settings, User as UserIcon } from "lucide-react";
 
 import { useIsLoggedIn } from "~/utils/supabase/AuthProvider";
 import { logout } from "~/utils/supabase/client";
+import { urls } from "~/utils/urls";
 
 import { MainNav } from "./MainNav";
 import { MobileNav } from "./MobileNav";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import type { NavbarMenuItem } from "./types";
-import { urls } from "~/utils/urls";
 
 const userItems = [
   {

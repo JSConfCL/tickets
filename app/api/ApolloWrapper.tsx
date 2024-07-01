@@ -108,6 +108,7 @@ const useErrorLink = () => {
     }
   });
 };
+
 if (!import.meta.env.VITE_JSCL_API_URL) {
   throw new Error("Missing env var: VITE_JSCL_API_URL");
 }

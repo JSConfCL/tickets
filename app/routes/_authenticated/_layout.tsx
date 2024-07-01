@@ -1,10 +1,12 @@
 import { Outlet } from "@remix-run/react";
+
 import { Login } from "~/components/Login/Login";
 import { useIsAuthReady, useIsLoggedIn } from "~/utils/supabase/AuthProvider";
 
 export default function AuthenticatedLayout() {
   const isAuthReady = useIsAuthReady();
   const isLoggedIn = useIsLoggedIn();
+
   if (!isAuthReady) {
     return null;
   }

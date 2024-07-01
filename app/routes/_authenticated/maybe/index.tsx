@@ -1,16 +1,18 @@
 import { useNavigate } from "@remix-run/react";
+import { useEffect } from "react";
 
 import { useIsAuthReady, useIsLoggedIn } from "~/utils/supabase/AuthProvider";
 import { urls } from "~/utils/urls";
-import { useEffect } from "react";
 
 const Redirecting = () => {
   const navigate = useNavigate();
+
   useEffect(() => {
     setTimeout(() => {
       navigate(urls.home);
     }, 2000);
   }, [navigate]);
+
   return <div>Redirecting to home page...</div>;
 };
 

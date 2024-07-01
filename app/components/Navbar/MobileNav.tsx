@@ -5,11 +5,11 @@ import { Button, buttonVariants } from "~/components/ui/button";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet";
 import { useIsAuthReady, useIsLoggedIn } from "~/utils/supabase/AuthProvider";
+import { urls } from "~/utils/urls";
 
 import { MobileLink } from "./MobileLink";
 import { MobileNavbarItem } from "./MobileNavbarItem";
 import type { NavBarProps } from "./types";
-import { urls } from "~/utils/urls";
 
 export function MobileNav({ items }: NavBarProps) {
   const [open, setOpen] = useState(false);

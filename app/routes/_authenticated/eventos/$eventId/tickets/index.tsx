@@ -1,4 +1,5 @@
 import { useParams } from "@remix-run/react";
+
 import EventPage from "~/components/TicketsSaleFlow";
 
 export default function Tickets() {

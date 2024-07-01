@@ -7,9 +7,11 @@ export const formatCurrency = (
   }
 
   let money = num;
+
   if (currency === "USD") {
     money = num / 100;
   }
+
   // ToDo: Include i18n
   return Intl.NumberFormat("es-CL", {
     currency: currency,
