@@ -6,3 +6,9 @@ node_modules
 .dev.vars
 
 .wrangler
+
+# graphql generated files
+*.generated.tsx
+
+# shadcn components
+app/components/ui/**/*

@@ -1,0 +1,26 @@
+mutation createPurchaseOrder($input: TicketClaimInput!) {
+  claimUserTicket(input: $input) {
+    __typename
+    ... on PurchaseOrder {
+      __typename
+      id
+      currency {
+        id
+      }
+      finalPrice
+      paymentLink
+      status
+      tickets {
+        id
+        approvalStatus
+        redemptionStatus
+        paymentStatus
+      }
+    }
+    ... on RedeemUserTicketError {
+      __typename
+      error
+      errorMessage
+    }
+  }
+}

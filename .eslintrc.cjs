@@ -33,7 +33,7 @@ module.exports = {
         "plugin:react/recommended",
         "plugin:react/jsx-runtime",
         "plugin:react-hooks/recommended",
-        "plugin:jsx-a11y/recommended",
+        "plugin:tailwindcss/recommended",
       ],
       settings: {
         react: {
@@ -55,6 +55,9 @@ module.exports = {
       files: ["**/*.{ts,tsx}"],
       plugins: ["@typescript-eslint", "import"],
       parser: "@typescript-eslint/parser",
+      parserOptions: {
+        project: "./tsconfig.json",
+      },
       settings: {
         "import/internal-regex": "^~/",
         "import/resolver": {
@@ -65,9 +68,30 @@ module.exports = {
             alwaysTryTypes: true,
           },
         },
+        "import/order": [
+          "error",
+          {
+            groups: [
+              "builtin", // Built-in imports (come from NodeJS native) go first
+              "external", // <- External imports
+              "internal", // <- Absolute imports
+              ["sibling", "parent"], // <- Relative imports, the sibling and parent types they can be mingled together
+              "index", // <- index imports
+              "unknown", // <- unknown
+            ],
+            "newlines-between": "always",
+            alphabetize: {
+              /* sort in ascending order. Options: ["ignore", "asc", "desc"] */
+              order: "asc",
+              /* ignore case. Options: [true, false] */
+              caseInsensitive: true,
+            },
+          },
+        ],
       },
       extends: [
         "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
         "plugin:import/recommended",
         "plugin:import/typescript",
       ],
