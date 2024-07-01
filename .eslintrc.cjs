@@ -22,7 +22,7 @@ module.exports = {
   ignorePatterns: ["!**/.server", "!**/.client"],
 
   // Base config
-  extends: ["eslint:recommended"],
+  extends: ["eslint:recommended", "prettier"],
 
   overrides: [
     // React
@@ -68,6 +68,14 @@ module.exports = {
             alwaysTryTypes: true,
           },
         },
+      },
+      extends: [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:import/recommended",
+        "plugin:import/typescript",
+      ],
+      rules: {
         "import/order": [
           "error",
           {
@@ -88,13 +96,35 @@ module.exports = {
             },
           },
         ],
+        "padding-line-between-statements": [
+          "error",
+          { blankLine: "always", prev: "*", next: "return" },
+          { blankLine: "always", prev: "*", next: "if" },
+          { blankLine: "always", prev: "if", next: "*" },
+          { blankLine: "always", prev: "*", next: "for" },
+          { blankLine: "always", prev: "for", next: "*" },
+          { blankLine: "always", prev: "*", next: "while" },
+          { blankLine: "always", prev: "while", next: "*" },
+          { blankLine: "always", prev: "*", next: "switch" },
+          { blankLine: "always", prev: "switch", next: "*" },
+          { blankLine: "always", prev: "*", next: "try" },
+          { blankLine: "always", prev: "try", next: "*" },
+          { blankLine: "always", prev: "*", next: "function" },
+          { blankLine: "always", prev: "function", next: "*" },
+          {
+            blankLine: "always",
+            prev: "import",
+            next: ["const", "let", "var"],
+          },
+          {
+            blankLine: "always",
+            prev: ["const", "let", "var"],
+            next: "expression",
+          },
+          { blankLine: "always", prev: "directive", next: "*" },
+          { blankLine: "any", prev: "directive", next: "directive" },
+        ],
       },
-      extends: [
-        "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/recommended-requiring-type-checking",
-        "plugin:import/recommended",
-        "plugin:import/typescript",
-      ],
     },
 
     // Node
