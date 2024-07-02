@@ -17,36 +17,40 @@ export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
           {item.content}
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          {item.children.map((children) => {
-            if (children.link) {
+          {item.children
+            .filter((child) => child.show)
+            .map((child) => {
+              if (child.link) {
+                return (
+                  <DropdownMenuItem
+                    key={`dropdown-${item.content}`}
+                    className="cursor-pointer"
+                  >
+                    <a href={child.link} className="flex items-center">
+                      {child.icon}
+                      <span>{child.content}</span>
+                    </a>
+                  </DropdownMenuItem>
+                );
+              }
+
+              if (child.content === "separator") {
+                return (
+                  <DropdownMenuSeparator key={`dropdown-${item.content}`} />
+                );
+              }
+
               return (
                 <DropdownMenuItem
                   key={`dropdown-${item.content}`}
-                  className="cursor-pointer"
+                  onClick={child.onClick}
+                  className={cn(child.onClick && "cursor-pointer")}
                 >
-                  <a href={children.link} className="flex items-center">
-                    {children.icon}
-                    <span>{children.content}</span>
-                  </a>
+                  {child.icon}
+                  <span>{child.content}</span>
                 </DropdownMenuItem>
               );
-            }
-
-            if (children.content === "separator") {
-              return <DropdownMenuSeparator key={`dropdown-${item.content}`} />;
-            }
-
-            return (
-              <DropdownMenuItem
-                key={`dropdown-${item.content}`}
-                onClick={children.onClick}
-                className={cn(children.onClick && "cursor-pointer")}
-              >
-                {children.icon}
-                <span>{children.content}</span>
-              </DropdownMenuItem>
-            );
-          })}
+            })}
         </DropdownMenuContent>
       </DropdownMenu>
     );

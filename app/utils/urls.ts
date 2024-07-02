@@ -6,5 +6,9 @@ export const urls = {
     tickets: (id: string) => `/eventos/${id}/tickets`,
   },
   comunidades: "/comunidades",
+  tickets: {
+    root: "/tickets",
+    ticket: (ticketId: string) => `/ticket/:${ticketId}`,
+  },
   login: "/login",
 };
