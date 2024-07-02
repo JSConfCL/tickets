@@ -8,11 +8,11 @@ import * as Types from '../../../api/gql/graphql';
 import { gql } from "graphql-tag";
 import * as Apollo from "@apollo/client";
 const defaultOptions = {} as const;
-export type MisTicketsQueryVariables = Types.Exact<{
+export type MyTicketsQueryVariables = Types.Exact<{
   input: Types.PaginatedInputMyTicketsSearchValues;
 }>;
 
-export type MisTicketsQuery = {
+export type MyTicketsQuery = {
   __typename?: "Query";
   myTickets: {
     __typename?: "PaginatedUserTicket";
@@ -33,8 +33,8 @@ export type MisTicketsQuery = {
   };
 };
 
-export const MisTicketsDocument = gql`
-  query misTickets($input: PaginatedInputMyTicketsSearchValues!) {
+export const MyTicketsDocument = gql`
+  query myTickets($input: PaginatedInputMyTicketsSearchValues!) {
     myTickets(input: $input) {
       data {
         approvalStatus
@@ -53,69 +53,69 @@ export const MisTicketsDocument = gql`
 `;
 
 /**
- * __useMisTicketsQuery__
+ * __useMyTicketsQuery__
  *
- * To run a query within a React component, call `useMisTicketsQuery` and pass it any options that fit your needs.
- * When your component renders, `useMisTicketsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMyTicketsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyTicketsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useMisTicketsQuery({
+ * const { data, loading, error } = useMyTicketsQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useMisTicketsQuery(
+export function useMyTicketsQuery(
   baseOptions: Apollo.QueryHookOptions<
-    MisTicketsQuery,
-    MisTicketsQueryVariables
+    MyTicketsQuery,
+    MyTicketsQueryVariables
   > &
     (
-      | { variables: MisTicketsQueryVariables; skip?: boolean }
+      | { variables: MyTicketsQueryVariables; skip?: boolean }
       | { skip: boolean }
     ),
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<MisTicketsQuery, MisTicketsQueryVariables>(
-    MisTicketsDocument,
+  return Apollo.useQuery<MyTicketsQuery, MyTicketsQueryVariables>(
+    MyTicketsDocument,
     options,
   );
 }
-export function useMisTicketsLazyQuery(
+export function useMyTicketsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    MisTicketsQuery,
-    MisTicketsQueryVariables
+    MyTicketsQuery,
+    MyTicketsQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<MisTicketsQuery, MisTicketsQueryVariables>(
-    MisTicketsDocument,
+  return Apollo.useLazyQuery<MyTicketsQuery, MyTicketsQueryVariables>(
+    MyTicketsDocument,
     options,
   );
 }
-export function useMisTicketsSuspenseQuery(
+export function useMyTicketsSuspenseQuery(
   baseOptions?: Apollo.SuspenseQueryHookOptions<
-    MisTicketsQuery,
-    MisTicketsQueryVariables
+    MyTicketsQuery,
+    MyTicketsQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<MisTicketsQuery, MisTicketsQueryVariables>(
-    MisTicketsDocument,
+  return Apollo.useSuspenseQuery<MyTicketsQuery, MyTicketsQueryVariables>(
+    MyTicketsDocument,
     options,
   );
 }
-export type MisTicketsQueryHookResult = ReturnType<typeof useMisTicketsQuery>;
-export type MisTicketsLazyQueryHookResult = ReturnType<
-  typeof useMisTicketsLazyQuery
+export type MyTicketsQueryHookResult = ReturnType<typeof useMyTicketsQuery>;
+export type MyTicketsLazyQueryHookResult = ReturnType<
+  typeof useMyTicketsLazyQuery
 >;
-export type MisTicketsSuspenseQueryHookResult = ReturnType<
-  typeof useMisTicketsSuspenseQuery
+export type MyTicketsSuspenseQueryHookResult = ReturnType<
+  typeof useMyTicketsSuspenseQuery
 >;
-export type MisTicketsQueryResult = Apollo.QueryResult<
-  MisTicketsQuery,
-  MisTicketsQueryVariables
+export type MyTicketsQueryResult = Apollo.QueryResult<
+  MyTicketsQuery,
+  MyTicketsQueryVariables
 >;

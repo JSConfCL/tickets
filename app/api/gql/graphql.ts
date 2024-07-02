@@ -856,11 +856,11 @@ export type FetchExampleEventsQuery = {
   }>;
 };
 
-export type MisTicketsQueryVariables = Exact<{
+export type MyTicketsQueryVariables = Exact<{
   input: PaginatedInputMyTicketsSearchValues;
 }>;
 
-export type MisTicketsQuery = {
+export type MyTicketsQuery = {
   myTickets: {
     data: Array<{
       approvalStatus: TicketApprovalStatus;
@@ -1050,13 +1050,13 @@ export const FetchExampleEventsDocument = {
   FetchExampleEventsQuery,
   FetchExampleEventsQueryVariables
 >;
-export const MisTicketsDocument = {
+export const MyTicketsDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "query",
-      name: { kind: "Name", value: "misTickets" },
+      name: { kind: "Name", value: "myTickets" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
@@ -1149,7 +1149,7 @@ export const MisTicketsDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<MisTicketsQuery, MisTicketsQueryVariables>;
+} as unknown as DocumentNode<MyTicketsQuery, MyTicketsQueryVariables>;
 export const CreatePurchaseOrderDocument = {
   kind: "Document",
   definitions: [
