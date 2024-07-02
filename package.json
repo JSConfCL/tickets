@@ -12,6 +12,8 @@
     "prestart": "npm run generate",
     "predev": "npm run generate",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
+    "prettier:ci": "prettier --check ./app",
+    "prettier:fix": "prettier --write ./app",
     "start": "wrangler pages dev ./build/client",
     "typecheck": "tsc",
     "typegen": "wrangler types"
