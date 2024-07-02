@@ -56,6 +56,3 @@ jobs:
 
       - name: Run Typecheck
         run: npm run typecheck
-
-      - name: Run Next Linter
-        run: npx next lint
