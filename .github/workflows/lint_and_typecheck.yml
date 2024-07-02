@@ -24,18 +24,18 @@ jobs:
       - name: 📦 Download Cached Package Dependencies
         uses: actions/cache@v3
         env:
-          cache-name: NPM
+          cache-name: NPMv2
         with:
           path: ~/.npm
           key: CACHE-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
 
-      # - name: 📦 Download Cached Eslint output
-      #   uses: actions/cache@v3
-      #   env:
-      #     cache-name: ESLINT
-      #   with:
-      #     path: .eslintcache
-      #     key: CACHE-${{ env.cache-name }}-${{ hashFiles('.eslintcache') }}
+      - name: 📦 Download Cached Eslint output
+        uses: actions/cache@v3
+        env:
+          cache-name: ESLINTv2
+        with:
+          path: .eslintcache
+          key: CACHE-${{ env.cache-name }}-${{ hashFiles('.eslintcache') }}
 
       - name: 📦 Download Cached Typescript output
         uses: actions/cache@v3
