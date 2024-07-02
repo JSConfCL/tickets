@@ -834,8 +834,16 @@ export type CheckPurchaseOrderStatusMutationVariables = Exact<{
   input: CheckForPurchaseOrderInput;
 }>;
 
-
-export type CheckPurchaseOrderStatusMutation = { checkPurchaseOrderStatus: { status: PurchaseOrderStatusEnum | null, tickets: Array<{ approvalStatus: TicketApprovalStatus, paymentStatus: TicketPaymentStatus, redemptionStatus: TicketRedemptionStatus }> } };
+export type CheckPurchaseOrderStatusMutation = {
+  checkPurchaseOrderStatus: {
+    status: PurchaseOrderStatusEnum | null;
+    tickets: Array<{
+      approvalStatus: TicketApprovalStatus;
+      paymentStatus: TicketPaymentStatus;
+      redemptionStatus: TicketRedemptionStatus;
+    }>;
+  };
+};
 
 export type CreatePurchaseOrderMutationVariables = Exact<{
   input: TicketClaimInput;
@@ -1299,4 +1307,3 @@ export const GetEventAndTicketsDocument = {
   GetEventAndTicketsQuery,
   GetEventAndTicketsQueryVariables
 >;
-

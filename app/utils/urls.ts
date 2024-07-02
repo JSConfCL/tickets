@@ -8,7 +8,7 @@ export const urls = {
   ordenes: {
     root: "/ordenes",
     orden: (id: string) => `/ordenes/${id}`,
-    tickets: (id: string) => `/ordenes/${id}/tickets`
+    tickets: (id: string) => `/ordenes/${id}/tickets`,
   },
   comunidades: "/comunidades",
   login: "/login",
