@@ -395,16 +395,16 @@ export type PaginatedUserTicket = {
 
 /** Pagination meta data */
 export type Pagination = {
-  currentPage: Scalars['Int']['output'];
-  pageSize: Scalars['Int']['output'];
-  totalPages: Scalars['Int']['output'];
-  totalRecords: Scalars['Int']['output'];
+  currentPage: Scalars["Int"]["output"];
+  pageSize: Scalars["Int"]["output"];
+  totalPages: Scalars["Int"]["output"];
+  totalRecords: Scalars["Int"]["output"];
 };
 
 export type PaginationSearchInputParams = {
   /** Page number, starts at 0 */
-  page: Scalars['Int']['input'];
-  pageSize: Scalars['Int']['input'];
+  page: Scalars["Int"]["input"];
+  pageSize: Scalars["Int"]["input"];
 };
 
 export type PayForPurchaseOrderInput = {
@@ -774,6 +774,7 @@ export type UserTicket = {
   id: Scalars["ID"]["output"];
   paymentStatus: TicketPaymentStatus;
   redemptionStatus: TicketRedemptionStatus;
+  ticketTemplate: Ticket;
 };
 
 export enum ValidPaymentMethods {
@@ -853,6 +854,27 @@ export type FetchExampleEventsQuery = {
       description: string | null;
     }>;
   }>;
+};
+
+export type MisTicketsQueryVariables = Exact<{
+  input: PaginatedInputMyTicketsSearchValues;
+}>;
+
+export type MisTicketsQuery = {
+  myTickets: {
+    data: Array<{
+      approvalStatus: TicketApprovalStatus;
+      id: string;
+      paymentStatus: TicketPaymentStatus;
+      redemptionStatus: TicketRedemptionStatus;
+    }>;
+    pagination: {
+      currentPage: number;
+      pageSize: number;
+      totalPages: number;
+      totalRecords: number;
+    };
+  };
 };
 
 export type CreatePurchaseOrderMutationVariables = Exact<{
@@ -1028,6 +1050,106 @@ export const FetchExampleEventsDocument = {
   FetchExampleEventsQuery,
   FetchExampleEventsQueryVariables
 >;
+export const MisTicketsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "misTickets" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: {
+                kind: "Name",
+                value: "PaginatedInputMyTicketsSearchValues",
+              },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "myTickets" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "data" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "approvalStatus" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "paymentStatus" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "redemptionStatus" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "pagination" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "currentPage" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "pageSize" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "totalPages" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "totalRecords" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MisTicketsQuery, MisTicketsQueryVariables>;
 export const CreatePurchaseOrderDocument = {
   kind: "Document",
   definitions: [

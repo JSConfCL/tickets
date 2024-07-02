@@ -1,6 +1,6 @@
 import { createGraphiQLFetcher, Fetcher } from "@graphiql/toolkit";
 import { GraphiQL } from "graphiql";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import "graphiql/graphiql.css";
 import { Button } from "~/components/ui/button";
@@ -9,6 +9,7 @@ import {
   useIsLoggedIn,
   useTokenRef,
 } from "~/utils/supabase/AuthProvider";
+import { useRefreshToken } from "~/utils/supabase/client";
 import { urls } from "~/utils/urls";
 
 const comunidades = `query TodasLasComunidades {
@@ -131,6 +132,7 @@ export default function Pregunta() {
   const tokenRef = useTokenRef();
   const isLoggedIn = useIsLoggedIn();
   const isAuthReady = useIsAuthReady();
+  const refreshToken = useRefreshToken();
 
   useEffect(() => {
     if (!tokenRef.current) {
@@ -147,6 +149,18 @@ export default function Pregunta() {
             ...init?.headers,
             Authorization: `Bearer ${tokenRef.current}`,
           },
+        }).then(async (res) => {
+          const cloned = res.clone();
+          const jsonResponse = await res.json();
+
+          if (
+            (jsonResponse as { errors: { extensions: { type: string } }[] })
+              ?.errors?.[0]?.extensions?.type === "UNAUTHENTICATED"
+          ) {
+            refreshToken();
+          }
+
+          return cloned;
         });
       },
     });

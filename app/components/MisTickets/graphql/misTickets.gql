@@ -1,0 +1,16 @@
+query misTickets($input: PaginatedInputMyTicketsSearchValues!) {
+  myTickets(input: $input) {
+    data {
+      approvalStatus
+      id
+      paymentStatus
+      redemptionStatus
+    }
+    pagination {
+      currentPage
+      pageSize
+      totalPages
+      totalRecords
+    }
+  }
+}

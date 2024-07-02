@@ -788,6 +788,7 @@ type UserTicket {
   id: ID!
   paymentStatus: TicketPaymentStatus!
   redemptionStatus: TicketRedemptionStatus!
+  ticketTemplate: Ticket!
 }
 
 enum ValidPaymentMethods {
