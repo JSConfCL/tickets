@@ -1,6 +1,6 @@
 /* eslint-disable */
-import * as types from './graphql';
-import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+import * as types from "./graphql";
+import type { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
 
 /**
  * Map of all GraphQL operations in the project.
@@ -13,11 +13,14 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "query FetchExampleEvents {\n  events {\n    id\n    description\n    community {\n      id\n      name\n    }\n    tags {\n      id\n      name\n      description\n    }\n  }\n}": types.FetchExampleEventsDocument,
-    "mutation CheckPurchaseOrderStatus($input: CheckForPurchaseOrderInput!) {\n  checkPurchaseOrderStatus(input: $input) {\n    status\n    tickets {\n      approvalStatus\n      paymentStatus\n      redemptionStatus\n    }\n  }\n}": types.CheckPurchaseOrderStatusDocument,
-    "mutation createPurchaseOrder($input: TicketClaimInput!) {\n  claimUserTicket(input: $input) {\n    __typename\n    ... on PurchaseOrder {\n      __typename\n      id\n      currency {\n        id\n      }\n      finalPrice\n      paymentLink\n      status\n      tickets {\n        id\n        approvalStatus\n        redemptionStatus\n        paymentStatus\n      }\n    }\n    ... on RedeemUserTicketError {\n      __typename\n      error\n      errorMessage\n    }\n  }\n}": types.CreatePurchaseOrderDocument,
-    "fragment EventTicketFragment on Ticket {\n  id\n  name\n  description\n  quantity\n  isFree\n  startDateTime\n  status\n  isUnlimited\n  prices {\n    id\n    amount\n    currency {\n      currency\n      id\n    }\n  }\n}": types.EventTicketFragmentFragmentDoc,
-    "query getEventAndTickets($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    endDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n    }\n    tickets {\n      ...EventTicketFragment\n    }\n  }\n}": types.GetEventAndTicketsDocument,
+  "query FetchExampleEvents {\n  events {\n    id\n    description\n    community {\n      id\n      name\n    }\n    tags {\n      id\n      name\n      description\n    }\n  }\n}":
+    types.FetchExampleEventsDocument,
+  "mutation createPurchaseOrder($input: TicketClaimInput!) {\n  claimUserTicket(input: $input) {\n    __typename\n    ... on PurchaseOrder {\n      __typename\n      id\n      currency {\n        id\n      }\n      finalPrice\n      paymentLink\n      status\n      tickets {\n        id\n        approvalStatus\n        redemptionStatus\n        paymentStatus\n      }\n    }\n    ... on RedeemUserTicketError {\n      __typename\n      error\n      errorMessage\n    }\n  }\n}":
+    types.CreatePurchaseOrderDocument,
+  "fragment EventTicketFragment on Ticket {\n  id\n  name\n  description\n  quantity\n  isFree\n  startDateTime\n  status\n  isUnlimited\n  prices {\n    id\n    amount\n    currency {\n      currency\n      id\n    }\n  }\n}":
+    types.EventTicketFragmentFragmentDoc,
+  "query getEventAndTickets($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    endDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n    }\n    tickets {\n      ...EventTicketFragment\n    }\n  }\n}":
+    types.GetEventAndTicketsDocument,
 };
 
 /**
@@ -37,26 +40,31 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "query FetchExampleEvents {\n  events {\n    id\n    description\n    community {\n      id\n      name\n    }\n    tags {\n      id\n      name\n      description\n    }\n  }\n}"): (typeof documents)["query FetchExampleEvents {\n  events {\n    id\n    description\n    community {\n      id\n      name\n    }\n    tags {\n      id\n      name\n      description\n    }\n  }\n}"];
+export function graphql(
+  source: "query FetchExampleEvents {\n  events {\n    id\n    description\n    community {\n      id\n      name\n    }\n    tags {\n      id\n      name\n      description\n    }\n  }\n}",
+): (typeof documents)["query FetchExampleEvents {\n  events {\n    id\n    description\n    community {\n      id\n      name\n    }\n    tags {\n      id\n      name\n      description\n    }\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "mutation CheckPurchaseOrderStatus($input: CheckForPurchaseOrderInput!) {\n  checkPurchaseOrderStatus(input: $input) {\n    status\n    tickets {\n      approvalStatus\n      paymentStatus\n      redemptionStatus\n    }\n  }\n}"): (typeof documents)["mutation CheckPurchaseOrderStatus($input: CheckForPurchaseOrderInput!) {\n  checkPurchaseOrderStatus(input: $input) {\n    status\n    tickets {\n      approvalStatus\n      paymentStatus\n      redemptionStatus\n    }\n  }\n}"];
+export function graphql(
+  source: "mutation createPurchaseOrder($input: TicketClaimInput!) {\n  claimUserTicket(input: $input) {\n    __typename\n    ... on PurchaseOrder {\n      __typename\n      id\n      currency {\n        id\n      }\n      finalPrice\n      paymentLink\n      status\n      tickets {\n        id\n        approvalStatus\n        redemptionStatus\n        paymentStatus\n      }\n    }\n    ... on RedeemUserTicketError {\n      __typename\n      error\n      errorMessage\n    }\n  }\n}",
+): (typeof documents)["mutation createPurchaseOrder($input: TicketClaimInput!) {\n  claimUserTicket(input: $input) {\n    __typename\n    ... on PurchaseOrder {\n      __typename\n      id\n      currency {\n        id\n      }\n      finalPrice\n      paymentLink\n      status\n      tickets {\n        id\n        approvalStatus\n        redemptionStatus\n        paymentStatus\n      }\n    }\n    ... on RedeemUserTicketError {\n      __typename\n      error\n      errorMessage\n    }\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "mutation createPurchaseOrder($input: TicketClaimInput!) {\n  claimUserTicket(input: $input) {\n    __typename\n    ... on PurchaseOrder {\n      __typename\n      id\n      currency {\n        id\n      }\n      finalPrice\n      paymentLink\n      status\n      tickets {\n        id\n        approvalStatus\n        redemptionStatus\n        paymentStatus\n      }\n    }\n    ... on RedeemUserTicketError {\n      __typename\n      error\n      errorMessage\n    }\n  }\n}"): (typeof documents)["mutation createPurchaseOrder($input: TicketClaimInput!) {\n  claimUserTicket(input: $input) {\n    __typename\n    ... on PurchaseOrder {\n      __typename\n      id\n      currency {\n        id\n      }\n      finalPrice\n      paymentLink\n      status\n      tickets {\n        id\n        approvalStatus\n        redemptionStatus\n        paymentStatus\n      }\n    }\n    ... on RedeemUserTicketError {\n      __typename\n      error\n      errorMessage\n    }\n  }\n}"];
+export function graphql(
+  source: "fragment EventTicketFragment on Ticket {\n  id\n  name\n  description\n  quantity\n  isFree\n  startDateTime\n  status\n  isUnlimited\n  prices {\n    id\n    amount\n    currency {\n      currency\n      id\n    }\n  }\n}",
+): (typeof documents)["fragment EventTicketFragment on Ticket {\n  id\n  name\n  description\n  quantity\n  isFree\n  startDateTime\n  status\n  isUnlimited\n  prices {\n    id\n    amount\n    currency {\n      currency\n      id\n    }\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "fragment EventTicketFragment on Ticket {\n  id\n  name\n  description\n  quantity\n  isFree\n  startDateTime\n  status\n  isUnlimited\n  prices {\n    id\n    amount\n    currency {\n      currency\n      id\n    }\n  }\n}"): (typeof documents)["fragment EventTicketFragment on Ticket {\n  id\n  name\n  description\n  quantity\n  isFree\n  startDateTime\n  status\n  isUnlimited\n  prices {\n    id\n    amount\n    currency {\n      currency\n      id\n    }\n  }\n}"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "query getEventAndTickets($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    endDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n    }\n    tickets {\n      ...EventTicketFragment\n    }\n  }\n}"): (typeof documents)["query getEventAndTickets($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    endDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n    }\n    tickets {\n      ...EventTicketFragment\n    }\n  }\n}"];
+export function graphql(
+  source: "query getEventAndTickets($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    endDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n    }\n    tickets {\n      ...EventTicketFragment\n    }\n  }\n}",
+): (typeof documents)["query getEventAndTickets($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    endDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n    }\n    tickets {\n      ...EventTicketFragment\n    }\n  }\n}"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
 }
 
-export type DocumentType<TDocumentNode extends DocumentNode<any, any>> = TDocumentNode extends DocumentNode<  infer TType,  any>  ? TType  : never;
+export type DocumentType<TDocumentNode extends DocumentNode<any, any>> =
+  TDocumentNode extends DocumentNode<infer TType, any> ? TType : never;
