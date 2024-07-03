@@ -23,7 +23,12 @@ const config = {
       config: {
         useTypeImports: true,
         skipTypename: true,
-        avoidOptionals: true,
+        avoidOptionals: {
+          field: true,
+          object: false,
+          inputValue: false,
+          defaultValue: false,
+        },
         nonOptionalTypename: false,
         // Lamentablemente, code-gen establece "any" como predeterminado, cuando no tiene un
         // tipo para un "scalar". Esta opción nos obliga a definir un tipo cada vez que
