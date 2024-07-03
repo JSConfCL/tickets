@@ -5,20 +5,6 @@ query myTickets($input: PaginatedInputMyTicketsSearchValues!) {
       id
       paymentStatus
       redemptionStatus
-      ticketTemplate {
-        id
-        name
-      }
-      purchaseOrder {
-        id
-        currency {
-          id
-          currency
-          validPaymentMethods
-        }
-        finalPrice
-        status
-      }
     }
     pagination {
       currentPage

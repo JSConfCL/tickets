@@ -787,7 +787,6 @@ type UserTicket {
   approvalStatus: TicketApprovalStatus!
   id: ID!
   paymentStatus: TicketPaymentStatus!
-  purchaseOrder: PurchaseOrder
   redemptionStatus: TicketRedemptionStatus!
   ticketTemplate: Ticket!
 }
