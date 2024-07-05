@@ -375,11 +375,36 @@ export type MutationValidateWorkEmailArgs = {
   confirmationToken: Scalars["String"]["input"];
 };
 
-export type MyTicketsSearchInput = {
+export type MyTicketsSearchValues = {
   approvalStatus: InputMaybe<TicketApprovalStatus>;
   eventId: InputMaybe<Scalars["String"]["input"]>;
   paymentStatus: InputMaybe<TicketPaymentStatus>;
   redemptionStatus: InputMaybe<TicketRedemptionStatus>;
+};
+
+export type PaginatedInputMyTicketsSearchValues = {
+  pagination: PaginationSearchInputParams;
+  search: InputMaybe<MyTicketsSearchValues>;
+};
+
+/** Type used for querying the paginated leaves and it's paginated meta data */
+export type PaginatedUserTicket = {
+  data: Array<UserTicket>;
+  pagination: Pagination;
+};
+
+/** Pagination meta data */
+export type Pagination = {
+  currentPage: Scalars["Int"]["output"];
+  pageSize: Scalars["Int"]["output"];
+  totalPages: Scalars["Int"]["output"];
+  totalRecords: Scalars["Int"]["output"];
+};
+
+export type PaginationSearchInputParams = {
+  /** Page number, starts at 0 */
+  page: Scalars["Int"]["input"];
+  pageSize: Scalars["Int"]["input"];
 };
 
 export type PayForPurchaseOrderInput = {
@@ -449,7 +474,7 @@ export type Query = {
   /** Get the current user */
   me: User;
   /** Get a list of tickets for the current user */
-  myTickets: Array<UserTicket>;
+  myTickets: PaginatedUserTicket;
   /** Get a list of salaries associated to the user */
   salaries: Array<Salary>;
   /** Search a consolidated payment logs, by date, aggregated by platform and currency_id */
@@ -504,7 +529,7 @@ export type QueryEventsArgs = {
 };
 
 export type QueryMyTicketsArgs = {
-  input: InputMaybe<MyTicketsSearchInput>;
+  input: PaginatedInputMyTicketsSearchValues;
 };
 
 export type QuerySearchConsolidatedPaymentLogsArgs = {
@@ -749,6 +774,7 @@ export type UserTicket = {
   id: Scalars["ID"]["output"];
   paymentStatus: TicketPaymentStatus;
   redemptionStatus: TicketRedemptionStatus;
+  ticketTemplate: Ticket;
 };
 
 export enum ValidPaymentMethods {
@@ -828,6 +854,27 @@ export type FetchExampleEventsQuery = {
       description: string | null;
     }>;
   }>;
+};
+
+export type MyTicketsQueryVariables = Exact<{
+  input: PaginatedInputMyTicketsSearchValues;
+}>;
+
+export type MyTicketsQuery = {
+  myTickets: {
+    data: Array<{
+      approvalStatus: TicketApprovalStatus;
+      id: string;
+      paymentStatus: TicketPaymentStatus;
+      redemptionStatus: TicketRedemptionStatus;
+    }>;
+    pagination: {
+      currentPage: number;
+      pageSize: number;
+      totalPages: number;
+      totalRecords: number;
+    };
+  };
 };
 
 export type CreatePurchaseOrderMutationVariables = Exact<{
@@ -1003,6 +1050,106 @@ export const FetchExampleEventsDocument = {
   FetchExampleEventsQuery,
   FetchExampleEventsQueryVariables
 >;
+export const MyTicketsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "myTickets" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: {
+                kind: "Name",
+                value: "PaginatedInputMyTicketsSearchValues",
+              },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "myTickets" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "data" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "approvalStatus" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "paymentStatus" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "redemptionStatus" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "pagination" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "currentPage" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "pageSize" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "totalPages" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "totalRecords" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MyTicketsQuery, MyTicketsQueryVariables>;
 export const CreatePurchaseOrderDocument = {
   kind: "Document",
   definitions: [

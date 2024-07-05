@@ -10,8 +10,8 @@ import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import { RetryLink } from "@apollo/client/link/retry";
 
-import { useSetTokenRef, useTokenRef } from "../utils/supabase/AuthProvider";
-import { supabaseClient } from "../utils/supabase/client";
+import { useTokenRef } from "../utils/supabase/AuthProvider";
+import { useRefreshToken } from "../utils/supabase/client";
 
 const retryLink = new RetryLink();
 
@@ -62,38 +62,21 @@ const useAuthLink = () => {
 // Este link se encarga de manejar errores de autenticación
 // Si el servidor responde con un code UNAUTHENTICATED, intenta refrescar el token.
 const useErrorLink = () => {
-  const setToken = useSetTokenRef();
+  const refreshToken = useRefreshToken();
 
   return onError(({ graphQLErrors, networkError, operation, forward }) => {
     if (graphQLErrors) {
       for (const err of graphQLErrors) {
-        if (err.extensions.code === "UNAUTHENTICATED") {
-          supabaseClient.auth
-            .getSession()
-            .then(({ data, error }) => {
-              if (error) {
-                // eslint-disable-next-line no-console
-                console.error("Error refreshing access token", error);
-
-                return;
-              }
-
-              const newToken = data.session?.access_token;
-
-              if (!newToken) {
-                // eslint-disable-next-line no-console
-                console.error("No access token found in session data");
-              } else {
-                setToken(newToken);
-              }
-
+        if (err.extensions.type === "UNAUTHENTICATED") {
+          refreshToken(
+            () => {
               forward(operation);
-            })
-            .catch((error: unknown) => {
+            },
+            () => {
               // eslint-disable-next-line no-console
-              console.error("Error refreshing access token", error);
-            });
-          // }
+              console.error("Error refreshing access token");
+            },
+          );
         }
       }
     } else if (networkError) {

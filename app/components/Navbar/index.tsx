@@ -1,6 +1,7 @@
 import { LogOut, PackageOpen, Settings, User as UserIcon } from "lucide-react";
+import { useMemo } from "react";
 
-import { useIsLoggedIn } from "~/utils/supabase/AuthProvider";
+import { useIsAuthReady, useIsLoggedIn } from "~/utils/supabase/AuthProvider";
 import { logout } from "~/utils/supabase/client";
 import { urls } from "~/utils/urls";
 
@@ -9,61 +10,78 @@ import { MobileNav } from "./MobileNav";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import type { NavbarMenuItem } from "./types";
 
-const userItems = [
-  {
-    content: "Eventos",
-    link: urls.eventos.root,
-  },
-  {
-    content: "Comunidades",
-    link: urls.comunidades,
-  },
-  {
-    content: "Perfil",
-    children: [
-      {
-        content: "Mi Cuenta",
-        icon: <UserIcon className="mr-2 size-4" />,
-        link: urls.home,
-      },
-      {
-        content: "separator",
-      },
-      {
-        content: "Settings",
-        icon: <Settings className="mr-2 size-4" />,
-        link: urls.home,
-      },
-      {
-        content: "separator",
-      },
-      {
-        content: "Salir",
-        icon: <LogOut className="mr-2 size-4" />,
-        onClick: () => {
-          logout().catch(console.error);
-        },
-      },
-    ],
-  },
-] satisfies NavbarMenuItem[];
 const guestItems = [
   {
     content: "Eventos",
+    show: true,
     link: urls.eventos.root,
   },
   {
     content: "Comunidades",
+    show: true,
     link: urls.comunidades,
-  },
-  {
-    content: "Iniciar sesión",
-    link: urls.login,
   },
 ] satisfies NavbarMenuItem[];
 
 export const Navbar = () => {
   const isLogged = useIsLoggedIn();
+  const isAuthReady = useIsAuthReady();
+
+  const userItems = useMemo(
+    () =>
+      [
+        {
+          content: "Eventos",
+          show: true,
+          link: urls.eventos.root,
+        },
+        {
+          content: "Comunidades",
+          show: true,
+          link: urls.comunidades,
+        },
+        {
+          content: "Mis Tickets",
+          show: true,
+          link: urls.tickets.root,
+        },
+        {
+          content: "Perfil",
+          show: true,
+          children: [
+            {
+              content: "Mi Cuenta",
+              show: true,
+              icon: <UserIcon className="mr-2 size-4" />,
+              link: urls.home,
+            },
+            {
+              show: true,
+              content: "separator",
+            },
+            {
+              content: "Settings",
+              show: true,
+              icon: <Settings className="mr-2 size-4" />,
+              link: urls.home,
+            },
+            {
+              show: true,
+              content: "separator",
+            },
+            {
+              content: "Salir",
+              show: isAuthReady && isLogged,
+              icon: <LogOut className="mr-2 size-4" />,
+              onClick: () => {
+                logout().catch(console.error);
+              },
+            },
+          ],
+        },
+      ] satisfies NavbarMenuItem[],
+    [isAuthReady, isLogged],
+  );
 
   return (
     <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
