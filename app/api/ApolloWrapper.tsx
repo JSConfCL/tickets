@@ -98,8 +98,7 @@ if (!import.meta.env.VITE_JSCL_API_URL) {
 const httpLink = new HttpLink({
   // Tiene que ser una URL absoluta, ya que las URLs relativas no pueden ser usadas en SSR.
   uri: import.meta.env.VITE_JSCL_API_URL,
-  fetchOptions: { cache: "no-store", credentials: "include" },
-  credentials: "include",
+  fetchOptions: { cache: "no-store" },
 });
 
 function useMakeClient() {
