@@ -620,7 +620,7 @@ Representation of a ticket
 type Ticket {
   description: String
   endDateTime: DateTime
-  eventId: String!
+  event: Event!
   id: ID!
 
   """
@@ -787,6 +787,7 @@ type UserTicket {
   approvalStatus: TicketApprovalStatus!
   id: ID!
   paymentStatus: TicketPaymentStatus!
+  purchaseOrder: PurchaseOrder
   redemptionStatus: TicketRedemptionStatus!
   ticketTemplate: Ticket!
 }
