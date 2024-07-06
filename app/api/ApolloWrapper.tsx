@@ -10,8 +10,7 @@ import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import { RetryLink } from "@apollo/client/link/retry";
 
-import { useTokenRef } from "../utils/supabase/AuthProvider";
-import { useRefreshToken } from "../utils/supabase/client";
+import { useRefreshSession, useTokenRef } from "../utils/supabase/AuthProvider";
 
 const retryLink = new RetryLink();
 
@@ -62,21 +61,20 @@ const useAuthLink = () => {
 // Este link se encarga de manejar errores de autenticación
 // Si el servidor responde con un code UNAUTHENTICATED, intenta refrescar el token.
 const useErrorLink = () => {
-  const refreshToken = useRefreshToken();
+  const refreshSession = useRefreshSession();
 
   return onError(({ graphQLErrors, networkError, operation, forward }) => {
     if (graphQLErrors) {
       for (const err of graphQLErrors) {
         if (err.extensions.type === "UNAUTHENTICATED") {
-          refreshToken(
-            () => {
+          refreshSession()
+            .then(() => {
               forward(operation);
-            },
-            () => {
+            })
+            .catch(() => {
               // eslint-disable-next-line no-console
               console.error("Error refreshing access token");
-            },
-          );
+            });
         }
       }
     } else if (networkError) {
@@ -100,8 +98,7 @@ if (!import.meta.env.VITE_JSCL_API_URL) {
 const httpLink = new HttpLink({
   // Tiene que ser una URL absoluta, ya que las URLs relativas no pueden ser usadas en SSR.
   uri: import.meta.env.VITE_JSCL_API_URL,
-  fetchOptions: { cache: "no-store", credentials: "include" },
-  credentials: "include",
+  fetchOptions: { cache: "no-store" },
 });
 
 function useMakeClient() {

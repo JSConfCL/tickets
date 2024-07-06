@@ -633,7 +633,7 @@ export type TagSearchInput = {
 export type Ticket = {
   description: Maybe<Scalars["String"]["output"]>;
   endDateTime: Maybe<Scalars["DateTime"]["output"]>;
-  eventId: Scalars["String"]["output"];
+  event: Event;
   id: Scalars["ID"]["output"];
   /** Whether or not the ticket is free */
   isFree: Scalars["Boolean"]["output"];
@@ -773,6 +773,7 @@ export type UserTicket = {
   approvalStatus: TicketApprovalStatus;
   id: Scalars["ID"]["output"];
   paymentStatus: TicketPaymentStatus;
+  purchaseOrder: Maybe<PurchaseOrder>;
   redemptionStatus: TicketRedemptionStatus;
   ticketTemplate: Ticket;
 };

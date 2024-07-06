@@ -7,12 +7,12 @@ import { Button } from "~/components/ui/button";
 import {
   useIsAuthReady,
   useIsLoggedIn,
+  useRefreshSession,
   useTokenRef,
 } from "~/utils/supabase/AuthProvider";
-import { useRefreshToken } from "~/utils/supabase/client";
 import { urls } from "~/utils/urls";
 
-const comunidades = `query TodasLasComunidades {
+const communities = `query AllTheCommunities {
   communities {
     description
     id
@@ -21,7 +21,7 @@ const comunidades = `query TodasLasComunidades {
   }
 }`;
 
-const comunidadesYEventos = `query ComunidadesYEventos {
+const communitiesAndEvents = `query CommunitiesAndEvents {
   communities {
     id
     name
@@ -37,7 +37,7 @@ const comunidadesYEventos = `query ComunidadesYEventos {
   }
 }`;
 
-const comunidadesUsuariosYEventos = `query comunidadesUsuariosYEventos {
+const communitiesUsersAndEvents = `query communitiesUsersAndEvents {
   communities {
     id
     name
@@ -60,11 +60,11 @@ const comunidadesUsuariosYEventos = `query comunidadesUsuariosYEventos {
   }
 }`;
 
-const mutacionCrearComunidad = `# Esta mutación requiere un permiso especial.
+const createCommunityMutation = `# Esta mutación requiere un permiso especial.
 # Manda un mensaje en el discord
 # https://https://discord.jschile.org
 # Para que te asignen el permiso
-mutation CrearComunidad($input: CommunityCreateInput!) {
+mutation CreateCommunity($input: CommunityCreateInput!) {
   createCommunity(input: $input) {
     id
     description
@@ -73,10 +73,10 @@ mutation CrearComunidad($input: CommunityCreateInput!) {
   }
 }`;
 
-const mutacionCrearEvento = `# Esta mutación requiere que seas Admin de una Comunidad.
+const createEventMutation = `# Esta mutación requiere que seas Admin de una Comunidad.
 # Puedes permirle permisos al Admin de alguna comunidad
 # para que te haga admin
-mutation CrearEvento($input: EventCreateInput!) {
+mutation CreateEvent($input: EventCreateInput!) {
   createEvent(input: $input) {
     id
     description
@@ -85,10 +85,10 @@ mutation CrearEvento($input: EventCreateInput!) {
   }
 }`;
 
-const mutacionCrearTicket = `# Esta mutación requiere que seas Admin de una Comunidad.
+const createTicketMutation = `# Esta mutación requiere que seas Admin de una Comunidad.
 # Puedes permirle permisos al Admin de alguna comunidad
 # para que te haga admin
-mutation CrearTicket($input: TicketCreateInput!) {
+mutation CreateTicket($input: TicketCreateInput!) {
   createTicket(input: $input) {
     id
     description
@@ -97,7 +97,7 @@ mutation CrearTicket($input: TicketCreateInput!) {
   }
 }`;
 
-const mutacionDeCreatePurchaseOrder = `mutation claimUserTicket($input: TicketClaimInput!) {
+const createPurchaseOrderMutation = `mutation claimUserTicket($input: TicketClaimInput!) {
   claimUserTicket(input: $input) {
     __typename
     ... on PurchaseOrder {
@@ -132,7 +132,7 @@ export default function Pregunta() {
   const tokenRef = useTokenRef();
   const isLoggedIn = useIsLoggedIn();
   const isAuthReady = useIsAuthReady();
-  const refreshToken = useRefreshToken();
+  const refreshSession = useRefreshSession();
 
   useEffect(() => {
     if (!tokenRef.current) {
@@ -157,7 +157,10 @@ export default function Pregunta() {
             (jsonResponse as { errors: { extensions: { type: string } }[] })
               ?.errors?.[0]?.extensions?.type === "UNAUTHENTICATED"
           ) {
-            refreshToken();
+            refreshSession().catch((error) => {
+              // eslint-disable-next-line no-console
+              console.error("Error refreshing access token", error);
+            });
           }
 
           return cloned;
@@ -166,7 +169,7 @@ export default function Pregunta() {
     });
 
     fetcherRef.current = fetcher;
-  }, [tokenRef]);
+  }, [refreshSession, tokenRef]);
 
   if (!isAuthReady) {
     <div className="p-4">...Loading</div>;
@@ -200,16 +203,16 @@ export default function Pregunta() {
         defaultEditorToolsVisibility="variables"
         defaultTabs={[
           {
-            query: comunidades,
+            query: communities,
           },
           {
-            query: comunidadesUsuariosYEventos,
+            query: communitiesUsersAndEvents,
           },
           {
-            query: comunidadesYEventos,
+            query: communitiesAndEvents,
           },
           {
-            query: mutacionCrearComunidad,
+            query: createCommunityMutation,
             variables: JSON.stringify(
               {
                 input: {
@@ -223,7 +226,7 @@ export default function Pregunta() {
             ),
           },
           {
-            query: mutacionCrearEvento,
+            query: createEventMutation,
             variables: JSON.stringify(
               {
                 input: {
@@ -239,7 +242,7 @@ export default function Pregunta() {
             ),
           },
           {
-            query: mutacionCrearTicket,
+            query: createTicketMutation,
             variables: JSON.stringify(
               {
                 input: {
@@ -262,7 +265,7 @@ export default function Pregunta() {
             ),
           },
           {
-            query: mutacionDeCreatePurchaseOrder,
+            query: createPurchaseOrderMutation,
             variables: JSON.stringify(
               {
                 input: {
