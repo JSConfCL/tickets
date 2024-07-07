@@ -5,12 +5,16 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import { setDefaultOptions } from "date-fns";
+import { es } from "date-fns/locale";
 
 import "./tailwind.css";
 import { ApolloWrapper } from "~/api/ApolloWrapper";
 import { Navbar } from "~/components/Navbar";
 import { Toaster } from "~/components/ui/sonner";
 import { AuthProvider } from "~/utils/supabase/AuthProvider";
+
+setDefaultOptions({ locale: es });
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (

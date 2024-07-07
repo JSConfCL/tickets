@@ -9,19 +9,38 @@ import { gql } from "graphql-tag";
 import * as Apollo from "@apollo/client";
 const defaultOptions = {} as const;
 export type MyTicketsQueryVariables = Types.Exact<{
-  input: Types.PaginatedInputMyTicketsSearchValues;
+  input: Types.PaginatedInputEventsSearchInput;
+  userTicketSearchInput?: Types.InputMaybe<Types.EventsTicketsSearchInput>;
 }>;
 
 export type MyTicketsQuery = {
   __typename?: "Query";
-  myTickets: {
-    __typename?: "PaginatedUserTicket";
+  searchEvents: {
+    __typename?: "PaginatedEvent";
     data: Array<{
-      __typename?: "UserTicket";
-      approvalStatus: Types.TicketApprovalStatus;
+      __typename?: "Event";
       id: string;
-      paymentStatus: Types.TicketPaymentStatus;
-      redemptionStatus: Types.TicketRedemptionStatus;
+      name: string;
+      description?: string | null;
+      startDateTime: any;
+      status: Types.EventStatus;
+      community?: {
+        __typename?: "Community";
+        id: string;
+        name?: string | null;
+      } | null;
+      usersTickets: Array<{
+        __typename?: "UserTicket";
+        id: string;
+        approvalStatus: Types.TicketApprovalStatus;
+        paymentStatus: Types.TicketPaymentStatus;
+        redemptionStatus: Types.TicketRedemptionStatus;
+        ticketTemplate: {
+          __typename?: "Ticket";
+          description?: string | null;
+          id: string;
+        };
+      }>;
     }>;
     pagination: {
       __typename?: "Pagination";
@@ -34,13 +53,31 @@ export type MyTicketsQuery = {
 };
 
 export const MyTicketsDocument = gql`
-  query myTickets($input: PaginatedInputMyTicketsSearchValues!) {
-    myTickets(input: $input) {
+  query myTickets(
+    $input: PaginatedInputEventsSearchInput!
+    $userTicketSearchInput: EventsTicketsSearchInput
+  ) {
+    searchEvents(input: $input) {
       data {
-        approvalStatus
         id
-        paymentStatus
-        redemptionStatus
+        name
+        description
+        startDateTime
+        community {
+          id
+          name
+        }
+        status
+        usersTickets(input: $userTicketSearchInput) {
+          id
+          approvalStatus
+          paymentStatus
+          redemptionStatus
+          ticketTemplate {
+            description
+            id
+          }
+        }
       }
       pagination {
         currentPage
@@ -65,6 +102,7 @@ export const MyTicketsDocument = gql`
  * const { data, loading, error } = useMyTicketsQuery({
  *   variables: {
  *      input: // value for 'input'
+ *      userTicketSearchInput: // value for 'userTicketSearchInput'
  *   },
  * });
  */

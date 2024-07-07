@@ -1,10 +1,28 @@
-query myTickets($input: PaginatedInputMyTicketsSearchValues!) {
-  myTickets(input: $input) {
+query myTickets(
+  $input: PaginatedInputEventsSearchInput!
+  $userTicketSearchInput: EventsTicketsSearchInput
+) {
+  searchEvents(input: $input) {
     data {
-      approvalStatus
       id
-      paymentStatus
-      redemptionStatus
+      name
+      description
+      startDateTime
+      community {
+        id
+        name
+      }
+      status
+      usersTickets(input: $userTicketSearchInput) {
+        id
+        approvalStatus
+        paymentStatus
+        redemptionStatus
+        ticketTemplate {
+          description
+          id
+        }
+      }
     }
     pagination {
       currentPage

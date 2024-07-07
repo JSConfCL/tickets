@@ -1,0 +1,17 @@
+query FetchExampleEvents($input: PaginatedInputEventsSearchInput!) {
+  searchEvents(input: $input) {
+    data {
+      id
+      description
+      community {
+        id
+        name
+      }
+      tags {
+        id
+        name
+        description
+      }
+    }
+  }
+}
