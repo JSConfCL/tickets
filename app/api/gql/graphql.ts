@@ -872,7 +872,7 @@ export type MyTicketsQueryVariables = Exact<{
   userTicketSearchInput?: InputMaybe<EventsTicketsSearchInput>;
 }>;
 
-export type MyTicketsQuery = {
+export type MyEventsQuery = {
   searchEvents: {
     data: Array<{
       id: string;
@@ -1037,7 +1037,7 @@ export const MyTicketsDocument = {
     {
       kind: "OperationDefinition",
       operation: "query",
-      name: { kind: "Name", value: "myTickets" },
+      name: { kind: "Name", value: "myEvents" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
@@ -1319,7 +1319,6 @@ export const CreatePurchaseOrderDocument = {
           {
             kind: "Field",
             name: { kind: "Name", value: "claimUserTicket" },
-            arguments: [
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "input" },
@@ -1396,9 +1395,6 @@ export const CreatePurchaseOrderDocument = {
                             },
                           ],
                         },
-                      },
-                    ],
-                  },
                 },
                 {
                   kind: "InlineFragment",

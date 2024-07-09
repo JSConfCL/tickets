@@ -1,8 +1,8 @@
 import { cx } from "class-variance-authority";
 import { Suspense } from "react";
 
-import { MyTicketsList } from "~/components/MyTickets/MyTicketsList";
-import { MyTicketsLoadingSkeleton } from "~/components/MyTickets/MyTicketsLoadingSkeleton";
+import { MyTicketsList } from "~/components/MyEvents/MyTicketsList";
+import { MyTicketsLoadingSkeleton } from "~/components/MyEvents/MyTicketsLoadingSkeleton";
 import { sharedLayoutStyle } from "~/components/sharedLayouts";
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
 

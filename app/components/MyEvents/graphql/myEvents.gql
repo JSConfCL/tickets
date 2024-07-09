@@ -1,4 +1,4 @@
-query myTickets(
+query myEvents(
   $input: PaginatedInputEventsSearchInput!
   $userTicketSearchInput: EventsTicketsSearchInput
 ) {

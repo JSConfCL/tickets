@@ -1,13 +1,13 @@
 import { formatDistanceToNow, subDays, format } from "date-fns";
 import { ArrowRight } from "lucide-react";
 
-import { useMyTicketsSuspenseQuery } from "~/components/MyTickets/graphql/myTickets.generated";
+import { useMyEventsSuspenseQuery } from "~/components/MyEvents/graphql/myEvents.generated";
 import { Button } from "~/components/ui/button";
 import { Card, CardTitle } from "~/components/ui/card";
 import { urls } from "~/utils/urls";
 
 export const MyTicketsList = () => {
-  const { data } = useMyTicketsSuspenseQuery({
+  const { data } = useMyEventsSuspenseQuery({
     variables: {
       input: {
         search: {
@@ -53,7 +53,7 @@ export const MyTicketsList = () => {
             <div>
               <Button asChild variant="secondary">
                 <a
-                  href={urls.events.myTickets(event.id)}
+                  href={urls.myEvents.myTickets(event.id)}
                   className="flex items-center gap-2"
                 >
                   <span>Ver {event.usersTickets.length} tickets</span>

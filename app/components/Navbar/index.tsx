@@ -43,7 +43,7 @@ export const Navbar = () => {
         {
           content: "Mis Eventos",
           show: true,
-          link: urls.tickets.root,
+          link: urls.myEvents.root,
         },
         {
           content: "Perfil",
