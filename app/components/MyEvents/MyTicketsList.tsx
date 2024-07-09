@@ -6,7 +6,13 @@ import { Button } from "~/components/ui/button";
 import { Card, CardTitle } from "~/components/ui/card";
 import { urls } from "~/utils/urls";
 
-export const MyTicketsList = () => {
+export const MyTicketsList = ({
+  startDateTimeFrom = null,
+  startDateTimeTo = null,
+}: {
+  startDateTimeFrom?: string | null;
+  startDateTimeTo?: string | null;
+}) => {
   const { data } = useMyEventsSuspenseQuery({
     variables: {
       input: {
@@ -14,8 +20,8 @@ export const MyTicketsList = () => {
           userHasTickets: true,
           id: null,
           name: null,
-          startDateTimeFrom: null,
-          startDateTimeTo: null,
+          startDateTimeFrom: startDateTimeFrom,
+          startDateTimeTo: startDateTimeTo,
           status: null,
           visibility: null,
         },
@@ -29,6 +35,9 @@ export const MyTicketsList = () => {
 
   return (
     <div className="flex flex-col gap-6">
+      {!data.searchEvents.data.length && (
+        <div className="text-center text-gray-400">No hay eventos</div>
+      )}
       {data.searchEvents.data.map((event) => {
         const parsedDate = new Date(event.startDateTime as string);
         const isOverAWeekFromNow = parsedDate > subDays(new Date(), 7);
