@@ -14,7 +14,7 @@ const guestItems = [
   {
     content: "Eventos",
     show: true,
-    link: urls.eventos.root,
+    link: urls.events.root,
   },
   {
     content: "Comunidades",
@@ -33,7 +33,7 @@ export const Navbar = () => {
         {
           content: "Eventos",
           show: true,
-          link: urls.eventos.root,
+          link: urls.events.root,
         },
         {
           content: "Comunidades",
@@ -41,7 +41,7 @@ export const Navbar = () => {
           link: urls.comunidades,
         },
         {
-          content: "Mis Tickets",
+          content: "Mis Eventos",
           show: true,
           link: urls.tickets.root,
         },

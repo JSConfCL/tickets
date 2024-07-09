@@ -1,7 +1,10 @@
 import { formatDistanceToNow, subDays, format } from "date-fns";
+import { ArrowRight } from "lucide-react";
 
 import { useMyTicketsSuspenseQuery } from "~/components/MyTickets/graphql/myTickets.generated";
+import { Button } from "~/components/ui/button";
 import { Card, CardTitle } from "~/components/ui/card";
+import { urls } from "~/utils/urls";
 
 export const MyTicketsList = () => {
   const { data } = useMyTicketsSuspenseQuery({
@@ -40,14 +43,24 @@ export const MyTicketsList = () => {
         return (
           <Card
             key={event.id}
-            className="flex w-full max-w-2xl flex-col gap-4 bg-gray-900/40 p-5"
+            className="flex w-full max-w-2xl flex-col gap-3 bg-gray-900/40 p-5"
           >
-            <div className="flex flex-col text-gray-400">
+            <div className="flex flex-col gap-1 text-xs text-gray-400">
               <span className="capitalize">{date}</span>
               <span>{formattedTime}</span>
             </div>
             <CardTitle className="text-xl ">{event.name}</CardTitle>
-            <div>{event.usersTickets.length} tickets</div>
+            <div>
+              <Button asChild variant="secondary">
+                <a
+                  href={urls.events.myTickets(event.id)}
+                  className="flex items-center gap-2"
+                >
+                  <span>Ver {event.usersTickets.length} tickets</span>
+                  <ArrowRight size={16} />
+                </a>
+              </Button>
+            </div>
           </Card>
         );
       })}

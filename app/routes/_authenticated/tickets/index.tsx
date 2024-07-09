@@ -10,7 +10,7 @@ export default function Layout() {
   return (
     <div className={cx(sharedLayoutStyle, "flex flex-col gap-10")}>
       <div className="flex w-full items-center justify-between">
-        <h1 className="text-3xl">Mis Tickets</h1>
+        <h1 className="text-3xl">Eventos</h1>
         <div>
           <Tabs defaultValue="account">
             <TabsList>
