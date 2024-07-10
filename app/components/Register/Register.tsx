@@ -25,7 +25,7 @@ export const Register = (props: { eventId: string }) => {
         Para registrarte, por favor haz click en el botón.
       </p>
       <Button asChild variant={"secondary"} size={"lg"}>
-        <a href={urls.eventos.tickets(props.eventId)}>Registrarse</a>
+        <a href={urls.events.tickets(props.eventId)}>Registrarse</a>
       </Button>
     </section>
   );

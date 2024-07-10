@@ -1,0 +1,34 @@
+query myEvents(
+  $input: PaginatedInputEventsSearchInput!
+  $userTicketSearchInput: EventsTicketsSearchInput
+) {
+  searchEvents(input: $input) {
+    data {
+      id
+      name
+      description
+      startDateTime
+      community {
+        id
+        name
+      }
+      status
+      usersTickets(input: $userTicketSearchInput) {
+        id
+        approvalStatus
+        paymentStatus
+        redemptionStatus
+        ticketTemplate {
+          description
+          id
+        }
+      }
+    }
+    pagination {
+      currentPage
+      pageSize
+      totalPages
+      totalRecords
+    }
+  }
+}

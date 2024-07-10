@@ -4,13 +4,19 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLocation,
 } from "@remix-run/react";
-
+import { setDefaultOptions } from "date-fns";
+import { es } from "date-fns/locale";
 import "./tailwind.css";
+import { AnimatePresence, motion } from "framer-motion";
+
 import { ApolloWrapper } from "~/api/ApolloWrapper";
 import { Navbar } from "~/components/Navbar";
 import { Toaster } from "~/components/ui/sonner";
 import { AuthProvider } from "~/utils/supabase/AuthProvider";
+
+setDefaultOptions({ locale: es });
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -30,12 +36,29 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+const variants = {
+  initial: { opacity: 0, scale: 0.99 },
+  animate: { opacity: 1, scale: 1 },
+  exit: { opacity: 0, scale: 0.99 },
+};
+const transition = { duration: 0.3 };
 export default function App() {
   return (
     <AuthProvider>
       <ApolloWrapper>
         <Navbar />
-        <Outlet />
+        <AnimatePresence mode="popLayout">
+          <motion.div
+            key={useLocation().pathname}
+            variants={variants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={transition}
+          >
+            <Outlet />
+          </motion.div>
+        </AnimatePresence>
         <Toaster />
       </ApolloWrapper>
     </AuthProvider>

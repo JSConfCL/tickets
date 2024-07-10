@@ -55,28 +55,28 @@ export enum CommnunityStatus {
 
 /** Representation of a Community */
 export type Community = {
-  banner: Maybe<Scalars["String"]["output"]>;
-  description: Maybe<Scalars["String"]["output"]>;
+  banner?: Maybe<Scalars["String"]["output"]>;
+  description?: Maybe<Scalars["String"]["output"]>;
   events: Array<Event>;
   id: Scalars["String"]["output"];
-  logo: Maybe<Scalars["String"]["output"]>;
-  name: Maybe<Scalars["String"]["output"]>;
+  logo?: Maybe<Scalars["String"]["output"]>;
+  name?: Maybe<Scalars["String"]["output"]>;
   status: CommnunityStatus;
   users: Array<User>;
 };
 
 /** Representation of a workEmail */
 export type Company = {
-  description: Maybe<Scalars["String"]["output"]>;
+  description?: Maybe<Scalars["String"]["output"]>;
   domain: Scalars["String"]["output"];
   hasBeenUpdated: Scalars["Boolean"]["output"];
   id: Scalars["String"]["output"];
-  logo: Maybe<Scalars["String"]["output"]>;
-  name: Maybe<Scalars["String"]["output"]>;
+  logo?: Maybe<Scalars["String"]["output"]>;
+  name?: Maybe<Scalars["String"]["output"]>;
   salarySubmissions: Scalars["Int"]["output"];
   /** Not available to users */
-  status: Maybe<CompanyStatus>;
-  website: Maybe<Scalars["String"]["output"]>;
+  status?: Maybe<CompanyStatus>;
+  website?: Maybe<Scalars["String"]["output"]>;
 };
 
 export enum CompanyStatus {
@@ -100,13 +100,13 @@ export type CreateCommunityInput = {
 };
 
 export type CreateCompanyInput = {
-  description: InputMaybe<Scalars["String"]["input"]>;
+  description?: InputMaybe<Scalars["String"]["input"]>;
   /** The email domain of the company (What we'll use to match the company to the user on account-creation) */
   domain: Scalars["String"]["input"];
-  logo: InputMaybe<Scalars["String"]["input"]>;
-  name: InputMaybe<Scalars["String"]["input"]>;
-  status: InputMaybe<CompanyStatus>;
-  website: InputMaybe<Scalars["String"]["input"]>;
+  logo?: InputMaybe<Scalars["String"]["input"]>;
+  name?: InputMaybe<Scalars["String"]["input"]>;
+  status?: InputMaybe<CompanyStatus>;
+  website?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type CreateSalaryInput = {
@@ -137,16 +137,16 @@ export type EnqueueGoogleAlbumImportInput = {
 
 /** Representation of an Event (Events and Users, is what tickets are linked to) */
 export type Event = {
-  address: Maybe<Scalars["String"]["output"]>;
-  community: Maybe<Community>;
-  description: Maybe<Scalars["String"]["output"]>;
-  endDateTime: Maybe<Scalars["DateTime"]["output"]>;
+  address?: Maybe<Scalars["String"]["output"]>;
+  community?: Maybe<Community>;
+  description?: Maybe<Scalars["String"]["output"]>;
+  endDateTime?: Maybe<Scalars["DateTime"]["output"]>;
   id: Scalars["String"]["output"];
   images: Array<SanityAssetRef>;
-  latitude: Maybe<Scalars["String"]["output"]>;
-  longitude: Maybe<Scalars["String"]["output"]>;
-  maxAttendees: Maybe<Scalars["Int"]["output"]>;
-  meetingURL: Maybe<Scalars["String"]["output"]>;
+  latitude?: Maybe<Scalars["String"]["output"]>;
+  longitude?: Maybe<Scalars["String"]["output"]>;
+  maxAttendees?: Maybe<Scalars["Int"]["output"]>;
+  meetingURL?: Maybe<Scalars["String"]["output"]>;
   name: Scalars["String"]["output"];
   startDateTime: Scalars["DateTime"]["output"];
   status: EventStatus;
@@ -161,39 +161,39 @@ export type Event = {
 
 /** Representation of an Event (Events and Users, is what tickets are linked to) */
 export type EventUsersTicketsArgs = {
-  input: InputMaybe<EventsTicketsSearchInput>;
+  input?: InputMaybe<EventsTicketsSearchInput>;
 };
 
 export type EventCreateInput = {
-  address: InputMaybe<Scalars["String"]["input"]>;
+  address?: InputMaybe<Scalars["String"]["input"]>;
   communityId: Scalars["String"]["input"];
   description: Scalars["String"]["input"];
-  endDateTime: InputMaybe<Scalars["DateTime"]["input"]>;
-  latitude: InputMaybe<Scalars["String"]["input"]>;
-  longitude: InputMaybe<Scalars["String"]["input"]>;
+  endDateTime?: InputMaybe<Scalars["DateTime"]["input"]>;
+  latitude?: InputMaybe<Scalars["String"]["input"]>;
+  longitude?: InputMaybe<Scalars["String"]["input"]>;
   maxAttendees: Scalars["Int"]["input"];
-  meetingURL: InputMaybe<Scalars["String"]["input"]>;
+  meetingURL?: InputMaybe<Scalars["String"]["input"]>;
   name: Scalars["String"]["input"];
   startDateTime: Scalars["DateTime"]["input"];
-  status: InputMaybe<EventStatus>;
-  timeZone: InputMaybe<Scalars["String"]["input"]>;
-  visibility: InputMaybe<EventVisibility>;
+  status?: InputMaybe<EventStatus>;
+  timeZone?: InputMaybe<Scalars["String"]["input"]>;
+  visibility?: InputMaybe<EventVisibility>;
 };
 
 export type EventEditInput = {
-  address: InputMaybe<Scalars["String"]["input"]>;
-  description: InputMaybe<Scalars["String"]["input"]>;
-  endDateTime: InputMaybe<Scalars["DateTime"]["input"]>;
+  address?: InputMaybe<Scalars["String"]["input"]>;
+  description?: InputMaybe<Scalars["String"]["input"]>;
+  endDateTime?: InputMaybe<Scalars["DateTime"]["input"]>;
   eventId: Scalars["String"]["input"];
-  latitude: InputMaybe<Scalars["String"]["input"]>;
-  longitude: InputMaybe<Scalars["String"]["input"]>;
-  maxAttendees: InputMaybe<Scalars["Int"]["input"]>;
-  meetingURL: InputMaybe<Scalars["String"]["input"]>;
-  name: InputMaybe<Scalars["String"]["input"]>;
-  startDateTime: InputMaybe<Scalars["DateTime"]["input"]>;
-  status: InputMaybe<EventStatus>;
-  timeZone: InputMaybe<Scalars["String"]["input"]>;
-  visibility: InputMaybe<EventVisibility>;
+  latitude?: InputMaybe<Scalars["String"]["input"]>;
+  longitude?: InputMaybe<Scalars["String"]["input"]>;
+  maxAttendees?: InputMaybe<Scalars["Int"]["input"]>;
+  meetingURL?: InputMaybe<Scalars["String"]["input"]>;
+  name?: InputMaybe<Scalars["String"]["input"]>;
+  startDateTime?: InputMaybe<Scalars["DateTime"]["input"]>;
+  status?: InputMaybe<EventStatus>;
+  timeZone?: InputMaybe<Scalars["String"]["input"]>;
+  visibility?: InputMaybe<EventVisibility>;
 };
 
 /** Search for tags */
@@ -213,20 +213,20 @@ export enum EventVisibility {
 }
 
 export type EventsSearchInput = {
-  id: InputMaybe<Scalars["String"]["input"]>;
-  name: InputMaybe<Scalars["String"]["input"]>;
-  startDateTimeFrom: InputMaybe<Scalars["DateTime"]["input"]>;
-  startDateTimeTo: InputMaybe<Scalars["DateTime"]["input"]>;
-  status: InputMaybe<EventStatus>;
-  userHasTickets: InputMaybe<Scalars["Boolean"]["input"]>;
-  visibility: InputMaybe<EventVisibility>;
+  id?: InputMaybe<Scalars["String"]["input"]>;
+  name?: InputMaybe<Scalars["String"]["input"]>;
+  startDateTimeFrom?: InputMaybe<Scalars["DateTime"]["input"]>;
+  startDateTimeTo?: InputMaybe<Scalars["DateTime"]["input"]>;
+  status?: InputMaybe<EventStatus>;
+  userHasTickets?: InputMaybe<Scalars["Boolean"]["input"]>;
+  visibility?: InputMaybe<EventVisibility>;
 };
 
 export type EventsTicketsSearchInput = {
-  approvalStatus: InputMaybe<TicketApprovalStatus>;
-  id: InputMaybe<Scalars["String"]["input"]>;
-  paymentStatus: InputMaybe<TicketPaymentStatus>;
-  redemptionStatus: InputMaybe<TicketRedemptionStatus>;
+  approvalStatus?: InputMaybe<TicketApprovalStatus>;
+  id?: InputMaybe<Scalars["String"]["input"]>;
+  paymentStatus?: InputMaybe<TicketPaymentStatus>;
+  redemptionStatus?: InputMaybe<TicketRedemptionStatus>;
 };
 
 export enum Gender {
@@ -377,10 +377,10 @@ export type MutationValidateWorkEmailArgs = {
 };
 
 export type MyTicketsSearchValues = {
-  approvalStatus: InputMaybe<TicketApprovalStatus>;
-  eventId: InputMaybe<Scalars["String"]["input"]>;
-  paymentStatus: InputMaybe<TicketPaymentStatus>;
-  redemptionStatus: InputMaybe<TicketRedemptionStatus>;
+  approvalStatus?: InputMaybe<TicketApprovalStatus>;
+  eventId?: InputMaybe<Scalars["String"]["input"]>;
+  paymentStatus?: InputMaybe<TicketPaymentStatus>;
+  redemptionStatus?: InputMaybe<TicketRedemptionStatus>;
 };
 
 /** Type used for querying the paginated leaves and it's paginated meta data */
@@ -390,13 +390,13 @@ export type PaginatedEvent = {
 };
 
 export type PaginatedInputEventsSearchInput = {
-  pagination: PaginationSearchInputParams;
-  search: InputMaybe<EventsSearchInput>;
+  pagination?: PaginationSearchInputParams;
+  search?: InputMaybe<EventsSearchInput>;
 };
 
 export type PaginatedInputMyTicketsSearchValues = {
-  pagination: PaginationSearchInputParams;
-  search: InputMaybe<MyTicketsSearchValues>;
+  pagination?: PaginationSearchInputParams;
+  search?: InputMaybe<MyTicketsSearchValues>;
 };
 
 /** Type used for querying the paginated leaves and it's paginated meta data */
@@ -444,16 +444,16 @@ export type PublicFinanceEntryRef = {
   id: Scalars["String"]["output"];
   platform: Scalars["String"]["output"];
   transactionAmount: Scalars["Float"]["output"];
-  transactionDate: Maybe<Scalars["DateTime"]["output"]>;
+  transactionDate?: Maybe<Scalars["DateTime"]["output"]>;
 };
 
 /** Representation of a Purchase Order */
 export type PurchaseOrder = {
-  currency: Maybe<AllowedCurrency>;
-  finalPrice: Maybe<Scalars["Float"]["output"]>;
+  currency?: Maybe<AllowedCurrency>;
+  finalPrice?: Maybe<Scalars["Float"]["output"]>;
   id: Scalars["ID"]["output"];
-  paymentLink: Maybe<Scalars["String"]["output"]>;
-  status: Maybe<PurchaseOrderStatusEnum>;
+  paymentLink?: Maybe<Scalars["String"]["output"]>;
+  status?: Maybe<PurchaseOrderStatusEnum>;
   tickets: Array<UserTicket>;
 };
 
@@ -472,13 +472,13 @@ export type Query = {
   /** Get a list of communities. Filter by name, id, or status */
   communities: Array<Community>;
   /** Get a community by id */
-  community: Maybe<Community>;
+  community?: Maybe<Community>;
   /** Get all available companies */
   companies: Array<Company>;
   /** Get all available companies */
   company: Company;
   /** Get an event by id */
-  event: Maybe<Event>;
+  event?: Maybe<Event>;
   /** Get a list of images, that are attached to an event */
   eventImages: Array<SanityAssetRef>;
   /** Get the current user */
@@ -511,9 +511,9 @@ export type Query = {
 };
 
 export type QueryCommunitiesArgs = {
-  id: InputMaybe<Scalars["String"]["input"]>;
-  name: InputMaybe<Scalars["String"]["input"]>;
-  status: InputMaybe<CommnunityStatus>;
+  id?: InputMaybe<Scalars["String"]["input"]>;
+  name?: InputMaybe<Scalars["String"]["input"]>;
+  status?: InputMaybe<CommnunityStatus>;
 };
 
 export type QueryCommunityArgs = {
@@ -521,7 +521,7 @@ export type QueryCommunityArgs = {
 };
 
 export type QueryCompaniesArgs = {
-  input: InputMaybe<SearchCompaniesInput>;
+  input?: InputMaybe<SearchCompaniesInput>;
 };
 
 export type QueryCompanyArgs = {
@@ -553,11 +553,11 @@ export type QuerySearchPaymentLogsArgs = {
 };
 
 export type QueryStatusArgs = {
-  name: InputMaybe<Scalars["String"]["input"]>;
+  name?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type QueryTagsArgs = {
-  input: InputMaybe<TagSearchInput>;
+  input?: InputMaybe<TagSearchInput>;
 };
 
 export type QueryUserSearchArgs = {
@@ -585,8 +585,8 @@ export type Salary = {
   company: Company;
   countryCode: Scalars["String"]["output"];
   currencyCode: Scalars["String"]["output"];
-  gender: Maybe<Gender>;
-  genderOtherText: Maybe<Scalars["String"]["output"]>;
+  gender?: Maybe<Gender>;
+  genderOtherText?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["String"]["output"];
   typeOfEmployment: TypeOfEmployment;
   workMetodology: WorkMetodology;
@@ -606,14 +606,14 @@ export type SanityAssetRef = {
 };
 
 export type SearchCompaniesInput = {
-  companyName: InputMaybe<Scalars["String"]["input"]>;
-  description: InputMaybe<Scalars["String"]["input"]>;
-  domain: InputMaybe<Scalars["String"]["input"]>;
-  website: InputMaybe<Scalars["String"]["input"]>;
+  companyName?: InputMaybe<Scalars["String"]["input"]>;
+  description?: InputMaybe<Scalars["String"]["input"]>;
+  domain?: InputMaybe<Scalars["String"]["input"]>;
+  website?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type SearchPaymentLogsInput = {
-  endDate: InputMaybe<Scalars["DateTime"]["input"]>;
+  endDate?: InputMaybe<Scalars["DateTime"]["input"]>;
   startDate: Scalars["DateTime"]["input"];
 };
 
@@ -629,22 +629,22 @@ export enum ServiceErrors {
 
 /** Representation of a tag. Tags can be associated to many things. An event, a community, etc. */
 export type Tag = {
-  description: Maybe<Scalars["String"]["output"]>;
+  description?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["String"]["output"];
-  name: Maybe<Scalars["String"]["output"]>;
+  name?: Maybe<Scalars["String"]["output"]>;
   slug: Scalars["String"]["output"];
 };
 
 export type TagSearchInput = {
-  description: InputMaybe<Scalars["String"]["input"]>;
-  id: InputMaybe<Scalars["String"]["input"]>;
-  name: InputMaybe<Scalars["String"]["input"]>;
+  description?: InputMaybe<Scalars["String"]["input"]>;
+  id?: InputMaybe<Scalars["String"]["input"]>;
+  name?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 /** Representation of a ticket */
 export type Ticket = {
-  description: Maybe<Scalars["String"]["output"]>;
-  endDateTime: Maybe<Scalars["DateTime"]["output"]>;
+  description?: Maybe<Scalars["String"]["output"]>;
+  endDateTime?: Maybe<Scalars["DateTime"]["output"]>;
   event: Event;
   id: Scalars["ID"]["output"];
   /** Whether or not the ticket is free */
@@ -652,9 +652,9 @@ export type Ticket = {
   /** Whether or not the ticket has an unlimited quantity. This is reserved for things loike online events. */
   isUnlimited: Scalars["Boolean"]["output"];
   name: Scalars["String"]["output"];
-  prices: Maybe<Array<Price>>;
+  prices?: Maybe<Array<Price>>;
   /** The number of tickets available for this ticket type */
-  quantity: Maybe<Scalars["Int"]["output"]>;
+  quantity?: Maybe<Scalars["Int"]["output"]>;
   requiresApproval: Scalars["Boolean"]["output"];
   startDateTime: Scalars["DateTime"]["output"];
   status: TicketTemplateStatus;
@@ -671,43 +671,43 @@ export enum TicketApprovalStatus {
 
 export type TicketClaimInput = {
   /** If this field is passed, a purchase order payment link will be generated right away */
-  generatePaymentLink: InputMaybe<GeneratePaymentLinkInput>;
+  generatePaymentLink?: InputMaybe<GeneratePaymentLinkInput>;
   /** A unique key to prevent duplicate requests, it's optional to send, but it's recommended to send it to prevent duplicate requests. If not sent, it will be created by the server. */
-  idempotencyUUIDKey: InputMaybe<Scalars["String"]["input"]>;
+  idempotencyUUIDKey?: InputMaybe<Scalars["String"]["input"]>;
   purchaseOrder: Array<PurchaseOrderInput>;
 };
 
 export type TicketCreateInput = {
-  description: InputMaybe<Scalars["String"]["input"]>;
-  endDateTime: InputMaybe<Scalars["DateTime"]["input"]>;
+  description?: InputMaybe<Scalars["String"]["input"]>;
+  endDateTime?: InputMaybe<Scalars["DateTime"]["input"]>;
   eventId: Scalars["String"]["input"];
   /** If the ticket is free, the price submitted will be ignored. */
   isFree: Scalars["Boolean"]["input"];
   name: Scalars["String"]["input"];
-  prices: InputMaybe<Array<PricingInputField>>;
-  quantity: InputMaybe<Scalars["Int"]["input"]>;
-  requiresApproval: InputMaybe<Scalars["Boolean"]["input"]>;
+  prices?: InputMaybe<Array<PricingInputField>>;
+  quantity?: InputMaybe<Scalars["Int"]["input"]>;
+  requiresApproval?: InputMaybe<Scalars["Boolean"]["input"]>;
   startDateTime: Scalars["DateTime"]["input"];
-  status: InputMaybe<TicketTemplateStatus>;
+  status?: InputMaybe<TicketTemplateStatus>;
   /** If provided, quantity must not be passed. This is for things like online events where there is no limit to the amount of tickets that can be sold. */
   unlimitedTickets: Scalars["Boolean"]["input"];
-  visibility: InputMaybe<TicketTemplateVisibility>;
+  visibility?: InputMaybe<TicketTemplateVisibility>;
 };
 
 export type TicketEditInput = {
-  description: InputMaybe<Scalars["String"]["input"]>;
-  endDateTime: InputMaybe<Scalars["DateTime"]["input"]>;
-  eventId: InputMaybe<Scalars["String"]["input"]>;
-  name: InputMaybe<Scalars["String"]["input"]>;
-  prices: InputMaybe<PricingInputField>;
-  quantity: InputMaybe<Scalars["Int"]["input"]>;
-  requiresApproval: InputMaybe<Scalars["Boolean"]["input"]>;
-  startDateTime: InputMaybe<Scalars["DateTime"]["input"]>;
-  status: InputMaybe<TicketTemplateStatus>;
+  description?: InputMaybe<Scalars["String"]["input"]>;
+  endDateTime?: InputMaybe<Scalars["DateTime"]["input"]>;
+  eventId?: InputMaybe<Scalars["String"]["input"]>;
+  name?: InputMaybe<Scalars["String"]["input"]>;
+  prices?: InputMaybe<PricingInputField>;
+  quantity?: InputMaybe<Scalars["Int"]["input"]>;
+  requiresApproval?: InputMaybe<Scalars["Boolean"]["input"]>;
+  startDateTime?: InputMaybe<Scalars["DateTime"]["input"]>;
+  status?: InputMaybe<TicketTemplateStatus>;
   ticketId: Scalars["String"]["input"];
   /** If provided, quantity must not be passed. This is for things like online events where there is no limit to the amount of tickets that can be sold. */
-  unlimitedTickets: InputMaybe<Scalars["Boolean"]["input"]>;
-  visibility: InputMaybe<TicketTemplateVisibility>;
+  unlimitedTickets?: InputMaybe<Scalars["Boolean"]["input"]>;
+  visibility?: InputMaybe<TicketTemplateVisibility>;
 };
 
 export enum TicketPaymentStatus {
@@ -740,45 +740,45 @@ export enum TypeOfEmployment {
 
 export type UpdateCommunityInput = {
   communityId: Scalars["String"]["input"];
-  description: InputMaybe<Scalars["String"]["input"]>;
-  name: InputMaybe<Scalars["String"]["input"]>;
-  slug: InputMaybe<Scalars["String"]["input"]>;
-  status: InputMaybe<CommnunityStatus>;
+  description?: InputMaybe<Scalars["String"]["input"]>;
+  name?: InputMaybe<Scalars["String"]["input"]>;
+  slug?: InputMaybe<Scalars["String"]["input"]>;
+  status?: InputMaybe<CommnunityStatus>;
 };
 
 export type UpdateCompanyInput = {
   companyId: Scalars["String"]["input"];
-  description: InputMaybe<Scalars["String"]["input"]>;
-  domain: InputMaybe<Scalars["String"]["input"]>;
-  logo: InputMaybe<Scalars["String"]["input"]>;
-  name: InputMaybe<Scalars["String"]["input"]>;
-  website: InputMaybe<Scalars["String"]["input"]>;
+  description?: InputMaybe<Scalars["String"]["input"]>;
+  domain?: InputMaybe<Scalars["String"]["input"]>;
+  logo?: InputMaybe<Scalars["String"]["input"]>;
+  name?: InputMaybe<Scalars["String"]["input"]>;
+  website?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type UpdateSalaryInput = {
-  amount: InputMaybe<Scalars["Int"]["input"]>;
+  amount?: InputMaybe<Scalars["Int"]["input"]>;
   confirmationToken: Scalars["String"]["input"];
-  countryCode: InputMaybe<Scalars["String"]["input"]>;
-  currencyCode: InputMaybe<Scalars["String"]["input"]>;
-  gender: InputMaybe<Gender>;
-  genderOtherText: InputMaybe<Scalars["String"]["input"]>;
+  countryCode?: InputMaybe<Scalars["String"]["input"]>;
+  currencyCode?: InputMaybe<Scalars["String"]["input"]>;
+  gender?: InputMaybe<Gender>;
+  genderOtherText?: InputMaybe<Scalars["String"]["input"]>;
   salaryId: Scalars["String"]["input"];
-  typeOfEmployment: InputMaybe<TypeOfEmployment>;
-  workMetodology: InputMaybe<WorkMetodology>;
-  workSeniorityAndRoleId: InputMaybe<Scalars["String"]["input"]>;
-  yearsOfExperience: InputMaybe<Scalars["Int"]["input"]>;
+  typeOfEmployment?: InputMaybe<TypeOfEmployment>;
+  workMetodology?: InputMaybe<WorkMetodology>;
+  workSeniorityAndRoleId?: InputMaybe<Scalars["String"]["input"]>;
+  yearsOfExperience?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
 /** Representation of a user */
 export type User = {
-  bio: Maybe<Scalars["String"]["output"]>;
+  bio?: Maybe<Scalars["String"]["output"]>;
   communities: Array<Community>;
-  email: Maybe<Scalars["String"]["output"]>;
+  email?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["String"]["output"];
-  imageUrl: Maybe<Scalars["String"]["output"]>;
-  isSuperAdmin: Maybe<Scalars["Boolean"]["output"]>;
-  lastName: Maybe<Scalars["String"]["output"]>;
-  name: Maybe<Scalars["String"]["output"]>;
+  imageUrl?: Maybe<Scalars["String"]["output"]>;
+  isSuperAdmin?: Maybe<Scalars["Boolean"]["output"]>;
+  lastName?: Maybe<Scalars["String"]["output"]>;
+  name?: Maybe<Scalars["String"]["output"]>;
   username: Scalars["String"]["output"];
 };
 
@@ -787,7 +787,7 @@ export type UserTicket = {
   approvalStatus: TicketApprovalStatus;
   id: Scalars["ID"]["output"];
   paymentStatus: TicketPaymentStatus;
-  purchaseOrder: Maybe<PurchaseOrder>;
+  purchaseOrder?: Maybe<PurchaseOrder>;
   redemptionStatus: TicketRedemptionStatus;
   ticketTemplate: Ticket;
 };
@@ -799,8 +799,8 @@ export enum ValidPaymentMethods {
 
 /** Representation of a work email associated to the current user */
 export type ValidatedWorkEmail = {
-  company: Maybe<Company>;
-  confirmationDate: Maybe<Scalars["DateTime"]["output"]>;
+  company?: Maybe<Company>;
+  confirmationDate?: Maybe<Scalars["DateTime"]["output"]>;
   id: Scalars["String"]["output"];
   isValidated: Scalars["Boolean"]["output"];
   status: EmailStatus;
@@ -821,7 +821,7 @@ export enum WorkMetodology {
 
 /** Representation of a work role */
 export type WorkRole = {
-  description: Maybe<Scalars["String"]["output"]>;
+  description?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["String"]["output"];
   name: Scalars["String"]["output"];
   seniorities: Array<WorkSeniority>;
@@ -833,7 +833,7 @@ export type WorkRoleSenioritiesInput = {
 
 /** Representation of a work seniority */
 export type WorkSeniority = {
-  description: Maybe<Scalars["String"]["output"]>;
+  description?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["String"]["output"];
   name: Scalars["String"]["output"];
 };
@@ -845,28 +845,57 @@ export type UpdateUserRoleInCommunityInput = {
 };
 
 export type UserEditInput = {
-  bio: InputMaybe<Scalars["String"]["input"]>;
+  bio?: InputMaybe<Scalars["String"]["input"]>;
   id: Scalars["String"]["input"];
-  lastName: InputMaybe<Scalars["String"]["input"]>;
-  name: InputMaybe<Scalars["String"]["input"]>;
-  username: InputMaybe<Scalars["String"]["input"]>;
+  lastName?: InputMaybe<Scalars["String"]["input"]>;
+  name?: InputMaybe<Scalars["String"]["input"]>;
+  username?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type UserSearchInput = {
-  tags: InputMaybe<Array<SearchableUserTags>>;
+  tags?: InputMaybe<Array<SearchableUserTags>>;
 };
 
-export type MyTicketsQueryVariables = Exact<{
-  input: PaginatedInputMyTicketsSearchValues;
+export type FetchExampleEventsQueryVariables = Exact<{
+  input: PaginatedInputEventsSearchInput;
 }>;
 
-export type MyTicketsQuery = {
-  myTickets: {
+export type FetchExampleEventsQuery = {
+  searchEvents: {
     data: Array<{
-      approvalStatus: TicketApprovalStatus;
       id: string;
-      paymentStatus: TicketPaymentStatus;
-      redemptionStatus: TicketRedemptionStatus;
+      description?: string | null;
+      community?: { id: string; name?: string | null } | null;
+      tags: Array<{
+        id: string;
+        name?: string | null;
+        description?: string | null;
+      }>;
+    }>;
+  };
+};
+
+export type MyEventsQueryVariables = Exact<{
+  input: PaginatedInputEventsSearchInput;
+  userTicketSearchInput?: InputMaybe<EventsTicketsSearchInput>;
+}>;
+
+export type MyEventsQuery = {
+  searchEvents: {
+    data: Array<{
+      id: string;
+      name: string;
+      description?: string | null;
+      startDateTime: string;
+      status: EventStatus;
+      community?: { id: string; name?: string | null } | null;
+      usersTickets: Array<{
+        id: string;
+        approvalStatus: TicketApprovalStatus;
+        paymentStatus: TicketPaymentStatus;
+        redemptionStatus: TicketRedemptionStatus;
+        ticketTemplate: { description?: string | null; id: string };
+      }>;
     }>;
     pagination: {
       currentPage: number;
@@ -883,7 +912,7 @@ export type CheckPurchaseOrderStatusMutationVariables = Exact<{
 
 export type CheckPurchaseOrderStatusMutation = {
   checkPurchaseOrderStatus: {
-    status: PurchaseOrderStatusEnum | null;
+    status?: PurchaseOrderStatusEnum | null;
     tickets: Array<{
       approvalStatus: TicketApprovalStatus;
       paymentStatus: TicketPaymentStatus;
@@ -901,10 +930,10 @@ export type CreatePurchaseOrderMutation = {
     | {
         __typename: "PurchaseOrder";
         id: string;
-        finalPrice: number | null;
-        paymentLink: string | null;
-        status: PurchaseOrderStatusEnum | null;
-        currency: { id: string } | null;
+        finalPrice?: number | null;
+        paymentLink?: string | null;
+        status?: PurchaseOrderStatusEnum | null;
+        currency?: { id: string } | null;
         tickets: Array<{
           id: string;
           approvalStatus: TicketApprovalStatus;
@@ -922,13 +951,13 @@ export type CreatePurchaseOrderMutation = {
 export type EventTicketFragmentFragment = {
   id: string;
   name: string;
-  description: string | null;
-  quantity: number | null;
+  description?: string | null;
+  quantity?: number | null;
   isFree: boolean;
   startDateTime: string;
   status: TicketTemplateStatus;
   isUnlimited: boolean;
-  prices: Array<{
+  prices?: Array<{
     id: string;
     amount: number;
     currency: { currency: string; id: string };
@@ -940,17 +969,17 @@ export type GetEventAndTicketsQueryVariables = Exact<{
 }>;
 
 export type GetEventAndTicketsQuery = {
-  event: {
+  event?: {
     id: string;
     name: string;
-    address: string | null;
-    description: string | null;
-    maxAttendees: number | null;
+    address?: string | null;
+    description?: string | null;
+    maxAttendees?: number | null;
     startDateTime: string;
-    endDateTime: string | null;
+    endDateTime?: string | null;
     status: EventStatus;
-    community: { name: string | null } | null;
-    users: Array<{ id: string; name: string | null }>;
+    community?: { name?: string | null } | null;
+    users: Array<{ id: string; name?: string | null }>;
     tickets: Array<{
       " $fragmentRefs"?: {
         EventTicketFragmentFragment: EventTicketFragmentFragment;
@@ -1010,13 +1039,13 @@ export const EventTicketFragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<EventTicketFragmentFragment, unknown>;
-export const MyTicketsDocument = {
+export const FetchExampleEventsDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "query",
-      name: { kind: "Name", value: "myTickets" },
+      name: { kind: "Name", value: "FetchExampleEvents" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
@@ -1028,10 +1057,7 @@ export const MyTicketsDocument = {
             kind: "NonNullType",
             type: {
               kind: "NamedType",
-              name: {
-                kind: "Name",
-                value: "PaginatedInputMyTicketsSearchValues",
-              },
+              name: { kind: "Name", value: "PaginatedInputEventsSearchInput" },
             },
           },
         },
@@ -1041,7 +1067,7 @@ export const MyTicketsDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "myTickets" },
+            name: { kind: "Name", value: "searchEvents" },
             arguments: [
               {
                 kind: "Argument",
@@ -1061,18 +1087,210 @@ export const MyTicketsDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "approvalStatus" },
-                      },
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "paymentStatus" },
+                        name: { kind: "Name", value: "description" },
                       },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "redemptionStatus" },
+                        name: { kind: "Name", value: "community" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tags" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "description" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  FetchExampleEventsQuery,
+  FetchExampleEventsQueryVariables
+>;
+export const MyEventsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "myEvents" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "PaginatedInputEventsSearchInput" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "userTicketSearchInput" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "EventsTicketsSearchInput" },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "searchEvents" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "data" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "description" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startDateTime" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "community" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "status" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "usersTickets" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "input" },
+                            value: {
+                              kind: "Variable",
+                              name: {
+                                kind: "Name",
+                                value: "userTicketSearchInput",
+                              },
+                            },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "approvalStatus" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "paymentStatus" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "redemptionStatus" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "ticketTemplate" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "description",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
                       },
                     ],
                   },
@@ -1109,7 +1327,7 @@ export const MyTicketsDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<MyTicketsQuery, MyTicketsQueryVariables>;
+} as unknown as DocumentNode<MyEventsQuery, MyEventsQueryVariables>;
 export const CheckPurchaseOrderStatusDocument = {
   kind: "Document",
   definitions: [

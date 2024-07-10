@@ -38,6 +38,7 @@
     "@supabase/supabase-js": "^2.44.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "date-fns": "^3.6.0",
     "framer-motion": "^11.2.12",
     "graphiql": "^3.0.6",
     "graphql": "^16.8.1",
