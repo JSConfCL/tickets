@@ -213,13 +213,13 @@ export enum EventVisibility {
 }
 
 export type EventsSearchInput = {
-  id: InputMaybe<Scalars["String"]["input"]>;
-  name: InputMaybe<Scalars["String"]["input"]>;
-  startDateTimeFrom: InputMaybe<Scalars["DateTime"]["input"]>;
-  startDateTimeTo: InputMaybe<Scalars["DateTime"]["input"]>;
-  status: InputMaybe<EventStatus>;
-  userHasTickets: InputMaybe<Scalars["Boolean"]["input"]>;
-  visibility: InputMaybe<EventVisibility>;
+  id?: InputMaybe<Scalars["String"]["input"]>;
+  name?: InputMaybe<Scalars["String"]["input"]>;
+  startDateTimeFrom?: InputMaybe<Scalars["DateTime"]["input"]>;
+  startDateTimeTo?: InputMaybe<Scalars["DateTime"]["input"]>;
+  status?: InputMaybe<EventStatus>;
+  userHasTickets?: InputMaybe<Scalars["Boolean"]["input"]>;
+  visibility?: InputMaybe<EventVisibility>;
 };
 
 export type EventsTicketsSearchInput = {
@@ -392,17 +392,6 @@ export type PaginatedEvent = {
 export type PaginatedInputEventsSearchInput = {
   pagination?: PaginationSearchInputParams;
   search?: InputMaybe<EventsSearchInput>;
-};
-
-/** Type used for querying the paginated leaves and it's paginated meta data */
-export type PaginatedEvent = {
-  data: Array<Event>;
-  pagination: Pagination;
-};
-
-export type PaginatedInputEventsSearchInput = {
-  pagination: PaginationSearchInputParams;
-  search: InputMaybe<EventsSearchInput>;
 };
 
 export type PaginatedInputMyTicketsSearchValues = {
@@ -784,12 +773,12 @@ export type UpdateSalaryInput = {
 export type User = {
   bio?: Maybe<Scalars["String"]["output"]>;
   communities: Array<Community>;
-  email: Maybe<Scalars["String"]["output"]>;
+  email?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["String"]["output"];
-  imageUrl: Maybe<Scalars["String"]["output"]>;
-  isSuperAdmin: Maybe<Scalars["Boolean"]["output"]>;
-  lastName: Maybe<Scalars["String"]["output"]>;
-  name: Maybe<Scalars["String"]["output"]>;
+  imageUrl?: Maybe<Scalars["String"]["output"]>;
+  isSuperAdmin?: Maybe<Scalars["Boolean"]["output"]>;
+  lastName?: Maybe<Scalars["String"]["output"]>;
+  name?: Maybe<Scalars["String"]["output"]>;
   username: Scalars["String"]["output"];
 };
 
@@ -867,7 +856,26 @@ export type UserSearchInput = {
   tags?: InputMaybe<Array<SearchableUserTags>>;
 };
 
-export type MyTicketsQueryVariables = Exact<{
+export type FetchExampleEventsQueryVariables = Exact<{
+  input: PaginatedInputEventsSearchInput;
+}>;
+
+export type FetchExampleEventsQuery = {
+  searchEvents: {
+    data: Array<{
+      id: string;
+      description?: string | null;
+      community?: { id: string; name?: string | null } | null;
+      tags: Array<{
+        id: string;
+        name?: string | null;
+        description?: string | null;
+      }>;
+    }>;
+  };
+};
+
+export type MyEventsQueryVariables = Exact<{
   input: PaginatedInputEventsSearchInput;
   userTicketSearchInput?: InputMaybe<EventsTicketsSearchInput>;
 }>;
@@ -904,7 +912,7 @@ export type CheckPurchaseOrderStatusMutationVariables = Exact<{
 
 export type CheckPurchaseOrderStatusMutation = {
   checkPurchaseOrderStatus: {
-    status: PurchaseOrderStatusEnum | null;
+    status?: PurchaseOrderStatusEnum | null;
     tickets: Array<{
       approvalStatus: TicketApprovalStatus;
       paymentStatus: TicketPaymentStatus;
@@ -1031,7 +1039,112 @@ export const EventTicketFragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<EventTicketFragmentFragment, unknown>;
-export const MyTicketsDocument = {
+export const FetchExampleEventsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "FetchExampleEvents" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "PaginatedInputEventsSearchInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "searchEvents" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "data" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "description" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "community" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tags" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "description" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  FetchExampleEventsQuery,
+  FetchExampleEventsQueryVariables
+>;
+export const MyEventsDocument = {
   kind: "Document",
   definitions: [
     {
@@ -1214,7 +1327,7 @@ export const MyTicketsDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<MyTicketsQuery, MyTicketsQueryVariables>;
+} as unknown as DocumentNode<MyEventsQuery, MyEventsQueryVariables>;
 export const CheckPurchaseOrderStatusDocument = {
   kind: "Document",
   definitions: [
@@ -1319,6 +1432,7 @@ export const CreatePurchaseOrderDocument = {
           {
             kind: "Field",
             name: { kind: "Name", value: "claimUserTicket" },
+            arguments: [
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "input" },
@@ -1395,6 +1509,9 @@ export const CreatePurchaseOrderDocument = {
                             },
                           ],
                         },
+                      },
+                    ],
+                  },
                 },
                 {
                   kind: "InlineFragment",
