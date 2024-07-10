@@ -103,7 +103,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setTokenRef,
         refreshSession,
       }) satisfies AuthContextType,
-    [user, isReady, setTokenRef, refreshSession],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [user, isReady, setTokenRef, refreshSession, supabaseSession],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
