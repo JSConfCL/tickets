@@ -8,7 +8,6 @@ import {
 } from "@remix-run/react";
 import { setDefaultOptions } from "date-fns";
 import { es } from "date-fns/locale";
-
 import "./tailwind.css";
 import { AnimatePresence, motion } from "framer-motion";
 
