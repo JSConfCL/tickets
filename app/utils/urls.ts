@@ -1,5 +1,8 @@
 export const urls = {
   home: "/",
+  profile: {
+    root: "/profile",
+  },
   events: {
     root: "/eventos",
     tickets: (id: string) => `/eventos/${id}/tickets`,

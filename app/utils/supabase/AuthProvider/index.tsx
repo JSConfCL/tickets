@@ -32,6 +32,7 @@ export const AuthContext = createContext<AuthContextType>({
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [supabaseSession, setSession] = useState<Session | null>(null);
+  const [isReady, setIsReady] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const tokenRef = useRef<string | null>(null);
 
@@ -62,6 +63,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setter(session);
 
       await supabaseClient.auth.startAutoRefresh();
+      await supabaseClient.auth.refreshSession();
     };
 
     const {
@@ -72,7 +74,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     // eslint-disable-next-line no-console
-    initialize().catch(console.error);
+    initialize()
+      .then(() => setIsReady(true))
+      .catch(console.error);
 
     return () => subscription.unsubscribe();
   }, [setter]);
@@ -94,12 +98,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       ({
         user,
         isLogged: Boolean(user?.id),
-        isReady: Boolean(supabaseSession),
+        isReady: Boolean(isReady),
         tokenRef,
         setTokenRef,
         refreshSession,
       }) satisfies AuthContextType,
-    [user, supabaseSession, tokenRef, setTokenRef, refreshSession],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [user, isReady, setTokenRef, refreshSession, supabaseSession],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,3 +1,4 @@
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,6 +11,8 @@ import { cn } from "~/utils/utils";
 import type { NavbarMenuItem } from "./types";
 
 export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
+  const variant = item.variant || "link";
+
   if (item.children) {
     return (
       <DropdownMenu>
@@ -58,24 +61,15 @@ export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
 
   if (item.link) {
     return (
-      <a
-        href={item.link}
-        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-      >
-        {item.content}
-      </a>
+      <Button variant={variant} asChild>
+        <a href={item.link}>{item.content}</a>
+      </Button>
     );
   }
 
   return (
-    <span
-      onClick={item.onClick}
-      className={cn(
-        "text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
-        item.onClick && "cursor-pointer",
-      )}
-    >
+    <Button variant={variant} onClick={item.onClick}>
       {item.content}
-    </span>
+    </Button>
   );
 };

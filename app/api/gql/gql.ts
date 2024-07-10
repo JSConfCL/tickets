@@ -17,6 +17,8 @@ const documents = {
     types.FetchExampleEventsDocument,
   "query myEvents($input: PaginatedInputEventsSearchInput!, $userTicketSearchInput: EventsTicketsSearchInput) {\n  searchEvents(input: $input) {\n    data {\n      id\n      name\n      description\n      startDateTime\n      community {\n        id\n        name\n      }\n      status\n      usersTickets(input: $userTicketSearchInput) {\n        id\n        approvalStatus\n        paymentStatus\n        redemptionStatus\n        ticketTemplate {\n          description\n          id\n        }\n      }\n    }\n    pagination {\n      currentPage\n      pageSize\n      totalPages\n      totalRecords\n    }\n  }\n}":
     types.MyEventsDocument,
+  "query myProfile {\n  me {\n    id\n    bio\n    lastName\n    username\n    imageUrl\n    email\n    name\n    communities {\n      id\n      name\n    }\n  }\n}":
+    types.MyProfileDocument,
   "mutation CheckPurchaseOrderStatus($input: CheckForPurchaseOrderInput!) {\n  checkPurchaseOrderStatus(input: $input) {\n    status\n    tickets {\n      approvalStatus\n      paymentStatus\n      redemptionStatus\n    }\n  }\n}":
     types.CheckPurchaseOrderStatusDocument,
   "mutation createPurchaseOrder($input: TicketClaimInput!) {\n  claimUserTicket(input: $input) {\n    __typename\n    ... on PurchaseOrder {\n      __typename\n      id\n      currency {\n        id\n      }\n      finalPrice\n      paymentLink\n      status\n      tickets {\n        id\n        approvalStatus\n        redemptionStatus\n        paymentStatus\n      }\n    }\n    ... on RedeemUserTicketError {\n      __typename\n      error\n      errorMessage\n    }\n  }\n}":
@@ -53,6 +55,12 @@ export function graphql(
 export function graphql(
   source: "query myEvents($input: PaginatedInputEventsSearchInput!, $userTicketSearchInput: EventsTicketsSearchInput) {\n  searchEvents(input: $input) {\n    data {\n      id\n      name\n      description\n      startDateTime\n      community {\n        id\n        name\n      }\n      status\n      usersTickets(input: $userTicketSearchInput) {\n        id\n        approvalStatus\n        paymentStatus\n        redemptionStatus\n        ticketTemplate {\n          description\n          id\n        }\n      }\n    }\n    pagination {\n      currentPage\n      pageSize\n      totalPages\n      totalRecords\n    }\n  }\n}",
 ): (typeof documents)["query myEvents($input: PaginatedInputEventsSearchInput!, $userTicketSearchInput: EventsTicketsSearchInput) {\n  searchEvents(input: $input) {\n    data {\n      id\n      name\n      description\n      startDateTime\n      community {\n        id\n        name\n      }\n      status\n      usersTickets(input: $userTicketSearchInput) {\n        id\n        approvalStatus\n        paymentStatus\n        redemptionStatus\n        ticketTemplate {\n          description\n          id\n        }\n      }\n    }\n    pagination {\n      currentPage\n      pageSize\n      totalPages\n      totalRecords\n    }\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "query myProfile {\n  me {\n    id\n    bio\n    lastName\n    username\n    imageUrl\n    email\n    name\n    communities {\n      id\n      name\n    }\n  }\n}",
+): (typeof documents)["query myProfile {\n  me {\n    id\n    bio\n    lastName\n    username\n    imageUrl\n    email\n    name\n    communities {\n      id\n      name\n    }\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -28,11 +28,9 @@ export default function LoginRoute() {
   }
 
   return (
-    <div className="flex w-full flex-1 flex-col items-center justify-center gap-2 bg-muted">
-      <div className="flex w-full max-w-lg flex-1 flex-col items-center justify-center gap-8">
-        <Login />
-        <div className="pb-28" />
-      </div>
+    <div className="flex w-full flex-1 flex-col items-center justify-center gap-2">
+      <div className="pt-28" />
+      <Login />
     </div>
   );
 }
