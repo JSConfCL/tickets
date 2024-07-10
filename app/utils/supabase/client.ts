@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createClient } from "@supabase/supabase-js";
-import cookies from "js-cookie";
 import { CookieAttributes } from "node_modules/@types/js-cookie";
-
-export const COOKIE_NAME = "community-os-access-token";
 
 if (!import.meta.env.VITE_SUPABASE_URL) {
   throw new Error("Missing VITE_SUPABASE_URL");
@@ -23,8 +20,6 @@ const oneYear = oneHour * 24 * 365;
 
 export const logout = async (onDone?: () => void) => {
   const data = await supabaseClient.auth.signOut({ scope: "local" });
-
-  cookies.remove(COOKIE_NAME);
 
   if (data.error) {
     throw new Error("Error logging out");

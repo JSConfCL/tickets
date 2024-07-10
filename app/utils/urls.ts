@@ -11,5 +11,9 @@ export const urls = {
     tickets: (id: string) => `/ordenes/${id}/tickets`,
   },
   comunidades: "/comunidades",
+  tickets: {
+    root: "/tickets",
+    ticket: (ticketId: string) => `/ticket/:${ticketId}`,
+  },
   login: "/login",
 };

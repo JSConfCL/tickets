@@ -10,8 +10,7 @@ import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import { RetryLink } from "@apollo/client/link/retry";
 
-import { useSetTokenRef, useTokenRef } from "../utils/supabase/AuthProvider";
-import { supabaseClient } from "../utils/supabase/client";
+import { useRefreshSession, useTokenRef } from "../utils/supabase/AuthProvider";
 
 const retryLink = new RetryLink();
 
@@ -62,38 +61,20 @@ const useAuthLink = () => {
 // Este link se encarga de manejar errores de autenticación
 // Si el servidor responde con un code UNAUTHENTICATED, intenta refrescar el token.
 const useErrorLink = () => {
-  const setToken = useSetTokenRef();
+  const refreshSession = useRefreshSession();
 
   return onError(({ graphQLErrors, networkError, operation, forward }) => {
     if (graphQLErrors) {
       for (const err of graphQLErrors) {
-        if (err.extensions.code === "UNAUTHENTICATED") {
-          supabaseClient.auth
-            .getSession()
-            .then(({ data, error }) => {
-              if (error) {
-                // eslint-disable-next-line no-console
-                console.error("Error refreshing access token", error);
-
-                return;
-              }
-
-              const newToken = data.session?.access_token;
-
-              if (!newToken) {
-                // eslint-disable-next-line no-console
-                console.error("No access token found in session data");
-              } else {
-                setToken(newToken);
-              }
-
+        if (err.extensions.type === "UNAUTHENTICATED") {
+          refreshSession()
+            .then(() => {
               forward(operation);
             })
-            .catch((error: unknown) => {
+            .catch(() => {
               // eslint-disable-next-line no-console
-              console.error("Error refreshing access token", error);
+              console.error("Error refreshing access token");
             });
-          // }
         }
       }
     } else if (networkError) {
@@ -117,8 +98,7 @@ if (!import.meta.env.VITE_JSCL_API_URL) {
 const httpLink = new HttpLink({
   // Tiene que ser una URL absoluta, ya que las URLs relativas no pueden ser usadas en SSR.
   uri: import.meta.env.VITE_JSCL_API_URL,
-  fetchOptions: { cache: "no-store", credentials: "include" },
-  credentials: "include",
+  fetchOptions: { cache: "no-store" },
 });
 
 function useMakeClient() {
