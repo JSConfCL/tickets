@@ -218,6 +218,7 @@ export type EventsSearchInput = {
   startDateTimeFrom: InputMaybe<Scalars["DateTime"]["input"]>;
   startDateTimeTo: InputMaybe<Scalars["DateTime"]["input"]>;
   status: InputMaybe<EventStatus>;
+  userHasTickets: InputMaybe<Scalars["Boolean"]["input"]>;
   visibility: InputMaybe<EventVisibility>;
 };
 
@@ -382,6 +383,17 @@ export type MyTicketsSearchValues = {
   redemptionStatus: InputMaybe<TicketRedemptionStatus>;
 };
 
+/** Type used for querying the paginated leaves and it's paginated meta data */
+export type PaginatedEvent = {
+  data: Array<Event>;
+  pagination: Pagination;
+};
+
+export type PaginatedInputEventsSearchInput = {
+  pagination: PaginationSearchInputParams;
+  search: InputMaybe<EventsSearchInput>;
+};
+
 export type PaginatedInputMyTicketsSearchValues = {
   pagination: PaginationSearchInputParams;
   search: InputMaybe<MyTicketsSearchValues>;
@@ -469,8 +481,6 @@ export type Query = {
   event: Maybe<Event>;
   /** Get a list of images, that are attached to an event */
   eventImages: Array<SanityAssetRef>;
-  /** Get a list of events. Filter by name, id, status or date */
-  events: Array<Event>;
   /** Get the current user */
   me: User;
   /** Get a list of tickets for the current user */
@@ -479,6 +489,8 @@ export type Query = {
   salaries: Array<Salary>;
   /** Search a consolidated payment logs, by date, aggregated by platform and currency_id */
   searchConsolidatedPaymentLogs: Array<ConsolidatedPaymentLogEntry>;
+  /** Get a list of events. Filter by name, id, status or date */
+  searchEvents: PaginatedEvent;
   /** Search on the payment logs by date, and returns a list of payment logs */
   searchPaymentLogs: Array<PublicFinanceEntryRef>;
   status: Scalars["String"]["output"];
@@ -524,16 +536,16 @@ export type QueryEventImagesArgs = {
   input: EventImageSearch;
 };
 
-export type QueryEventsArgs = {
-  input: InputMaybe<EventsSearchInput>;
-};
-
 export type QueryMyTicketsArgs = {
   input: PaginatedInputMyTicketsSearchValues;
 };
 
 export type QuerySearchConsolidatedPaymentLogsArgs = {
   input: SearchPaymentLogsInput;
+};
+
+export type QuerySearchEventsArgs = {
+  input: PaginatedInputEventsSearchInput;
 };
 
 export type QuerySearchPaymentLogsArgs = {
@@ -761,7 +773,9 @@ export type UpdateSalaryInput = {
 export type User = {
   bio: Maybe<Scalars["String"]["output"]>;
   communities: Array<Community>;
+  email: Maybe<Scalars["String"]["output"]>;
   id: Scalars["String"]["output"];
+  imageUrl: Maybe<Scalars["String"]["output"]>;
   isSuperAdmin: Maybe<Scalars["Boolean"]["output"]>;
   lastName: Maybe<Scalars["String"]["output"]>;
   name: Maybe<Scalars["String"]["output"]>;
@@ -842,21 +856,6 @@ export type UserSearchInput = {
   tags: InputMaybe<Array<SearchableUserTags>>;
 };
 
-export type FetchExampleEventsQueryVariables = Exact<{ [key: string]: never }>;
-
-export type FetchExampleEventsQuery = {
-  events: Array<{
-    id: string;
-    description: string | null;
-    community: { id: string; name: string | null } | null;
-    tags: Array<{
-      id: string;
-      name: string | null;
-      description: string | null;
-    }>;
-  }>;
-};
-
 export type MyTicketsQueryVariables = Exact<{
   input: PaginatedInputMyTicketsSearchValues;
 }>;
@@ -875,6 +874,21 @@ export type MyTicketsQuery = {
       totalPages: number;
       totalRecords: number;
     };
+  };
+};
+
+export type CheckPurchaseOrderStatusMutationVariables = Exact<{
+  input: CheckForPurchaseOrderInput;
+}>;
+
+export type CheckPurchaseOrderStatusMutation = {
+  checkPurchaseOrderStatus: {
+    status: PurchaseOrderStatusEnum | null;
+    tickets: Array<{
+      approvalStatus: TicketApprovalStatus;
+      paymentStatus: TicketPaymentStatus;
+      redemptionStatus: TicketRedemptionStatus;
+    }>;
   };
 };
 
@@ -996,61 +1010,6 @@ export const EventTicketFragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<EventTicketFragmentFragment, unknown>;
-export const FetchExampleEventsDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "query",
-      name: { kind: "Name", value: "FetchExampleEvents" },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "events" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "id" } },
-                { kind: "Field", name: { kind: "Name", value: "description" } },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "community" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "id" } },
-                      { kind: "Field", name: { kind: "Name", value: "name" } },
-                    ],
-                  },
-                },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "tags" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "id" } },
-                      { kind: "Field", name: { kind: "Name", value: "name" } },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "description" },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  FetchExampleEventsQuery,
-  FetchExampleEventsQueryVariables
->;
 export const MyTicketsDocument = {
   kind: "Document",
   definitions: [
@@ -1151,6 +1110,81 @@ export const MyTicketsDocument = {
     },
   ],
 } as unknown as DocumentNode<MyTicketsQuery, MyTicketsQueryVariables>;
+export const CheckPurchaseOrderStatusDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "CheckPurchaseOrderStatus" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "CheckForPurchaseOrderInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "checkPurchaseOrderStatus" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "status" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "tickets" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "approvalStatus" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "paymentStatus" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "redemptionStatus" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CheckPurchaseOrderStatusMutation,
+  CheckPurchaseOrderStatusMutationVariables
+>;
 export const CreatePurchaseOrderDocument = {
   kind: "Document",
   definitions: [
