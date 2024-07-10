@@ -1,11 +1,9 @@
 import { Menu, PackageOpen } from "lucide-react";
 import { useState } from "react";
 
-import { Button, buttonVariants } from "~/components/ui/button";
+import { Button } from "~/components/ui/button";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet";
-import { useIsAuthReady, useIsLoggedIn } from "~/utils/supabase/AuthProvider";
-import { urls } from "~/utils/urls";
 
 import { MobileLink } from "./MobileLink";
 import { MobileNavbarItem } from "./MobileNavbarItem";
@@ -13,8 +11,6 @@ import type { NavBarProps } from "./types";
 
 export function MobileNav({ items }: NavBarProps) {
   const [open, setOpen] = useState(false);
-  const isLoggedIn = useIsLoggedIn();
-  const isReady = useIsAuthReady();
   const closeNav = () => {
     setOpen(false);
   };
@@ -37,22 +33,15 @@ export function MobileNav({ items }: NavBarProps) {
         <ScrollArea className="my-4 h-[calc(100vh-8rem)] px-6 pb-10">
           <div className="flex flex-col space-y-2">
             <div className="flex flex-col space-y-3 pt-6">
-              {items.map((item) => (
-                <MobileNavbarItem
-                  key={`mobile-${item.content}`}
-                  item={item}
-                  onNavItemClick={closeNav}
-                />
-              ))}
-              {isReady && !isLoggedIn ? (
-                <a
-                  className={buttonVariants({})}
-                  href={urls.login}
-                  onClick={closeNav}
-                >
-                  Ingresar
-                </a>
-              ) : null}
+              {items
+                .filter((item) => item.show)
+                .map((item) => (
+                  <MobileNavbarItem
+                    key={`mobile-${item.content}`}
+                    item={item}
+                    onNavItemClick={closeNav}
+                  />
+                ))}
             </div>
           </div>
         </ScrollArea>

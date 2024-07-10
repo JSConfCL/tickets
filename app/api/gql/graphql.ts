@@ -906,6 +906,21 @@ export type MyEventsQuery = {
   };
 };
 
+export type MyProfileQueryVariables = Exact<{ [key: string]: never }>;
+
+export type MyProfileQuery = {
+  me: {
+    id: string;
+    bio?: string | null;
+    lastName?: string | null;
+    username: string;
+    imageUrl?: string | null;
+    email?: string | null;
+    name?: string | null;
+    communities: Array<{ id: string; name?: string | null }>;
+  };
+};
+
 export type CheckPurchaseOrderStatusMutationVariables = Exact<{
   input: CheckForPurchaseOrderInput;
 }>;
@@ -1328,6 +1343,48 @@ export const MyEventsDocument = {
     },
   ],
 } as unknown as DocumentNode<MyEventsQuery, MyEventsQueryVariables>;
+export const MyProfileDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "myProfile" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "me" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "bio" } },
+                { kind: "Field", name: { kind: "Name", value: "lastName" } },
+                { kind: "Field", name: { kind: "Name", value: "username" } },
+                { kind: "Field", name: { kind: "Name", value: "imageUrl" } },
+                { kind: "Field", name: { kind: "Name", value: "email" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "communities" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MyProfileQuery, MyProfileQueryVariables>;
 export const CheckPurchaseOrderStatusDocument = {
   kind: "Document",
   definitions: [

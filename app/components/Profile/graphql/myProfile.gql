@@ -1,0 +1,15 @@
+query myProfile {
+  me {
+    id
+    bio
+    lastName
+    username
+    imageUrl
+    email
+    name
+    communities {
+      id
+      name
+    }
+  }
+}

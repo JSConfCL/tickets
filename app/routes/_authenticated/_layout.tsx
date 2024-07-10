@@ -13,7 +13,8 @@ export default function AuthenticatedLayout() {
 
   if (!isLoggedIn) {
     return (
-      <div className="flex w-full flex-1 items-center justify-center bg-muted px-4 pt-8">
+      <div className="flex w-full flex-1 flex-col items-center justify-center gap-2">
+        <div className="pt-28" />
         <Login />
       </div>
     );

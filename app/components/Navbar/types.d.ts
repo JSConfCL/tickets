@@ -3,6 +3,7 @@ export type NavbarMenuItem = {
   show: boolean;
   link?: string;
   icon?: React.ReactNode;
+  variant?: "secondary" | "link" | "default";
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   children?: Array<NavbarMenuItem>;
 };
