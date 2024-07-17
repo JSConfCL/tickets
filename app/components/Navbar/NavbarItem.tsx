@@ -64,9 +64,7 @@ export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
   if (item.link) {
     return (
       <Button variant={variant} asChild>
-        <Link to={item.link} className="123123">
-          {item.content}
-        </Link>
+        <Link to={item.link}>{item.content}</Link>
       </Button>
     );
   }
