@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import {
   LogOut,
   PackageOpen,
@@ -89,12 +90,12 @@ export const Navbar = () => {
   return (
     <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
       <div className="container flex h-14 items-center">
-        <a href="/">
+        <Link to="/">
           <div className="px-0">
             <PackageOpen className="size-5" />
             <span className="sr-only">Devent</span>
           </div>
-        </a>
+        </Link>
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <div className="w-full flex-1 md:w-auto md:flex-none"></div>
           <nav className="hidden items-center space-x-4 md:flex ">

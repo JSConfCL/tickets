@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import { Info } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
@@ -25,7 +26,7 @@ export const Register = (props: { eventId: string }) => {
         Para registrarte, por favor haz click en el botón.
       </p>
       <Button asChild variant={"secondary"} size={"lg"}>
-        <a href={urls.events.tickets(props.eventId)}>Registrarse</a>
+        <Link to={urls.events.tickets(props.eventId)}>Registrarse</Link>
       </Button>
     </section>
   );

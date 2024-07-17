@@ -1,4 +1,5 @@
 import { createGraphiQLFetcher, Fetcher } from "@graphiql/toolkit";
+import { Link } from "@remix-run/react";
 import { GraphiQL } from "graphiql";
 import { useEffect, useRef } from "react";
 
@@ -180,9 +181,9 @@ export default function Pregunta() {
       <div className="m-auto my-0 p-4">
         <p>Woah! No estas logueado</p>
         Para loguearte{" "}
-        <a href={urls.login}>
+        <Link to={urls.login}>
           <Button variant="outline">Haz click aquí</Button>
-        </a>
+        </Link>
       </div>
     );
   }

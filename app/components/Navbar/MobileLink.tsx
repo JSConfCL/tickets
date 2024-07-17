@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import type { MouseEventHandler, AnchorHTMLAttributes } from "react";
 
 import { cn } from "~/utils/utils";
@@ -9,15 +10,15 @@ interface MobileLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 }
 
 export function MobileLink({
-  href,
+  href = "",
   onClick,
   className,
   children,
   ...props
 }: MobileLinkProps) {
   return (
-    <a href={href} onClick={onClick} className={cn(className)} {...props}>
+    <Link to={href} onClick={onClick} className={cn(className)} {...props}>
       {children}
-    </a>
+    </Link>
   );
 }

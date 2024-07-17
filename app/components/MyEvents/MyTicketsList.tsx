@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import { formatDistanceToNow, subDays, format } from "date-fns";
 import { ArrowRight } from "lucide-react";
 import { useMemo } from "react";
@@ -119,15 +120,15 @@ export const MyTicketsList = ({
                   <div className="flex items-end justify-between">
                     <div>
                       <Button asChild variant="secondary">
-                        <a
-                          href={urls.myEvents.myTickets(event.id)}
+                        <Link
+                          to={urls.myEvents.myTickets(event.id)}
                           className="flex items-center gap-2"
                         >
                           <span className="capitalize">
                             {event.usersTickets.length} tickets
                           </span>
                           <ArrowRight size={16} />
-                        </a>
+                        </Link>
                       </Button>
                     </div>
                     <div>

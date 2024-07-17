@@ -1,3 +1,5 @@
+import { Link } from "@remix-run/react";
+
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -22,17 +24,17 @@ export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
         <DropdownMenuContent align="end">
           {item.children
             .filter((child) => child.show)
-            .map((child) => {
+            .map((child: NavbarMenuItem) => {
               if (child.link) {
                 return (
                   <DropdownMenuItem
                     key={`dropdown-${item.content}`}
                     className="cursor-pointer"
                   >
-                    <a href={child.link} className="flex items-center">
+                    <Link to={child.link} className="flex items-center">
                       {child.icon}
                       <span>{child.content}</span>
-                    </a>
+                    </Link>
                   </DropdownMenuItem>
                 );
               }
@@ -62,7 +64,9 @@ export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
   if (item.link) {
     return (
       <Button variant={variant} asChild>
-        <a href={item.link}>{item.content}</a>
+        <Link to={item.link} className="123123">
+          {item.content}
+        </Link>
       </Button>
     );
   }
