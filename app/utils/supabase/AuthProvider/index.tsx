@@ -1,4 +1,4 @@
-import { AuthSession, Session, User } from "@supabase/supabase-js";
+import { AuthSession, Session } from "@supabase/supabase-js";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import {
   MutableRefObject,
@@ -14,7 +14,7 @@ import {
 import { supabaseClient } from "~/utils/supabase/client";
 
 export type AuthContextType = {
-  user: User | null;
+  userId: string | null;
   isLogged: boolean;
   isReady: boolean;
   tokenRef: MutableRefObject<string | null>;
@@ -27,7 +27,7 @@ export type AuthContextType = {
 };
 
 export const AuthContext = createContext<AuthContextType>({
-  user: null,
+  userId: null,
   isLogged: false,
   isReady: false,
   tokenRef: { current: null },
@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   console.log("impersonation", impersonation, impersonationRef.current);
   const [isReady, setIsReady] = useState<boolean>(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
   const tokenRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -60,17 +60,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [impersonation]);
 
-  const setter = useCallback(
-    (session: AuthSession | null) => {
-      const user = session?.user ?? null;
-      const token = session?.access_token ?? null;
-
-      setUser(user);
-      setSession(session);
-      tokenRef.current = token;
-    },
-    [setSession, setUser],
-  );
   const setTokenRef = useCallback(
     (token: string | null) => {
       tokenRef.current = token;
@@ -78,31 +67,45 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     [tokenRef],
   );
 
+  const setter = useCallback(
+    (session: AuthSession | null) => {
+      const userId = session?.user?.id ?? null;
+      const token = session?.access_token ?? null;
+
+      setUserId(userId);
+      setSession(session);
+      setTokenRef(token);
+    },
+    [setTokenRef],
+  );
+
   useEffect(() => {
     const initialize = async () => {
       const {
         data: { session },
+        error,
       } = await supabaseClient.auth.getSession();
 
-      setter(session);
+      if (error) throw error;
 
-      await supabaseClient.auth.startAutoRefresh();
-      await supabaseClient.auth.refreshSession();
+      setter(session);
+      setIsReady(true);
     };
 
     const {
       data: { subscription },
-    } = supabaseClient.auth.onAuthStateChange(async (_event, session) => {
+    } = supabaseClient.auth.onAuthStateChange((_event, session) => {
       setter(session);
-      await supabaseClient.auth.startAutoRefresh();
+      setIsReady(true);
     });
 
-    // eslint-disable-next-line no-console
-    initialize()
-      .then(() => setIsReady(true))
-      .catch(console.error);
+    initialize().catch((error) => {
+      console.error("Error setting session", error);
+    });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [setter]);
 
   const refreshSession = useCallback(async () => {
@@ -120,8 +123,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const value = useMemo(
     () =>
       ({
-        user,
-        isLogged: Boolean(user?.id),
+        userId,
+        isLogged: Boolean(supabaseSession),
         isReady: Boolean(isReady),
         impersonation,
         tokenRef,
@@ -129,9 +132,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         refreshSession,
         setImpersonation,
       }) satisfies AuthContextType,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
-      user,
+      userId,
       isReady,
       impersonation,
       setTokenRef,
@@ -144,10 +146,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export const useUser = () => useContext(AuthContext).user;
 export const useAuthContext = () => useContext(AuthContext);
 export const useTokenRef = () => useContext(AuthContext).tokenRef;
-export const useSetTokenRef = () => useContext(AuthContext).setTokenRef;
 export const useIsLoggedIn = () => useContext(AuthContext).isLogged;
 export const useIsAuthReady = () => useContext(AuthContext).isReady;
 export const useRefreshSession = () => useContext(AuthContext).refreshSession;
