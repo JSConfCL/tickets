@@ -19,8 +19,14 @@ export type MyProfileQuery = {
     lastName?: string | null;
     username: string;
     imageUrl?: string | null;
+    isSuperAdmin?: boolean | null;
     email?: string | null;
     name?: string | null;
+    impersonatedUser?: {
+      __typename?: "User";
+      id: string;
+      name?: string | null;
+    } | null;
     communities: Array<{
       __typename?: "Community";
       id: string;
@@ -37,8 +43,13 @@ export const MyProfileDocument = gql`
       lastName
       username
       imageUrl
+      isSuperAdmin
       email
       name
+      impersonatedUser {
+        id
+        name
+      }
       communities {
         id
         name

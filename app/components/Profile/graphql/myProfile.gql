@@ -5,8 +5,13 @@ query myProfile {
     lastName
     username
     imageUrl
+    isSuperAdmin
     email
     name
+    impersonatedUser {
+      id
+      name
+    }
     communities {
       id
       name

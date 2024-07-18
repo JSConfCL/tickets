@@ -399,6 +399,17 @@ export type PaginatedInputMyTicketsSearchValues = {
   search?: InputMaybe<MyTicketsSearchValues>;
 };
 
+export type PaginatedInputUserSearchValues = {
+  pagination?: PaginationSearchInputParams;
+  search?: InputMaybe<UserSearchValues>;
+};
+
+/** Type used for querying the paginated leaves and it's paginated meta data */
+export type PaginatedUser = {
+  data: Array<User>;
+  pagination: Pagination;
+};
+
 /** Type used for querying the paginated leaves and it's paginated meta data */
 export type PaginatedUserTicket = {
   data: Array<UserTicket>;
@@ -497,7 +508,7 @@ export type Query = {
   /** Get a list of tags */
   tags: Array<Tag>;
   /** Get a list of users */
-  userSearch: Array<User>;
+  userSearch: PaginatedUser;
   /** Get a list of users */
   users: Array<User>;
   /** Get a workEmail and check if its validated for this user */
@@ -561,7 +572,7 @@ export type QueryTagsArgs = {
 };
 
 export type QueryUserSearchArgs = {
-  input: UserSearchInput;
+  input: PaginatedInputUserSearchValues;
 };
 
 export type QueryWorkEmailArgs = {
@@ -776,10 +787,16 @@ export type User = {
   email?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["String"]["output"];
   imageUrl?: Maybe<Scalars["String"]["output"]>;
+  impersonatedUser?: Maybe<User>;
   isSuperAdmin?: Maybe<Scalars["Boolean"]["output"]>;
   lastName?: Maybe<Scalars["String"]["output"]>;
   name?: Maybe<Scalars["String"]["output"]>;
   username: Scalars["String"]["output"];
+};
+
+export type UserSearchValues = {
+  name?: InputMaybe<Scalars["String"]["input"]>;
+  userName?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 /** Representation of a User ticket */
@@ -852,10 +869,6 @@ export type UserEditInput = {
   username?: InputMaybe<Scalars["String"]["input"]>;
 };
 
-export type UserSearchInput = {
-  tags?: InputMaybe<Array<SearchableUserTags>>;
-};
-
 export type FetchExampleEventsQueryVariables = Exact<{
   input: PaginatedInputEventsSearchInput;
 }>;
@@ -906,6 +919,29 @@ export type MyEventsQuery = {
   };
 };
 
+export type SearchUsersQueryVariables = Exact<{
+  input: PaginatedInputUserSearchValues;
+}>;
+
+export type SearchUsersQuery = {
+  userSearch: {
+    data: Array<{
+      id: string;
+      username: string;
+      name?: string | null;
+      lastName?: string | null;
+      imageUrl?: string | null;
+      email?: string | null;
+    }>;
+    pagination: {
+      currentPage: number;
+      pageSize: number;
+      totalPages: number;
+      totalRecords: number;
+    };
+  };
+};
+
 export type MyProfileQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MyProfileQuery = {
@@ -915,8 +951,10 @@ export type MyProfileQuery = {
     lastName?: string | null;
     username: string;
     imageUrl?: string | null;
+    isSuperAdmin?: boolean | null;
     email?: string | null;
     name?: string | null;
+    impersonatedUser?: { id: string; name?: string | null } | null;
     communities: Array<{ id: string; name?: string | null }>;
   };
 };
@@ -1343,6 +1381,105 @@ export const MyEventsDocument = {
     },
   ],
 } as unknown as DocumentNode<MyEventsQuery, MyEventsQueryVariables>;
+export const SearchUsersDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "SearchUsers" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "PaginatedInputUserSearchValues" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "userSearch" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "data" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "username" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "lastName" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "imageUrl" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "email" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "pagination" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "currentPage" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "pageSize" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "totalPages" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "totalRecords" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SearchUsersQuery, SearchUsersQueryVariables>;
 export const MyProfileDocument = {
   kind: "Document",
   definitions: [
@@ -1364,8 +1501,23 @@ export const MyProfileDocument = {
                 { kind: "Field", name: { kind: "Name", value: "lastName" } },
                 { kind: "Field", name: { kind: "Name", value: "username" } },
                 { kind: "Field", name: { kind: "Name", value: "imageUrl" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "isSuperAdmin" },
+                },
                 { kind: "Field", name: { kind: "Name", value: "email" } },
                 { kind: "Field", name: { kind: "Name", value: "name" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "impersonatedUser" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "communities" },

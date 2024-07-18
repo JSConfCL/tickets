@@ -37,6 +37,8 @@
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.44.2",
+    "@tanstack/react-table": "^8.19.3",
+    "@uidotdev/usehooks": "^2.4.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",

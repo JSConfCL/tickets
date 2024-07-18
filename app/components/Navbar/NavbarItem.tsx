@@ -7,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
+  DropdownMenuPortal,
 } from "~/components/ui/dropdown-menu";
 import { cn } from "~/utils/utils";
 
@@ -21,42 +22,44 @@ export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
         <DropdownMenuTrigger className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
           {item.content}
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          {item.children
-            .filter((child) => child.show)
-            .map((child: NavbarMenuItem) => {
-              if (child.link) {
+        <DropdownMenuPortal>
+          <DropdownMenuContent align="end">
+            {item.children
+              .filter((child) => child.show)
+              .map((child: NavbarMenuItem) => {
+                if (child.link) {
+                  return (
+                    <DropdownMenuItem
+                      key={`dropdown-${item.content}`}
+                      className="cursor-pointer"
+                    >
+                      <Link to={child.link} className="flex items-center">
+                        {child.icon}
+                        <span>{child.content}</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  );
+                }
+
+                if (child.content === "separator") {
+                  return (
+                    <DropdownMenuSeparator key={`dropdown-${item.content}`} />
+                  );
+                }
+
                 return (
                   <DropdownMenuItem
                     key={`dropdown-${item.content}`}
-                    className="cursor-pointer"
+                    onClick={child.onClick}
+                    className={cn(child.onClick && "cursor-pointer")}
                   >
-                    <Link to={child.link} className="flex items-center">
-                      {child.icon}
-                      <span>{child.content}</span>
-                    </Link>
+                    {child.icon}
+                    <span>{child.content}</span>
                   </DropdownMenuItem>
                 );
-              }
-
-              if (child.content === "separator") {
-                return (
-                  <DropdownMenuSeparator key={`dropdown-${item.content}`} />
-                );
-              }
-
-              return (
-                <DropdownMenuItem
-                  key={`dropdown-${item.content}`}
-                  onClick={child.onClick}
-                  className={cn(child.onClick && "cursor-pointer")}
-                >
-                  {child.icon}
-                  <span>{child.content}</span>
-                </DropdownMenuItem>
-              );
-            })}
-        </DropdownMenuContent>
+              })}
+          </DropdownMenuContent>
+        </DropdownMenuPortal>
       </DropdownMenu>
     );
   }
