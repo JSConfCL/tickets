@@ -1,4 +1,5 @@
 import { AuthSession, Session, User } from "@supabase/supabase-js";
+import { useLocalStorage } from "@uidotdev/usehooks";
 import {
   MutableRefObject,
   createContext,
@@ -17,8 +18,12 @@ export type AuthContextType = {
   isLogged: boolean;
   isReady: boolean;
   tokenRef: MutableRefObject<string | null>;
+  impersonation: { userId: string; userName: string } | null;
   setTokenRef: (token: string | null) => void;
   refreshSession: () => Promise<void>;
+  setImpersonation: (
+    impersonation: { userId: string; userName: string } | null,
+  ) => void;
 };
 
 export const AuthContext = createContext<AuthContextType>({
@@ -26,15 +31,34 @@ export const AuthContext = createContext<AuthContextType>({
   isLogged: false,
   isReady: false,
   tokenRef: { current: null },
+  impersonation: null,
   setTokenRef: () => {},
   refreshSession: async () => {},
+  setImpersonation: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [supabaseSession, setSession] = useState<Session | null>(null);
+  const [impersonation, setImpersonation] = useLocalStorage<{
+    userId: string;
+    userName: string;
+  } | null>("impersonation-key", null);
+  const impersonationRef = useRef<{
+    userId: string;
+    userName: string;
+  } | null>(impersonation);
+
+  console.log("impersonation", impersonation, impersonationRef.current);
   const [isReady, setIsReady] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const tokenRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    // This is our way to force a reload when impersonation changes
+    if (impersonationRef.current?.userId !== impersonation?.userId) {
+      window.location.reload();
+    }
+  }, [impersonation]);
 
   const setter = useCallback(
     (session: AuthSession | null) => {
@@ -99,18 +123,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         user,
         isLogged: Boolean(user?.id),
         isReady: Boolean(isReady),
+        impersonation,
         tokenRef,
         setTokenRef,
         refreshSession,
+        setImpersonation,
       }) satisfies AuthContextType,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [user, isReady, setTokenRef, refreshSession, supabaseSession],
+    [
+      user,
+      isReady,
+      impersonation,
+      setTokenRef,
+      refreshSession,
+      setImpersonation,
+      supabaseSession,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useUser = () => useContext(AuthContext).user;
+export const useAuthContext = () => useContext(AuthContext);
 export const useTokenRef = () => useContext(AuthContext).tokenRef;
 export const useSetTokenRef = () => useContext(AuthContext).setTokenRef;
 export const useIsLoggedIn = () => useContext(AuthContext).isLogged;

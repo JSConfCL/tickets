@@ -4,7 +4,11 @@ import { useMemo, useState } from "react";
 
 import { ImpersonationModal } from "~/components/Navbar/Impersonation";
 import { useMyProfileQuery } from "~/components/Profile/graphql/myProfile.generated";
-import { useIsAuthReady, useIsLoggedIn } from "~/utils/supabase/AuthProvider";
+import {
+  useAuthContext,
+  useIsAuthReady,
+  useIsLoggedIn,
+} from "~/utils/supabase/AuthProvider";
 import { logout } from "~/utils/supabase/client";
 import { urls } from "~/utils/urls";
 
@@ -16,7 +20,11 @@ import type { NavbarMenuItem } from "./types";
 export const Navbar = () => {
   const isLogged = useIsLoggedIn();
   const isAuthReady = useIsAuthReady();
-  const myProfile = useMyProfileQuery();
+  const myProfile = useMyProfileQuery({
+    skip: !isLogged || !isAuthReady,
+  });
+  const { impersonation, setImpersonation } = useAuthContext();
+
   const [impersonateModal, setImpersonateModal] = useState(false);
 
   const userItems = useMemo(
@@ -52,11 +60,15 @@ export const Navbar = () => {
               content: "separator",
             },
             {
-              content: "Impersonar",
+              content: impersonation ? "Dejar de Impersonar" : "Impersonar",
               show: Boolean(myProfile?.data?.me?.isSuperAdmin),
               icon: <VenetianMaskIcon color="red" className="mr-2 size-4" />,
               onClick: () => {
-                setImpersonateModal(true);
+                if (impersonation) {
+                  setImpersonation(null);
+                } else {
+                  setImpersonateModal(true);
+                }
               },
             },
             // {
@@ -86,7 +98,13 @@ export const Navbar = () => {
           show: isAuthReady && !isLogged,
         },
       ] satisfies NavbarMenuItem[],
-    [isAuthReady, isLogged, myProfile?.data?.me?.isSuperAdmin],
+    [
+      impersonation,
+      isAuthReady,
+      isLogged,
+      myProfile?.data?.me?.isSuperAdmin,
+      setImpersonation,
+    ],
   );
 
   return (

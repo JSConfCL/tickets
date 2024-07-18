@@ -10,7 +10,11 @@ import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import { RetryLink } from "@apollo/client/link/retry";
 
-import { useRefreshSession, useTokenRef } from "../utils/supabase/AuthProvider";
+import {
+  useAuthContext,
+  useRefreshSession,
+  useTokenRef,
+} from "~/utils/supabase/AuthProvider";
 
 const retryLink = new RetryLink();
 
@@ -34,6 +38,7 @@ const errorPromotionLink = new ApolloLink((operation, forward) => {
 // Este link se encarga de añadir el token de autenticación a las peticiones
 const useAuthLink = () => {
   const accessToken = useTokenRef().current;
+  const { impersonation } = useAuthContext();
 
   return setContext((_, context) => {
     // Obtenemos el access token desde el contexto.
@@ -46,6 +51,11 @@ const useAuthLink = () => {
       return {
         headers: {
           ...headers,
+          ...(impersonation?.userId
+            ? {
+                "x-impersonated-user-id": impersonation.userId,
+              }
+            : {}),
           authorization: `Bearer ${token}`,
         },
       };

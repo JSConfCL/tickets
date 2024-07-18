@@ -22,7 +22,6 @@ import { Input } from "~/components/ui/input";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -37,37 +36,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-
-export const columns: ColumnDef<{
-  email: string | null;
-  userName: string;
-  id: string;
-}>[] = [
-  {
-    accessorKey: "id",
-    header: "Id",
-  },
-  {
-    accessorKey: "userName",
-    header: "User name",
-  },
-  {
-    accessorKey: "email",
-    header: "Email",
-  },
-  {
-    accessorKey: "impersonate",
-    header: "Impersonate",
-    cell: ({ row }) => (
-      <Button
-        size="sm"
-        onClick={() => window.localStorage.setItem("impersonation", row.id)}
-      >
-        Impersonate
-      </Button>
-    ),
-  },
-];
+import { useAuthContext } from "~/utils/supabase/AuthProvider";
 
 export const ImpersonationModal = ({
   isOpen,
@@ -79,6 +48,54 @@ export const ImpersonationModal = ({
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 350);
+  const { setImpersonation } = useAuthContext();
+
+  const columns: ColumnDef<{
+    email: string | null;
+    userName: string;
+    id: string;
+  }>[] = useMemo(
+    () => [
+      {
+        accessorKey: "id",
+        header: "Id",
+      },
+      {
+        accessorKey: "userName",
+        header: "User name",
+      },
+      {
+        accessorKey: "email",
+        header: "Email",
+      },
+      {
+        accessorKey: "impersonate",
+        header: "Impersonate",
+        cell: ({ row }) => {
+          // eslint-disable-next-line react-hooks/rules-of-hooks
+          const { impersonation } = useAuthContext();
+
+          return (
+            <Button
+              size="sm"
+              onClick={() => {
+                setImpersonation({
+                  userId: row.original.id,
+                  userName: row.original.userName,
+                });
+                onStateChange(false);
+              }}
+            >
+              {impersonation?.userId === row.id
+                ? "Stop Impersonating"
+                : "Impersonate"}
+            </Button>
+          );
+        },
+      },
+    ],
+    [onStateChange, setImpersonation],
+  );
 
   const userQuery = useSearchUsersQuery({
     variables: {
@@ -185,8 +202,9 @@ export const ImpersonationModal = ({
                 <PaginationItem>
                   <PaginationPrevious
                     onClick={(e) => {
+                      e.preventDefault();
+
                       if (page > 0) {
-                        e.preventDefault();
                         setPage(page - 1);
                       }
                     }}
@@ -215,8 +233,9 @@ export const ImpersonationModal = ({
                 <PaginationItem>
                   <PaginationNext
                     onClick={(e) => {
+                      e.preventDefault();
+
                       if (pagination.totalPages - 1 > page) {
-                        e.preventDefault();
                         setPage(page + 1);
                       }
                     }}

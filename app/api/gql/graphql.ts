@@ -796,6 +796,7 @@ export type User = {
 
 export type UserSearchValues = {
   name?: InputMaybe<Scalars["String"]["input"]>;
+  tags?: InputMaybe<Array<SearchableUserTags>>;
   userName?: InputMaybe<Scalars["String"]["input"]>;
 };
 
