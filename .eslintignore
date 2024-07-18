@@ -6,3 +6,6 @@ node_modules
 .dev.vars
 
 .wrangler
+
+# shadcn components
+app/components/ui/**/*

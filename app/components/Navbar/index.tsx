@@ -1,12 +1,14 @@
-import {
-  LogOut,
-  PackageOpen,
-  // Settings,
-  User as UserIcon,
-} from "lucide-react";
-import { useMemo } from "react";
+import { Link } from "@remix-run/react";
+import { LogOut, PackageOpen, UserIcon, VenetianMaskIcon } from "lucide-react";
+import { useMemo, useState } from "react";
 
-import { useIsAuthReady, useIsLoggedIn } from "~/utils/supabase/AuthProvider";
+import { ImpersonationModal } from "~/components/Navbar/Impersonation";
+import { useMyProfileQuery } from "~/components/Profile/graphql/myProfile.generated";
+import {
+  useAuthContext,
+  useIsAuthReady,
+  useIsLoggedIn,
+} from "~/utils/supabase/AuthProvider";
 import { logout } from "~/utils/supabase/client";
 import { urls } from "~/utils/urls";
 
@@ -18,11 +20,12 @@ import type { NavbarMenuItem } from "./types";
 export const Navbar = () => {
   const isLogged = useIsLoggedIn();
   const isAuthReady = useIsAuthReady();
-
-  console.log({
-    isAuthReady,
-    isLogged,
+  const myProfile = useMyProfileQuery({
+    skip: !isLogged || !isAuthReady,
   });
+  const { impersonation, setImpersonation } = useAuthContext();
+
+  const [impersonateModal, setImpersonateModal] = useState(false);
 
   const userItems = useMemo(
     () =>
@@ -56,6 +59,18 @@ export const Navbar = () => {
               show: true,
               content: "separator",
             },
+            {
+              content: impersonation ? "Dejar de Impersonar" : "Impersonar",
+              show: Boolean(myProfile?.data?.me?.isSuperAdmin),
+              icon: <VenetianMaskIcon color="red" className="mr-2 size-4" />,
+              onClick: () => {
+                if (impersonation) {
+                  setImpersonation(null);
+                } else {
+                  setImpersonateModal(true);
+                }
+              },
+            },
             // {
             //   content: "Settings",
             //   show: true,
@@ -83,27 +98,39 @@ export const Navbar = () => {
           show: isAuthReady && !isLogged,
         },
       ] satisfies NavbarMenuItem[],
-    [isAuthReady, isLogged],
+    [
+      impersonation,
+      isAuthReady,
+      isLogged,
+      myProfile?.data?.me?.isSuperAdmin,
+      setImpersonation,
+    ],
   );
 
   return (
-    <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
-      <div className="container flex h-14 items-center">
-        <a href="/">
-          <div className="px-0">
-            <PackageOpen className="size-5" />
-            <span className="sr-only">Devent</span>
+    <>
+      <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
+        <div className="container flex h-14 items-center">
+          <Link to="/">
+            <div className="px-0">
+              <PackageOpen className="size-5" />
+              <span className="sr-only">Devent</span>
+            </div>
+          </Link>
+          <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+            <div className="w-full flex-1 md:w-auto md:flex-none"></div>
+            <nav className="hidden items-center space-x-4 md:flex ">
+              <MainNav items={userItems} />
+              {/* <ThemeSwitcher /> */}
+            </nav>
           </div>
-        </a>
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <div className="w-full flex-1 md:w-auto md:flex-none"></div>
-          <nav className="hidden items-center space-x-4 md:flex ">
-            <MainNav items={userItems} />
-            {/* <ThemeSwitcher /> */}
-          </nav>
+          <MobileNav items={userItems} />
         </div>
-        <MobileNav items={userItems} />
-      </div>
-    </header>
+      </header>
+      <ImpersonationModal
+        isOpen={impersonateModal}
+        onStateChange={setImpersonateModal}
+      />
+    </>
   );
 };

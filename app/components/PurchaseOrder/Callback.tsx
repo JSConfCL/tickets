@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import { useCallback, useEffect, useRef } from "react";
 import { toast } from "sonner";
 
@@ -57,7 +58,7 @@ export const PurchaseCallback = ({
     return (
       <div>
         Congrats! Go get your{" "}
-        <a href={urls.ordenes.tickets(purchaseOrderId)}>tickets</a>
+        <Link to={urls.ordenes.tickets(purchaseOrderId)}>tickets</Link>
       </div>
     );
   }

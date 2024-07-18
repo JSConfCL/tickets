@@ -1,7 +1,11 @@
 import { useNavigate } from "@remix-run/react";
 import { useEffect } from "react";
 
-import { useIsAuthReady, useIsLoggedIn } from "~/utils/supabase/AuthProvider";
+import {
+  useAuthContext,
+  useIsAuthReady,
+  useIsLoggedIn,
+} from "~/utils/supabase/AuthProvider";
 import { logout } from "~/utils/supabase/client";
 import { urls } from "~/utils/urls";
 
@@ -16,13 +20,15 @@ const Redirecting = () => {
 };
 
 const Logout = () => {
+  const { setImpersonation } = useAuthContext();
   const navigate = useNavigate();
 
   useEffect(() => {
     logout(() => {
       navigate(urls.home);
+      setImpersonation(null);
     }).catch(console.error);
-  }, [navigate]);
+  }, [navigate, setImpersonation]);
 
   return null;
 };

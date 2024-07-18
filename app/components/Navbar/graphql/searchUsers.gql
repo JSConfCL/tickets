@@ -1,0 +1,18 @@
+query SearchUsers($input: PaginatedInputUserSearchValues!) {
+  userSearch(input: $input) {
+    data {
+      id
+      username
+      name
+      lastName
+      imageUrl
+      email
+    }
+    pagination {
+      currentPage
+      pageSize
+      totalPages
+      totalRecords
+    }
+  }
+}
