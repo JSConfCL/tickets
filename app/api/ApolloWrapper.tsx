@@ -56,6 +56,7 @@ const useAuthLink = () => {
                 "x-impersonated-user-id": impersonation.userId,
               }
             : {}),
+          "x-trace-id": crypto.randomUUID(),
           authorization: `Bearer ${token}`,
         },
       };

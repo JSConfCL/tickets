@@ -14,7 +14,7 @@ import { urls } from "~/utils/urls";
 
 import { MainNav } from "./MainNav";
 import { MobileNav } from "./MobileNav";
-// import { ThemeSwitcher } from "./ThemeSwitcher";
+import { ThemeSwitcher } from "./ThemeSwitcher";
 import type { NavbarMenuItem } from "./types";
 
 export const Navbar = () => {
@@ -32,12 +32,12 @@ export const Navbar = () => {
       [
         {
           content: "Eventos",
-          show: true,
+          show: false,
           link: urls.events.root,
         },
         {
           content: "Comunidades",
-          show: true,
+          show: false,
           link: urls.comunidades,
         },
         {
@@ -121,7 +121,7 @@ export const Navbar = () => {
             <div className="w-full flex-1 md:w-auto md:flex-none"></div>
             <nav className="hidden items-center space-x-4 md:flex ">
               <MainNav items={userItems} />
-              {/* <ThemeSwitcher /> */}
+              <ThemeSwitcher />
             </nav>
           </div>
           <MobileNav items={userItems} />
