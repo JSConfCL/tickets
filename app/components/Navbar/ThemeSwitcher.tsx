@@ -7,7 +7,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { getDefaultThemeKey } from "~/rootHelpers";
 

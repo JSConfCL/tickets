@@ -7,7 +7,7 @@ export const getDefaultThemeKey = () => {
         | "light"
         | "dark";
     } catch (error) {
-      console.error("Error getting theme from localStorage", error);
+      window.localStorage.removeItem("theme");
     }
   } else if (typeof window !== "undefined") {
     theme = window.matchMedia("(prefers-color-scheme: dark)").matches
