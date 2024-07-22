@@ -14,20 +14,21 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ApolloWrapper } from "~/api/ApolloWrapper";
 import { Navbar } from "~/components/Navbar";
 import { Toaster } from "~/components/ui/sonner";
+import { getDefaultThemeKey } from "~/rootHelpers";
 import { AuthProvider } from "~/utils/supabase/AuthProvider";
 
 setDefaultOptions({ locale: es });
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark h-dvh bg-slate-950">
+    <html lang="en" className={`h-dvh bg-slate-100 dark:bg-slate-950`}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body className="flex min-h-full flex-col">
+      <body className={`${getDefaultThemeKey()} flex min-h-full flex-col`}>
         {children}
         <ScrollRestoration />
         <Scripts />

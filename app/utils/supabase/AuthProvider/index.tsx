@@ -48,7 +48,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     userName: string;
   } | null>(impersonation);
 
-  console.log("impersonation", impersonation, impersonationRef.current);
   const [isReady, setIsReady] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const tokenRef = useRef<string | null>(null);
