@@ -1,6 +1,5 @@
-import React, { MouseEventHandler, useCallback, useRef } from "react";
+import React, { MouseEventHandler, useCallback } from "react";
 import { toast } from "sonner";
-import { v4 } from "uuid";
 
 import { Card, CardContent } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
