@@ -51,10 +51,7 @@ export const PurchaseCallback = ({
 
   const { status } = data.checkPurchaseOrderStatus;
 
-  if (
-    status === PurchaseOrderStatusEnum.Paid ||
-    status === PurchaseOrderStatusEnum.NotRequired
-  ) {
+  if (status === PurchaseOrderStatusEnum.Complete) {
     return (
       <div>
         Congrats! Go get your{" "}
