@@ -270,7 +270,6 @@ export default function Pregunta() {
             variables: JSON.stringify(
               {
                 input: {
-                  idempotencyUUIDKey: "13a5143e-74b3-4f2a-b1ee-4780ae1086da",
                   purchaseOrder: [
                     {
                       quantity: 2,

@@ -36,7 +36,6 @@ export const ConfirmationTab = ({
   ) => string | null;
   currencyId: string;
 }) => {
-  const idempotencyUUIDKey = useRef<string>(v4());
   const [purchaseOrderMutation, purchaseOrderMutationResults] =
     useCreatePurchaseOrderMutation();
   const createPurchaseOrder = useCallback(async () => {
@@ -54,7 +53,6 @@ export const ConfirmationTab = ({
           generatePaymentLink: {
             currencyId,
           },
-          idempotencyUUIDKey: idempotencyUUIDKey.current,
           purchaseOrder,
         },
       },
