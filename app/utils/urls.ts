@@ -9,7 +9,7 @@ export const urls = {
   },
   myEvents: {
     root: `/my-events`,
-    myTickets: (id: string) => `/my-events/${id}/my-tickets`,
+    details: (id: string) => `/my-events/${id}`,
   },
   ordenes: {
     root: "/ordenes",

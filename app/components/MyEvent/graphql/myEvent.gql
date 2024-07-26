@@ -1,4 +1,4 @@
-query myEvents(
+query myEvent(
   $input: PaginatedInputEventsSearchInput!
   $userTicketSearchInput: EventsTicketsSearchInput
 ) {
@@ -8,6 +8,7 @@ query myEvents(
       name
       description
       startDateTime
+      endDateTime
       address
       bannerImageSanityRef
       community {
@@ -20,9 +21,11 @@ query myEvents(
         approvalStatus
         paymentStatus
         redemptionStatus
+        createdAt
         ticketTemplate {
-          description
           id
+          name
+          description
         }
       }
     }

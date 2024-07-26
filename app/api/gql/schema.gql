@@ -138,6 +138,7 @@ Representation of an Event (Events and Users, is what tickets are linked to)
 """
 type Event {
   address: String
+  bannerImageSanityRef: String
   community: Community
   description: String
   endDateTime: DateTime
@@ -517,10 +518,12 @@ type PublicFinanceEntryRef {
 Representation of a Purchase Order
 """
 type PurchaseOrder {
+  createdAt: DateTime
   currency: AllowedCurrency
   finalPrice: Float
   id: ID!
   paymentLink: String
+  paymentPlatform: String
   purchasePaymentStatus: PurchaseOrderPaymentStatusEnum
   status: PurchaseOrderStatusEnum
   tickets: [UserTicket!]!
@@ -949,6 +952,7 @@ Representation of a User ticket
 """
 type UserTicket {
   approvalStatus: TicketApprovalStatus!
+  createdAt: DateTime!
   id: ID!
   paymentStatus: TicketPaymentStatus!
   purchaseOrder: PurchaseOrder

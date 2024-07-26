@@ -8,12 +8,12 @@ import * as Types from '../../../api/gql/graphql';
 import { gql } from "graphql-tag";
 import * as Apollo from "@apollo/client";
 const defaultOptions = {} as const;
-export type MyEventsQueryVariables = Types.Exact<{
+export type MyEventQueryVariables = Types.Exact<{
   input: Types.PaginatedInputEventsSearchInput;
   userTicketSearchInput?: Types.InputMaybe<Types.EventsTicketsSearchInput>;
 }>;
 
-export type MyEventsQuery = {
+export type MyEventQuery = {
   __typename?: "Query";
   searchEvents: {
     __typename?: "PaginatedEvent";
@@ -23,6 +23,7 @@ export type MyEventsQuery = {
       name: string;
       description?: string | null;
       startDateTime: any;
+      endDateTime?: any | null;
       address?: string | null;
       bannerImageSanityRef?: string | null;
       status: Types.EventStatus;
@@ -37,10 +38,12 @@ export type MyEventsQuery = {
         approvalStatus: Types.TicketApprovalStatus;
         paymentStatus: Types.TicketPaymentStatus;
         redemptionStatus: Types.TicketRedemptionStatus;
+        createdAt: any;
         ticketTemplate: {
           __typename?: "Ticket";
-          description?: string | null;
           id: string;
+          name: string;
+          description?: string | null;
         };
       }>;
     }>;
@@ -54,8 +57,8 @@ export type MyEventsQuery = {
   };
 };
 
-export const MyEventsDocument = gql`
-  query myEvents(
+export const MyEventDocument = gql`
+  query myEvent(
     $input: PaginatedInputEventsSearchInput!
     $userTicketSearchInput: EventsTicketsSearchInput
   ) {
@@ -65,6 +68,7 @@ export const MyEventsDocument = gql`
         name
         description
         startDateTime
+        endDateTime
         address
         bannerImageSanityRef
         community {
@@ -77,9 +81,11 @@ export const MyEventsDocument = gql`
           approvalStatus
           paymentStatus
           redemptionStatus
+          createdAt
           ticketTemplate {
-            description
             id
+            name
+            description
           }
         }
       }
@@ -94,64 +100,62 @@ export const MyEventsDocument = gql`
 `;
 
 /**
- * __useMyEventsQuery__
+ * __useMyEventQuery__
  *
- * To run a query within a React component, call `useMyEventsQuery` and pass it any options that fit your needs.
- * When your component renders, `useMyEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMyEventQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyEventQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useMyEventsQuery({
+ * const { data, loading, error } = useMyEventQuery({
  *   variables: {
  *      input: // value for 'input'
  *      userTicketSearchInput: // value for 'userTicketSearchInput'
  *   },
  * });
  */
-export function useMyEventsQuery(
-  baseOptions: Apollo.QueryHookOptions<MyEventsQuery, MyEventsQueryVariables> &
-    ({ variables: MyEventsQueryVariables; skip?: boolean } | { skip: boolean }),
+export function useMyEventQuery(
+  baseOptions: Apollo.QueryHookOptions<MyEventQuery, MyEventQueryVariables> &
+    ({ variables: MyEventQueryVariables; skip?: boolean } | { skip: boolean }),
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<MyEventsQuery, MyEventsQueryVariables>(
-    MyEventsDocument,
+  return Apollo.useQuery<MyEventQuery, MyEventQueryVariables>(
+    MyEventDocument,
     options,
   );
 }
-export function useMyEventsLazyQuery(
+export function useMyEventLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    MyEventsQuery,
-    MyEventsQueryVariables
+    MyEventQuery,
+    MyEventQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<MyEventsQuery, MyEventsQueryVariables>(
-    MyEventsDocument,
+  return Apollo.useLazyQuery<MyEventQuery, MyEventQueryVariables>(
+    MyEventDocument,
     options,
   );
 }
-export function useMyEventsSuspenseQuery(
+export function useMyEventSuspenseQuery(
   baseOptions?: Apollo.SuspenseQueryHookOptions<
-    MyEventsQuery,
-    MyEventsQueryVariables
+    MyEventQuery,
+    MyEventQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<MyEventsQuery, MyEventsQueryVariables>(
-    MyEventsDocument,
+  return Apollo.useSuspenseQuery<MyEventQuery, MyEventQueryVariables>(
+    MyEventDocument,
     options,
   );
 }
-export type MyEventsQueryHookResult = ReturnType<typeof useMyEventsQuery>;
-export type MyEventsLazyQueryHookResult = ReturnType<
-  typeof useMyEventsLazyQuery
+export type MyEventQueryHookResult = ReturnType<typeof useMyEventQuery>;
+export type MyEventLazyQueryHookResult = ReturnType<typeof useMyEventLazyQuery>;
+export type MyEventSuspenseQueryHookResult = ReturnType<
+  typeof useMyEventSuspenseQuery
 >;
-export type MyEventsSuspenseQueryHookResult = ReturnType<
-  typeof useMyEventsSuspenseQuery
->;
-export type MyEventsQueryResult = Apollo.QueryResult<
-  MyEventsQuery,
-  MyEventsQueryVariables
+export type MyEventQueryResult = Apollo.QueryResult<
+  MyEventQuery,
+  MyEventQueryVariables
 >;
