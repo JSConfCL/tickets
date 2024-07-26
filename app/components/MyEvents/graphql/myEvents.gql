@@ -8,6 +8,8 @@ query myEvents(
       name
       description
       startDateTime
+      address
+      bannerImageSanityRef
       community {
         id
         name

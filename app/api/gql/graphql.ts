@@ -1045,6 +1045,8 @@ export type MyEventsQuery = {
       name: string;
       description?: string | null;
       startDateTime: string;
+      address?: string | null;
+      bannerImageSanityRef?: string | null;
       status: EventStatus;
       community?: { id: string; name?: string | null } | null;
       usersTickets: Array<{
@@ -1410,6 +1412,14 @@ export const MyEventsDocument = {
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "startDateTime" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "address" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "bannerImageSanityRef" },
                       },
                       {
                         kind: "Field",

@@ -23,6 +23,8 @@ export type MyEventsQuery = {
       name: string;
       description?: string | null;
       startDateTime: any;
+      address?: string | null;
+      bannerImageSanityRef?: string | null;
       status: Types.EventStatus;
       community?: {
         __typename?: "Community";
@@ -63,6 +65,8 @@ export const MyEventsDocument = gql`
         name
         description
         startDateTime
+        address
+        bannerImageSanityRef
         community {
           id
           name
