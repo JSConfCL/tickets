@@ -1,0 +1,25 @@
+query MyPurchaseOrders($input: PaginatedInputMyPurchaseOrdersInput!) {
+  myPurchaseOrders(input: $input) {
+    data {
+      id
+      finalPrice
+      paymentPlatform
+      createdAt
+      currency {
+        id
+        currency
+      }
+      tickets {
+        id
+        ticketTemplate {
+          id
+          name
+          event {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+}

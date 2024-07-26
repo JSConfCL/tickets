@@ -1105,6 +1105,30 @@ export type MyEventsQuery = {
   };
 };
 
+export type MyPurchaseOrdersQueryVariables = Exact<{
+  input: PaginatedInputMyPurchaseOrdersInput;
+}>;
+
+export type MyPurchaseOrdersQuery = {
+  myPurchaseOrders: {
+    data: Array<{
+      id: string;
+      finalPrice?: number | null;
+      paymentPlatform?: string | null;
+      createdAt?: string | null;
+      currency?: { id: string; currency: string } | null;
+      tickets: Array<{
+        id: string;
+        ticketTemplate: {
+          id: string;
+          name: string;
+          event: { id: string; name: string };
+        };
+      }>;
+    }>;
+  };
+};
+
 export type SearchUsersQueryVariables = Exact<{
   input: PaginatedInputUserSearchValues;
 }>;
@@ -1779,6 +1803,148 @@ export const MyEventsDocument = {
     },
   ],
 } as unknown as DocumentNode<MyEventsQuery, MyEventsQueryVariables>;
+export const MyPurchaseOrdersDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "MyPurchaseOrders" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: {
+                kind: "Name",
+                value: "PaginatedInputMyPurchaseOrdersInput",
+              },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "myPurchaseOrders" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "data" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "finalPrice" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "paymentPlatform" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "currency" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "currency" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tickets" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "ticketTemplate" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "event" },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "id" },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "name" },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  MyPurchaseOrdersQuery,
+  MyPurchaseOrdersQueryVariables
+>;
 export const SearchUsersDocument = {
   kind: "Document",
   definitions: [
