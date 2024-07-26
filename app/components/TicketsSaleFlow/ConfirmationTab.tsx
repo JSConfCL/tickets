@@ -1,6 +1,5 @@
-import React, { MouseEventHandler, useCallback, useRef } from "react";
+import React, { MouseEventHandler, useCallback } from "react";
 import { toast } from "sonner";
-import { v4 } from "uuid";
 
 import { Card, CardContent } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
@@ -36,7 +35,6 @@ export const ConfirmationTab = ({
   ) => string | null;
   currencyId: string;
 }) => {
-  const idempotencyUUIDKey = useRef<string>(v4());
   const [purchaseOrderMutation, purchaseOrderMutationResults] =
     useCreatePurchaseOrderMutation();
   const createPurchaseOrder = useCallback(async () => {
@@ -54,7 +52,6 @@ export const ConfirmationTab = ({
           generatePaymentLink: {
             currencyId,
           },
-          idempotencyUUIDKey: idempotencyUUIDKey.current,
           purchaseOrder,
         },
       },
