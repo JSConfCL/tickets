@@ -129,15 +129,17 @@ const MyTicketDetails = ({
                   <div className="flex items-center justify-between">
                     <dt className="text-muted-foreground">paymentStatus</dt>
                     <dd>
-                      <Badge className="gap-2" variant="outline">
-                        <span
-                          className={cn(
-                            "flex h-2 w-2 rounded-full",
-                            paymentStatusColor(ticket.paymentStatus),
-                          )}
-                        />
-                        {paymentStatusLabel(ticket.paymentStatus)}
-                      </Badge>
+                      {ticket.paymentStatus && (
+                        <Badge className="gap-2" variant="outline">
+                          <span
+                            className={cn(
+                              "flex h-2 w-2 rounded-full",
+                              paymentStatusColor(ticket.paymentStatus),
+                            )}
+                          />
+                          {paymentStatusLabel(ticket.paymentStatus)}
+                        </Badge>
+                      )}
                     </dd>
                   </div>
                   <div className="flex items-center justify-between">
@@ -305,15 +307,17 @@ export const MyEvent = ({ id }: { id: string }) => {
                         </Badge>
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
-                        <Badge className="gap-2" variant="outline">
-                          <span
-                            className={cn(
-                              "flex h-2 w-2 rounded-full",
-                              paymentStatusColor(ticket.paymentStatus),
-                            )}
-                          />
-                          {paymentStatusLabel(ticket.paymentStatus)}
-                        </Badge>
+                        {ticket.paymentStatus && (
+                          <Badge className="gap-2" variant="outline">
+                            <span
+                              className={cn(
+                                "flex h-2 w-2 rounded-full",
+                                paymentStatusColor(ticket.paymentStatus),
+                              )}
+                            />
+                            {paymentStatusLabel(ticket.paymentStatus)}
+                          </Badge>
+                        )}
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
                         <Badge className="gap-2" variant="outline">
