@@ -31,7 +31,7 @@ const documents = {
     types.CreatePurchaseOrderDocument,
   "fragment EventTicketFragment on Ticket {\n  id\n  name\n  description\n  quantity\n  isFree\n  startDateTime\n  status\n  isUnlimited\n  prices {\n    id\n    amount\n    currency {\n      currency\n      id\n    }\n  }\n}":
     types.EventTicketFragmentFragmentDoc,
-  "query getEventAndTickets($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    endDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n    }\n    tickets {\n      ...EventTicketFragment\n    }\n  }\n}":
+  "query getEventAndTickets($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    startDateTime\n    endDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n    }\n    tickets {\n      ...EventTicketFragment\n    }\n  }\n}":
     types.GetEventAndTicketsDocument,
 };
 
@@ -107,8 +107,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "query getEventAndTickets($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    endDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n    }\n    tickets {\n      ...EventTicketFragment\n    }\n  }\n}",
-): (typeof documents)["query getEventAndTickets($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    maxAttendees\n    startDateTime\n    endDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n    }\n    tickets {\n      ...EventTicketFragment\n    }\n  }\n}"];
+  source: "query getEventAndTickets($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    startDateTime\n    endDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n    }\n    tickets {\n      ...EventTicketFragment\n    }\n  }\n}",
+): (typeof documents)["query getEventAndTickets($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    startDateTime\n    endDateTime\n    status\n    community {\n      name\n    }\n    users {\n      id\n      name\n    }\n    tickets {\n      ...EventTicketFragment\n    }\n  }\n}"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

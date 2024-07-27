@@ -27,7 +27,7 @@ export type CreatePurchaseOrderMutation = {
           id: string;
           approvalStatus: Types.TicketApprovalStatus;
           redemptionStatus: Types.TicketRedemptionStatus;
-          paymentStatus: Types.TicketPaymentStatus;
+          paymentStatus?: Types.PurchaseOrderPaymentStatusEnum | null;
         }>;
       }
     | {

@@ -233,7 +233,6 @@ export default function Pregunta() {
                 input: {
                   communityId: "",
                   description: "",
-                  maxAttendees: 0,
                   name: "",
                   startDateTime: "",
                 },

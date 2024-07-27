@@ -21,7 +21,6 @@ export type GetEventAndTicketsQuery = {
     name: string;
     address?: string | null;
     description?: string | null;
-    maxAttendees?: number | null;
     startDateTime: any;
     endDateTime?: any | null;
     status: Types.EventStatus;
@@ -58,7 +57,6 @@ export const GetEventAndTicketsDocument = gql`
       name
       address
       description
-      maxAttendees
       startDateTime
       endDateTime
       status

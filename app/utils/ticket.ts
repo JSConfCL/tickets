@@ -1,3 +1,5 @@
+import { PurchaseOrderPaymentStatusEnum } from "~/api/gql/graphql";
+
 export const idReference = (id: string) => id.split("-")[4];
 
 export const approvalStatusLabel = (status: string) =>
@@ -31,7 +33,7 @@ export const approvalStatusColor = (status: string) =>
     rejected: "bg-red-400",
   })[status] ?? "bg-gray-400";
 
-export const paymentStatusColor = (status: string) =>
+export const paymentStatusColor = (status: PurchaseOrderPaymentStatusEnum) =>
   ({
     not_required: "bg-green-400",
     paid: "bg-green-400",

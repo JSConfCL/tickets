@@ -4,7 +4,6 @@ query getEventAndTickets($input: String!) {
     name
     address
     description
-    maxAttendees
     startDateTime
     endDateTime
     status
