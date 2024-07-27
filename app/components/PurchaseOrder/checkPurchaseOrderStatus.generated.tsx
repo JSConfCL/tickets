@@ -20,7 +20,7 @@ export type CheckPurchaseOrderStatusMutation = {
     tickets: Array<{
       __typename?: "UserTicket";
       approvalStatus: Types.TicketApprovalStatus;
-      paymentStatus: Types.TicketPaymentStatus;
+      paymentStatus?: Types.PurchaseOrderPaymentStatusEnum | null;
       redemptionStatus: Types.TicketRedemptionStatus;
     }>;
   };

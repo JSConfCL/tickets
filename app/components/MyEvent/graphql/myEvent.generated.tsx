@@ -36,7 +36,7 @@ export type MyEventQuery = {
         __typename?: "UserTicket";
         id: string;
         approvalStatus: Types.TicketApprovalStatus;
-        paymentStatus: Types.TicketPaymentStatus;
+        paymentStatus?: Types.PurchaseOrderPaymentStatusEnum | null;
         redemptionStatus: Types.TicketRedemptionStatus;
         createdAt: any;
         ticketTemplate: {

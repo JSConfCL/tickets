@@ -157,7 +157,6 @@ export type Event = {
   images: Array<SanityAssetRef>;
   latitude?: Maybe<Scalars["String"]["output"]>;
   longitude?: Maybe<Scalars["String"]["output"]>;
-  maxAttendees?: Maybe<Scalars["Int"]["output"]>;
   meetingURL?: Maybe<Scalars["String"]["output"]>;
   name: Scalars["String"]["output"];
   startDateTime: Scalars["DateTime"]["output"];
@@ -184,7 +183,6 @@ export type EventCreateInput = {
   endDateTime?: InputMaybe<Scalars["DateTime"]["input"]>;
   latitude?: InputMaybe<Scalars["String"]["input"]>;
   longitude?: InputMaybe<Scalars["String"]["input"]>;
-  maxAttendees: Scalars["Int"]["input"];
   meetingURL?: InputMaybe<Scalars["String"]["input"]>;
   name: Scalars["String"]["input"];
   startDateTime: Scalars["DateTime"]["input"];
@@ -200,7 +198,6 @@ export type EventEditInput = {
   eventId: Scalars["String"]["input"];
   latitude?: InputMaybe<Scalars["String"]["input"]>;
   longitude?: InputMaybe<Scalars["String"]["input"]>;
-  maxAttendees?: InputMaybe<Scalars["Int"]["input"]>;
   meetingURL?: InputMaybe<Scalars["String"]["input"]>;
   name?: InputMaybe<Scalars["String"]["input"]>;
   startDateTime?: InputMaybe<Scalars["DateTime"]["input"]>;
@@ -261,6 +258,7 @@ export type GeneratePaymentLinkInput = {
 };
 
 export type Mutation = {
+  acceptGiftedTicket: UserTicket;
   /** Try to add a person to a team */
   addPersonToTeam: AddUserToTeamResponseRef;
   /** Approve a ticket */
@@ -311,6 +309,10 @@ export type Mutation = {
   updateUserRoleInCommunity: User;
   /** Validates work email for a user */
   validateWorkEmail: WorkEmail;
+};
+
+export type MutationAcceptGiftedTicketArgs = {
+  userTicketId: Scalars["String"]["input"];
 };
 
 export type MutationAddPersonToTeamArgs = {
@@ -799,6 +801,7 @@ export type Ticket = {
 export enum TicketApprovalStatus {
   Approved = "approved",
   Cancelled = "cancelled",
+  Gifted = "gifted",
   NotRequired = "not_required",
   Pending = "pending",
   Rejected = "rejected",
@@ -935,7 +938,7 @@ export type UserTicket = {
   approvalStatus: TicketApprovalStatus;
   createdAt: Scalars["DateTime"]["output"];
   id: Scalars["ID"]["output"];
-  paymentStatus: TicketPaymentStatus;
+  paymentStatus?: Maybe<PurchaseOrderPaymentStatusEnum>;
   purchaseOrder?: Maybe<PurchaseOrder>;
   redemptionStatus: TicketRedemptionStatus;
   ticketTemplate: Ticket;
@@ -1053,7 +1056,7 @@ export type MyEventQuery = {
       usersTickets: Array<{
         id: string;
         approvalStatus: TicketApprovalStatus;
-        paymentStatus: TicketPaymentStatus;
+        paymentStatus?: PurchaseOrderPaymentStatusEnum | null;
         redemptionStatus: TicketRedemptionStatus;
         createdAt: string;
         ticketTemplate: {
@@ -1091,7 +1094,7 @@ export type MyEventsQuery = {
       usersTickets: Array<{
         id: string;
         approvalStatus: TicketApprovalStatus;
-        paymentStatus: TicketPaymentStatus;
+        paymentStatus?: PurchaseOrderPaymentStatusEnum | null;
         redemptionStatus: TicketRedemptionStatus;
         ticketTemplate: { description?: string | null; id: string };
       }>;
@@ -1178,7 +1181,7 @@ export type CheckPurchaseOrderStatusMutation = {
     status?: PurchaseOrderStatusEnum | null;
     tickets: Array<{
       approvalStatus: TicketApprovalStatus;
-      paymentStatus: TicketPaymentStatus;
+      paymentStatus?: PurchaseOrderPaymentStatusEnum | null;
       redemptionStatus: TicketRedemptionStatus;
     }>;
   };
@@ -1201,7 +1204,7 @@ export type CreatePurchaseOrderMutation = {
           id: string;
           approvalStatus: TicketApprovalStatus;
           redemptionStatus: TicketRedemptionStatus;
-          paymentStatus: TicketPaymentStatus;
+          paymentStatus?: PurchaseOrderPaymentStatusEnum | null;
         }>;
       }
     | {
@@ -1237,7 +1240,6 @@ export type GetEventAndTicketsQuery = {
     name: string;
     address?: string | null;
     description?: string | null;
-    maxAttendees?: number | null;
     startDateTime: string;
     endDateTime?: string | null;
     status: EventStatus;
@@ -2364,10 +2366,6 @@ export const GetEventAndTicketsDocument = {
                 { kind: "Field", name: { kind: "Name", value: "name" } },
                 { kind: "Field", name: { kind: "Name", value: "address" } },
                 { kind: "Field", name: { kind: "Name", value: "description" } },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "maxAttendees" },
-                },
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "startDateTime" },
