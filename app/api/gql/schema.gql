@@ -101,6 +101,10 @@ input CreateCompanyInput {
   website: String
 }
 
+input CreatePlaceholderUsersInput {
+  users: [placeHolderUsersInput!]!
+}
+
 input CreateSalaryInput {
   amount: Int!
   companyId: String!
@@ -142,16 +146,22 @@ Representation of an Event (Events and Users, is what tickets are linked to)
 """
 type Event {
   address: String
+  bannerImage: Image
   bannerImageSanityRef: String
   community: Community
   description: String
   endDateTime: DateTime
+  galleries: [Gallery!]!
   id: ID!
   images: [SanityAssetRef!]!
   latitude: String
+  logoImage: Image
   longitude: String
   meetingURL: String
+  mobileBannerImage: Image
   name: String!
+  previewImage: Image
+  schedules: [Schedule!]!
   speakers: [Speaker!]!
   startDateTime: DateTime!
   status: EventStatus!
@@ -241,6 +251,27 @@ input EventsTicketsSearchInput {
   redemptionStatus: TicketRedemptionStatus
 }
 
+input FindUserTicketSearchInput {
+  approvalStatus: [TicketApprovalStatus!]
+  eventIds: [String!]
+  paymentStatus: [TicketPaymentStatus!]
+  redemptionStatus: [TicketRedemptionStatus!]
+  ticketsIds: [String!]
+  userIds: [String!]
+  userTicketIds: [String!]
+}
+
+"""
+Representation of a Gallery, usually associated to an event
+"""
+type Gallery {
+  description: String
+  event: Event
+  id: ID!
+  images: [Image!]!
+  name: String!
+}
+
 enum Gender {
   Agender
   Female
@@ -260,6 +291,29 @@ input GeneratePaymentLinkInput {
   currencyId: String!
 }
 
+input GiftTicketsToUserInput {
+  allowMultipleTicketsPerUsers: Boolean!
+  autoApproveTickets: Boolean!
+  notifyUsers: Boolean!
+  ticketIds: [String!]!
+  userIds: [String!]!
+}
+
+"""
+An image, usually associated to a gallery
+"""
+type Image {
+  gallery: Gallery
+  hosting: ImageHostingEnum!
+  id: ID!
+  url: String!
+}
+
+enum ImageHostingEnum {
+  cloudflare
+  sanity
+}
+
 type Mutation {
   acceptGiftedTicket(userTicketId: String!): UserTicket!
 
@@ -272,6 +326,11 @@ type Mutation {
   Try to add a person to a team
   """
   addPersonToTeam(input: AddPersonToTeamInput!): AddUserToTeamResponseRef!
+
+  """
+  Apply to a waitlist
+  """
+  applyToWaitlist(ticketId: String!): UserTicket!
 
   """
   Approve a ticket
@@ -307,6 +366,11 @@ type Mutation {
   Create an event
   """
   createEvent(input: EventCreateInput!): Event!
+
+  """
+  Create placeholder users (used for things like invitations)
+  """
+  createPlaceholderdUsers(input: CreatePlaceholderUsersInput!): [User!]!
 
   """
   Create a salary
@@ -349,6 +413,11 @@ type Mutation {
   enqueueGoogleAlbumImport(input: EnqueueGoogleAlbumImportInput!): Boolean!
 
   """
+  Gift tickets to users, allowing multiple tickets per user, and conditionally notify them
+  """
+  giftTicketsToUsers(input: GiftTicketsToUserInput!): [UserTicket!]!
+
+  """
   Create a purchase order
   """
   payForPurchaseOrder(input: PayForPurchaseOrderInput!): PurchaseOrder!
@@ -367,11 +436,16 @@ type Mutation {
   Kickoff the email validation flow. This flow will links an email to a user, create a company if it does not exist, and allows filling data for that email's position
   """
   startWorkEmailValidation(email: String!): WorkEmail!
+  triggerUserTicketApprovalReview(
+    eventId: String!
+    userId: String!
+  ): [UserTicket!]!
 
   """
   Update a company
   """
   updateCompany(input: UpdateCompanyInput!): Company!
+  updateMyUserData(input: updateUserDataInput!): User!
 
   """
   Create a salary
@@ -421,6 +495,11 @@ type PaginatedEvent {
 input PaginatedInputEventsSearchInput {
   pagination: PaginationSearchInputParams! = { page: 0, pageSize: 20 }
   search: EventsSearchInput
+}
+
+input PaginatedInputFindUserTicketSearchInput {
+  pagination: PaginationSearchInputParams! = { page: 0, pageSize: 20 }
+  search: FindUserTicketSearchInput
 }
 
 input PaginatedInputMyPurchaseOrdersInput {
@@ -531,6 +610,19 @@ enum PronounsEnum {
 }
 
 """
+Representation of the public data for a user's event attendance, used usually for public profiles or 'shareable ticket' pages
+"""
+type PublicEventAttendance {
+  event: Event!
+  id: ID!
+  userInfo: PublicUserInfo!
+}
+
+input PublicEventAttendanceInfo {
+  id: String!
+}
+
+"""
 Representation of a payment log entry
 """
 type PublicFinanceEntryRef {
@@ -540,6 +632,31 @@ type PublicFinanceEntryRef {
   platform: String!
   transactionAmount: Float!
   transactionDate: DateTime
+}
+
+input PublicTicketInput {
+  publicTicketId: String!
+}
+
+"""
+Representation of a user's publicly accessible data, to be used in public contexts like shareable ticket UIs
+"""
+type PublicUserInfo {
+  firstName: String
+  lastName: String
+  profilePicture: String
+  userName: String!
+}
+
+"""
+Representation of the public information of a User ticket
+"""
+type PublicUserTicket {
+  id: ID!
+  ticket: Ticket!
+  userImage: String
+  userName: String
+  userUsername: String
 }
 
 """
@@ -606,6 +723,18 @@ type Query {
   eventImages(input: EventImageSearch!): [SanityAssetRef!]!
 
   """
+  Get a list of user tickets
+  """
+  findUserTickets(
+    input: PaginatedInputFindUserTicketSearchInput!
+  ): PaginatedUserTicket!
+
+  """
+  Get a single waitlist
+  """
+  getWaitlist(ticketId: String!): Waitlist!
+
+  """
   Get the current user
   """
   me: User!
@@ -623,9 +752,26 @@ type Query {
   myTickets(input: PaginatedInputMyTicketsSearchValues!): PaginatedUserTicket!
 
   """
+  Get public event attendance info
+  """
+  publicEventAttendanceInfo(
+    input: PublicEventAttendanceInfo!
+  ): PublicEventAttendance
+
+  """
+  Get a list of user tickets
+  """
+  publicTicketInfo(input: PublicTicketInput!): PublicUserTicket!
+
+  """
   Get a list of salaries associated to the user
   """
   salaries: [Salary!]!
+
+  """
+  Get a schedule by its ID
+  """
+  schedule(scheduleId: String!): Schedule!
 
   """
   Search a consolidated payment logs, by date, aggregated by platform and currency_id
@@ -682,6 +828,10 @@ type Query {
   workRoles: [WorkRole!]!
 }
 
+input RSVPFilterInput {
+  eventIds: [String!]
+}
+
 type RedeemUserTicketError {
   error: Boolean!
   errorMessage: String!
@@ -728,6 +878,19 @@ type SanityAssetRef {
   url: String!
 }
 
+"""
+Representation of a Schedule
+"""
+type Schedule {
+  description: String
+  endTimestamp: DateTime!
+  event: Event!
+  id: ID!
+  sessions: [Session!]!
+  startTimestamp: DateTime!
+  title: String!
+}
+
 input SearchCompaniesInput {
   companyName: String
   description: String
@@ -747,18 +910,26 @@ enum SearchableUserTags {
 }
 
 enum ServiceErrors {
+  ALREADY_EXISTS
+  CONFLICT
+  FAILED_PRECONDITION
+  FORBIDDEN
+  INTERNAL_SERVER_ERROR
+  INVALID_ARGUMENT
+  NOT_FOUND
   UNAUTHENTICATED
+  UNAUTHORIZED
 }
 
 """
 Representation of a Session
 """
-type SessionRef {
+type Session {
   description: String
-  endTimestamp: Date!
+  endTimestamp: DateTime!
   id: ID!
   speakers: [Speaker!]!
-  startTimestamp: Date!
+  startTimestamp: DateTime!
   title: String!
 }
 
@@ -778,9 +949,11 @@ Representation of a Speaker
 type Speaker {
   avatar: String
   bio: String
+  company: String
   id: ID!
   name: String!
-  sessions: [SessionRef!]!
+  rol: String
+  sessions: [Session!]!
   socials: [String!]!
 }
 
@@ -864,6 +1037,7 @@ type Ticket {
   requiresApproval: Boolean!
   startDateTime: DateTime!
   status: TicketTemplateStatus!
+  tags: [String!]!
   visibility: TicketTemplateVisibility!
 }
 
@@ -882,11 +1056,6 @@ input TicketClaimInput {
   If this field is passed, a purchase order payment link will be generated right away
   """
   generatePaymentLink: GeneratePaymentLinkInput
-
-  """
-  A unique key to prevent duplicate requests, it's optional to send, but it's recommended to send it to prevent duplicate requests. If not sent, it will be created by the server.
-  """
-  idempotencyUUIDKey: String
   purchaseOrder: [PurchaseOrderInput!]!
 }
 
@@ -894,17 +1063,21 @@ input TicketCreateInput {
   description: String
   endDateTime: DateTime
   eventId: String!
+  externalLink: String
+  imageLink: String
 
   """
   If the ticket is free, the price submitted will be ignored.
   """
   isFree: Boolean!
+  maxTicketsPerUser: Int
   name: String!
   prices: [PricingInputField!]
   quantity: Int
   requiresApproval: Boolean
   startDateTime: DateTime!
   status: TicketTemplateStatus
+  tags: [String!]
 
   """
   If provided, quantity must not be passed. This is for things like online events where there is no limit to the amount of tickets that can be sold.
@@ -918,7 +1091,7 @@ input TicketEditInput {
   endDateTime: DateTime
   eventId: String
   name: String
-  prices: PricingInputField
+  prices: [PricingInputField!]
   quantity: Int
   requiresApproval: Boolean
   startDateTime: DateTime
@@ -1011,13 +1184,34 @@ type User {
   lastName: String
   name: String
   pronouns: PronounsEnum
+
+  """
+  Get a list of user's RSVPs
+  """
+  rsvps(input: RSVPFilterInput): [UserTicket!]!
   teams: [TeamRef!]!
+  userData: UserData
   username: String!
+}
+
+"""
+Representation of a user's data
+"""
+type UserData {
+  city: String!
+  countryOfResidence: String!
+  emergencyPhoneNumber: String
+  foodAllergies: String
+  organizationName: String
+  roleInOrganization: String
+  rut: String
+  worksInOrganization: Boolean!
 }
 
 input UserSearchValues {
   name: String
   tags: [SearchableUserTags!]
+  userIds: [String!]
   userName: String
 }
 
@@ -1034,9 +1228,11 @@ type UserTicket {
   createdAt: DateTime!
   id: ID!
   paymentStatus: PurchaseOrderPaymentStatusEnum
+  publicId: String!
   purchaseOrder: PurchaseOrder
   redemptionStatus: TicketRedemptionStatus!
   ticketTemplate: Ticket!
+  user: User
 }
 
 """
@@ -1064,6 +1260,24 @@ type ValidatedWorkEmail {
   isValidated: Boolean!
   status: EmailStatus!
   workEmail: String!
+}
+
+"""
+Representation of a waitlist
+"""
+type Waitlist {
+  """
+  The ID of the waitlist. It matches the ID of the underlying ticket
+  """
+  id: ID!
+  myRsvp: UserTicket
+  ticket: Ticket!
+}
+
+enum WaitlistApprovalStatus {
+  approved
+  pending
+  rejected
 }
 
 """
@@ -1101,6 +1315,30 @@ type WorkSeniority {
   description: String
   id: ID!
   name: String!
+}
+
+input placeHolderUsersInput {
+  ciudad: String
+  email: String!
+  emergencyPhoneNumber: String
+  foodAllergies: String
+  name: String!
+  nombreOrganizacion: String
+  pais: String
+  rolEnOrganizacion: String
+  trabajasEnOrganizacion: String
+}
+
+input updateUserDataInput {
+  city: String!
+  countryOfResidence: String!
+  emergencyPhoneNumber: String
+  eventId: String!
+  foodAllergies: String
+  organizationName: String
+  roleInOrganization: String
+  rut: String
+  worksInOrganization: Boolean!
 }
 
 input updateUserRoleInCommunityInput {
