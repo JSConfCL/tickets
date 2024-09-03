@@ -10,7 +10,6 @@ import { Button } from "~/components/ui/button";
 import { Card, CardDescription, CardTitle } from "~/components/ui/card";
 import { Skeleton } from "~/components/ui/skeleton";
 import { formatDate, formatTime } from "~/utils/date";
-import { parseAddress, formatAddress } from "~/utils/event";
 import { pluralize } from "~/utils/string";
 import { urls } from "~/utils/urls";
 
@@ -103,9 +102,7 @@ export const MyTicketsList = ({
                 const parsedDate = new Date(event.startDateTime as string);
                 const formattedTime = formatTime(parsedDate);
                 const formattedDate = formatDate(parsedDate);
-                const formatedAddress = formatAddress(
-                  parseAddress(event.address),
-                );
+                const formatedAddress = event.address;
 
                 return (
                   <div key={event.id} className="basis-full">

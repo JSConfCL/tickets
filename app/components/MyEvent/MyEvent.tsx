@@ -27,7 +27,6 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { formatDate, formatTime } from "~/utils/date";
-import { parseAddress, formatAddress } from "~/utils/event";
 import {
   approvalStatusColor,
   approvalStatusLabel,
@@ -196,7 +195,7 @@ export const MyEvent = ({ id }: { id: string }) => {
   const parsedDate = new Date(event.startDateTime as string);
   const formattedDate = formatDate(parsedDate);
   const formattedTime = formatTime(parsedDate);
-  const formatedAddress = formatAddress(parseAddress(event.address));
+  const formatedAddress = event.address;
 
   // onOpenChange signature is: (open: boolean) => void
   // so, we can't use the setShowTicket directly cuz types inconsitency
