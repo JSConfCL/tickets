@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 
+import { GetEventAndTicketsQuery } from "~/components/TicketsSaleFlow/graphql/getEventAndTickets.generated";
 import {
   Select,
   SelectContent,
@@ -8,8 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { Tabs, TabsContent } from "~/components/ui/tabs";
 import { formatCurrency } from "~/utils/numbers";
+import { cn } from "~/utils/utils";
 
 import { ConfirmationTab } from "./ConfirmationTab";
 import { EventTicketFragmentFragment } from "./graphql/EventTicketFragment.generated";
@@ -18,7 +20,6 @@ import { Currencies, TicketsState } from "./types";
 
 const MIN_NUMBER_OF_TICKETS = 0;
 const MAX_NUMBER_OF_TICKETS = 100;
-const MAX_STEP = 0;
 
 // Stepper
 const steps = [
@@ -39,14 +40,15 @@ const steps = [
 ];
 
 export default function Tickets({
-  tickets,
+  event,
   isActive,
   hasFinished,
 }: {
-  tickets: EventTicketFragmentFragment[];
+  event: NonNullable<GetEventAndTicketsQuery["event"]>;
   isActive: boolean;
   hasFinished: boolean;
 }) {
+  const tickets = event.tickets;
   const [step, setStep] = useState(0);
   const activeStep = steps[step];
 
@@ -205,44 +207,43 @@ export default function Tickets({
       value={steps[step].slug}
       onValueChange={customStep}
     >
-      <div className="flex items-center">
-        <TabsList>
-          {steps.map((step, index) => (
-            <TabsTrigger
-              key={step.id}
-              value={step.slug}
-              disabled={index > MAX_STEP}
-            >
-              {step.shortName}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-        <div className="ml-auto flex items-center gap-2">
-          {Object.values(currencies).length > 1 ? (
-            <div className="flex justify-end">
-              <Select
-                onValueChange={handleChangeCurrency}
-                defaultValue={selectedCurrencyId}
-              >
-                <SelectTrigger className="w-full md:w-[100px]">
-                  <SelectValue placeholder="Selecciona una Moneda" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {Object.values(currencies).map((currency) => (
-                      <SelectItem key={currency.id} value={currency.id}>
-                        {currency.currency}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-          ) : null}
+      <TabsContent value={steps[0].slug} className="flex flex-col gap-4">
+        <div
+          className={cn(
+            "mx-auto h-20 w-full rounded-md bg-primary/10 lg:h-40",
+            event.bannerImage?.url ? "bg-cover bg-center" : "",
+          )}
+          style={
+            event.bannerImage?.url
+              ? { backgroundImage: `url(${event.bannerImage?.url})` }
+              : {}
+          }
+        />
+        <div className="flex items-center">
+          <div className="ml-auto flex items-center gap-2">
+            {Object.values(currencies).length > 1 ? (
+              <div className="flex justify-end">
+                <Select
+                  onValueChange={handleChangeCurrency}
+                  defaultValue={selectedCurrencyId}
+                >
+                  <SelectTrigger className="w-full md:w-[100px]">
+                    <SelectValue placeholder="Selecciona una Moneda" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {Object.values(currencies).map((currency) => (
+                        <SelectItem key={currency.id} value={currency.id}>
+                          {currency.currency}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            ) : null}
+          </div>
         </div>
-      </div>
-
-      <TabsContent value={steps[0].slug}>
         <TicketSelectionTab
           step={step}
           steps={steps}
@@ -256,10 +257,16 @@ export default function Tickets({
           onPlusButtonClick={handleAdd}
           onInputChange={handleChange}
           isActive={isActive}
+          getFormmatedTicketPrice={getFormmatedTicketPrice}
           hasFinished={hasFinished}
         />
       </TabsContent>
-      <TabsContent value={steps[1].slug}>
+      <TabsContent value={steps[1].slug} className="flex flex-col gap-4">
+        <img
+          className="mx-auto w-60"
+          src={event.logoImage?.url}
+          alt={event.name}
+        />
         <ConfirmationTab
           step={step}
           steps={steps}

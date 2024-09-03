@@ -24,6 +24,9 @@ export type GetEventAndTicketsQuery = {
     startDateTime: any;
     endDateTime?: any | null;
     status: Types.EventStatus;
+    logoImage?: { __typename?: "Image"; url: string } | null;
+    bannerImage?: { __typename?: "Image"; url: string } | null;
+    mobileBannerImage?: { __typename?: "Image"; url: string } | null;
     community?: { __typename?: "Community"; name?: string | null } | null;
     users: Array<{ __typename?: "User"; id: string; name?: string | null }>;
     tickets: Array<{
@@ -60,6 +63,15 @@ export const GetEventAndTicketsDocument = gql`
       startDateTime
       endDateTime
       status
+      logoImage {
+        url
+      }
+      bannerImage {
+        url
+      }
+      mobileBannerImage {
+        url
+      }
       community {
         name
       }
