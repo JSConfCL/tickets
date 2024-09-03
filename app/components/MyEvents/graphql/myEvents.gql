@@ -9,7 +9,9 @@ query myEvents(
       description
       startDateTime
       address
-      bannerImageSanityRef
+      previewImage {
+        url
+      }
       community {
         id
         name

@@ -1,37 +1,20 @@
-import { Calendar, EllipsisVertical, ExternalLink, MapPin } from "lucide-react";
+import {
+  Calendar,
+  DownloadIcon,
+  ExternalLink,
+  MapPin,
+  Mail,
+  EyeIcon,
+  EyeOffIcon,
+} from "lucide-react";
 import { useState } from "react";
 import QRCode from "react-qr-code";
 
 import { Badge } from "~/components/ui/badge";
-import { Button, buttonVariants } from "~/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogClose,
-} from "~/components/ui/dialog";
-import { Skeleton } from "~/components/ui/skeleton";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "~/components/ui/table";
+import { Button } from "~/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { formatDate, formatTime } from "~/utils/date";
 import {
-  approvalStatusColor,
-  approvalStatusLabel,
-  paymentStatusLabel,
-  paymentStatusColor,
   redemptionStatusLabel,
   redemptionStatusColor,
   idReference as ticketIdReference,
@@ -46,136 +29,116 @@ import { Separator } from "../ui/separator";
 
 type Event = MyEventQuery["searchEvents"]["data"][0];
 
-const MyTicketDetails = ({
+const Ticket = ({
   event,
-  ticketId,
-  onChange,
+  ticket,
 }: {
   event: Event;
-  ticketId: string | null;
-  onChange: (open: boolean) => void;
+  ticket: Event["usersTickets"]["0"];
 }) => {
-  if (!ticketId) {
-    return null;
-  }
-
-  const ticket = event.usersTickets.find((ticket) => ticket.id === ticketId);
-
-  if (!ticket) {
-    return null;
-  }
+  const [showQR, setShowQR] = useState(false);
 
   return (
-    <Dialog open={!!ticketId} onOpenChange={onChange}>
-      <DialogContent className="block h-full md:h-auto md:max-h-[90vh]">
-        <div className="flex h-full flex-col gap-4 md:max-h-[90vh]">
-          <div className="min-h-0 flex-1 overflow-y-auto md:max-h-[90vh]">
-            <div className="mt-4 w-full">
-              <QRCode className="mx-auto" value={ticket.id} />
-            </div>
-            <div className="p-6 text-sm">
-              <div className="grid gap-3">
-                <div className="font-semibold">
-                  ID Ref: {ticketIdReference(ticket.id)}
-                </div>
-                <div className="font-semibold">Evento</div>
-                <ul className="grid gap-3">
-                  <li className="flex items-center justify-between">
-                    <span className="text-muted-foreground">Nombre</span>
-                    <span>{event.name}</span>
-                  </li>
-                  {event.startDateTime ? (
-                    <li className="flex items-center justify-between">
-                      <span className="text-muted-foreground">
-                        Fecha {event.endDateTime ? "de inicio" : ""}
-                      </span>
-                      <span>{formatDate(event.startDateTime as string)}</span>
-                    </li>
-                  ) : null}
-                  {event.endDateTime ? (
-                    <li className="flex items-center justify-between">
-                      <span className="text-muted-foreground">
-                        Fecha de fin
-                      </span>
-                      <span>{formatDate(event.endDateTime as string)}</span>
-                    </li>
-                  ) : null}
-                </ul>
-              </div>
-              <Separator className="my-4" />
-              <div className="grid gap-3">
-                <div className="font-semibold">Ticket</div>
-                <dl className="grid gap-3">
-                  <div className="flex items-center justify-between">
-                    <dt className="text-muted-foreground">Tipo</dt>
-                    <dd>{ticket.ticketTemplate.name}</dd>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <dt className="text-muted-foreground">approvalStatus</dt>
-                    <dd>
-                      {" "}
-                      <Badge className="gap-2" variant="outline">
-                        <span
-                          className={cn(
-                            "flex h-2 w-2 rounded-full",
-                            approvalStatusColor(ticket.approvalStatus),
-                          )}
-                        />
-                        {approvalStatusLabel(ticket.approvalStatus)}
-                      </Badge>
-                    </dd>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <dt className="text-muted-foreground">paymentStatus</dt>
-                    <dd>
-                      {ticket.paymentStatus && (
-                        <Badge className="gap-2" variant="outline">
-                          <span
-                            className={cn(
-                              "flex h-2 w-2 rounded-full",
-                              paymentStatusColor(ticket.paymentStatus),
-                            )}
-                          />
-                          {paymentStatusLabel(ticket.paymentStatus)}
-                        </Badge>
-                      )}
-                    </dd>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <dt className="text-muted-foreground">redemptionStatus</dt>
-                    <dd>
-                      <Badge className="gap-2" variant="outline">
-                        <span
-                          className={cn(
-                            "flex h-2 w-2 rounded-full",
-                            redemptionStatusColor(ticket.redemptionStatus),
-                          )}
-                        />
-                        {redemptionStatusLabel(ticket.redemptionStatus)}
-                      </Badge>
-                    </dd>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <dt className="text-muted-foreground">Fecha de Compra</dt>
-                    <dd>{formatDate(ticket.createdAt as string)}</dd>
-                  </div>
-                </dl>
-              </div>
-              <Separator className="my-4" />
-            </div>
-            <DialogFooter>
-              <DialogClose className={buttonVariants({ variant: "default" })}>
-                Cerrar
-              </DialogClose>
-            </DialogFooter>
-          </div>
+    <Card className="h-full bg-white p-6 text-black">
+      <div className="relative mt-4 w-full max-w-[90%] text-right">
+        <div className={cn(showQR ? "" : "blur-lg")}>
+          <QRCode className="mx-auto" value={ticket.id} />
         </div>
-      </DialogContent>
-    </Dialog>
+        <Button
+          className="mt-4"
+          onClick={() => {
+            setShowQR((show) => !show);
+          }}
+        >
+          {showQR ? (
+            <>
+              <EyeIcon className="size-4" /> Ver QR
+            </>
+          ) : (
+            <>
+              <EyeOffIcon className="size-4" /> Ocultar QR
+            </>
+          )}
+        </Button>
+      </div>
+      <CardTitle className="my-6 text-center">
+        ID Ref: {ticketIdReference(ticket.id)}
+      </CardTitle>
+      <CardContent className="text-sm">
+        <div className="grid gap-3">
+          <ul className="grid gap-3">
+            <li className="flex items-center justify-between">
+              <span className="font-semibold">Evento</span>
+              <span>{event.name}</span>
+            </li>
+          </ul>
+          <Separator className="my-2" />
+          <ul className="grid gap-3">
+            <li className="flex items-center justify-between">
+              <span className="font-semibold">Fecha de inicio</span>
+              <span>{formatDate(event.startDateTime as string)}</span>
+            </li>
+            {event.endDateTime ? (
+              <li className="flex items-center justify-between">
+                <span className="font-semibold">Fecha de fin</span>
+                <span>{formatDate(event.endDateTime as string)}</span>
+              </li>
+            ) : null}
+          </ul>
+          <Separator className="my-2" />
+          <ul className="grid gap-3">
+            <li className="flex items-center justify-between">
+              <span className="font-semibold">Tipo de Ticket</span>
+              <span>{ticket.ticketTemplate.name}</span>
+            </li>
+            <li className="flex items-center justify-between">
+              <span className="font-semibold">Estado</span>
+              <span>
+                <Badge className="gap-2 text-black" variant="outline">
+                  <span
+                    className={cn(
+                      "flex h-2 w-2 rounded-full",
+                      redemptionStatusColor(ticket.redemptionStatus),
+                    )}
+                  />
+                  {redemptionStatusLabel(ticket.redemptionStatus)}
+                </Badge>
+              </span>
+            </li>
+            <li className="flex items-center justify-between">
+              <span className="font-semibold">Fecha de Compra</span>
+              <span>{formatDate(ticket.createdAt as string)}</span>
+            </li>
+          </ul>
+        </div>
+        <div className="mt-4 flex flex-col gap-2 md:flex-row">
+          <Button
+            className="flex grow flex-row gap-2 bg-white text-black"
+            variant="outline"
+            onClick={() => {
+              // setSelectedTicket(ticket.id);
+            }}
+          >
+            <DownloadIcon className="size-4" /> Descargar
+          </Button>
+          <Button
+            className="flex grow flex-row gap-2 bg-white text-black"
+            variant="outline"
+            onClick={() => {
+              // setSelectedTicket(ticket.id);
+            }}
+          >
+            <Mail className="size-4" /> Enviar por email
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
+
 export const MyEvent = ({ id }: { id: string }) => {
-  const [selectedTicket, setSelectedTicket] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_selectedTicket, setSelectedTicket] = useState<string | null>(null);
   const { data } = useMyEventSuspenseQuery({
     variables: {
       input: {
@@ -199,6 +162,7 @@ export const MyEvent = ({ id }: { id: string }) => {
 
   // onOpenChange signature is: (open: boolean) => void
   // so, we can't use the setShowTicket directly cuz types inconsitency
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleChange = (open: boolean) => {
     if (!open) {
       setSelectedTicket(null);
@@ -223,7 +187,7 @@ export const MyEvent = ({ id }: { id: string }) => {
                 />
               ) : (
                 <>
-                  <Skeleton className="mx-auto mb-4 h-40 w-full rounded-md lg:h-96" />
+                  <div className="mx-auto mb-4 h-40 w-full rounded-md bg-primary/10 lg:h-96" />
                   <span className="sr-only">Imagen del evento</span>
                 </>
               )}
@@ -255,107 +219,11 @@ export const MyEvent = ({ id }: { id: string }) => {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="px-7">
-              <CardTitle className="text-2xl">Tickets</CardTitle>
-              <CardDescription>
-                Revisa tus tickets disponibles para este evento.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Id</TableHead>
-                    <TableHead className="hidden md:table-cell">
-                      Evento
-                    </TableHead>
-                    <TableHead>Tipo de Ticket</TableHead>
-                    <TableHead className="hidden md:table-cell">
-                      approvalStatus
-                    </TableHead>
-                    <TableHead className="hidden md:table-cell">
-                      paymentStatusColor
-                    </TableHead>
-                    <TableHead className="hidden md:table-cell">
-                      redemptionStatusColor
-                    </TableHead>
-                    <TableHead className="hidden md:table-cell">
-                      Comprado
-                    </TableHead>
-                    <TableHead className="text-right"></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {tickets.map((ticket) => (
-                    <TableRow key={ticket.id}>
-                      <TableCell>{ticketIdReference(ticket.id)}</TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {event.name}
-                      </TableCell>
-                      <TableCell>{ticket.ticketTemplate.name}</TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        <Badge className="gap-2" variant="outline">
-                          <span
-                            className={cn(
-                              "flex h-2 w-2 rounded-full",
-                              approvalStatusColor(ticket.approvalStatus),
-                            )}
-                          />
-                          {approvalStatusLabel(ticket.approvalStatus)}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {ticket.paymentStatus && (
-                          <Badge className="gap-2" variant="outline">
-                            <span
-                              className={cn(
-                                "flex h-2 w-2 rounded-full",
-                                paymentStatusColor(ticket.paymentStatus),
-                              )}
-                            />
-                            {paymentStatusLabel(ticket.paymentStatus)}
-                          </Badge>
-                        )}
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        <Badge className="gap-2" variant="outline">
-                          <span
-                            className={cn(
-                              "flex h-2 w-2 rounded-full",
-                              redemptionStatusColor(ticket.redemptionStatus),
-                            )}
-                          />
-                          {redemptionStatusLabel(ticket.redemptionStatus)}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {formatDate(ticket.createdAt as string)}
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="ghost"
-                          onClick={() => {
-                            setSelectedTicket(ticket.id);
-                          }}
-                        >
-                          <EllipsisVertical className="size-4" />
-                          <span className="sr-only">
-                            Ver detalles del Ticket
-                          </span>
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              <MyTicketDetails
-                event={event}
-                ticketId={selectedTicket}
-                onChange={handleChange}
-              />
-            </CardContent>
-          </Card>
+          <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-4 md:grid-cols-3">
+            {tickets.map((ticket) => (
+              <Ticket key={ticket.id} event={event} ticket={ticket} />
+            ))}
+          </div>
         </div>
       ) : null}
     </div>
