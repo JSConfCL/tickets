@@ -16,6 +16,7 @@ import "@fontsource/poppins/300.css";
 import "@fontsource/poppins/400.css";
 
 import { ApolloWrapper } from "~/api/ApolloWrapper";
+import { Footer } from "~/components/Footer";
 import { Navbar } from "~/components/Navbar";
 import { Toaster } from "~/components/ui/sonner";
 import { getDefaultThemeKey } from "~/rootHelpers";
@@ -63,10 +64,12 @@ export default function App() {
             animate="animate"
             exit="exit"
             transition={transition}
+            className="flex min-h-[calc(100dvh-20rem)] flex-row md:min-h-[calc(100dvh-10.5rem)]"
           >
             <Outlet />
           </motion.div>
         </AnimatePresence>
+        <Footer />
         <Toaster />
       </ApolloWrapper>
     </AuthProvider>
