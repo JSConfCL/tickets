@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react";
-import { LogOut, PackageOpen, UserIcon, VenetianMaskIcon } from "lucide-react";
+import { LogOut, Tickets, UserIcon, VenetianMaskIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { ImpersonationModal } from "~/components/Navbar/Impersonation";
@@ -113,7 +113,7 @@ export const Navbar = () => {
         <div className="container flex h-14 items-center">
           <Link to="/">
             <div className="px-0">
-              <PackageOpen className="size-5" />
+              <Tickets className="size-5" />
               <span className="sr-only">Devent</span>
             </div>
           </Link>
