@@ -11,6 +11,10 @@ import { es } from "date-fns/locale";
 import "./tailwind.css";
 import { AnimatePresence, motion } from "framer-motion";
 
+import "cal-sans";
+import "@fontsource/poppins/300.css";
+import "@fontsource/poppins/400.css";
+
 import { ApolloWrapper } from "~/api/ApolloWrapper";
 import { Navbar } from "~/components/Navbar";
 import { Toaster } from "~/components/ui/sonner";
@@ -21,7 +25,10 @@ setDefaultOptions({ locale: es });
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`h-dvh bg-slate-100 dark:bg-slate-950`}>
+    <html
+      lang="en"
+      className={`h-dvh bg-slate-100 font-poppins dark:bg-slate-950`}
+    >
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
