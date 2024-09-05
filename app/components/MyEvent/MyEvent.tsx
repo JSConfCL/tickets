@@ -1,8 +1,10 @@
 import {
   Calendar,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   DownloadIcon,
   ExternalLink,
   MapPin,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Mail,
   EyeIcon,
   EyeOffIcon,
@@ -11,21 +13,22 @@ import { useState } from "react";
 import QRCode from "react-qr-code";
 
 import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { Button, buttonVariants } from "~/components/ui/button";
+import { Card, CardContent, CardTitle } from "~/components/ui/card";
+import { Separator } from "~/components/ui/separator";
 import { formatDate, formatTime } from "~/utils/date";
 import {
   redemptionStatusLabel,
   redemptionStatusColor,
   idReference as ticketIdReference,
 } from "~/utils/ticket";
+import { urls } from "~/utils/urls";
 import { cn } from "~/utils/utils";
 
 import {
   MyEventQuery,
   useMyEventSuspenseQuery,
 } from "./graphql/myEvent.generated";
-import { Separator } from "../ui/separator";
 
 type Event = MyEventQuery["searchEvents"]["data"][0];
 
@@ -37,26 +40,29 @@ const Ticket = ({
   ticket: Event["usersTickets"]["0"];
 }) => {
   const [showQR, setShowQR] = useState(false);
+  const publicUrl = event?.publicShareURL
+    ? urls.public.ticket(ticket.id, event.publicShareURL)
+    : undefined;
 
   return (
     <Card className="h-full bg-white p-6 text-black">
-      <div className="relative mt-4 w-full max-w-[90%] text-right">
+      <div className="relative mx-auto mt-4 w-full max-w-[90%] text-center">
         <div className={cn(showQR ? "" : "blur-lg")}>
           <QRCode className="mx-auto" value={ticket.id} />
         </div>
         <Button
-          className="mt-4"
+          className="mt-8"
           onClick={() => {
             setShowQR((show) => !show);
           }}
         >
           {showQR ? (
             <>
-              <EyeIcon className="size-4" /> Ver QR
+              <EyeIcon className="size-4" /> Ocultar QR
             </>
           ) : (
             <>
-              <EyeOffIcon className="size-4" /> Ocultar QR
+              <EyeOffIcon className="size-4" /> Ver QR
             </>
           )}
         </Button>
@@ -112,24 +118,35 @@ const Ticket = ({
           </ul>
         </div>
         <div className="mt-4 flex flex-col gap-2 md:flex-row">
+          {publicUrl ? (
+            <a
+              href={publicUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                "flex grow flex-row gap-2 bg-white text-black",
+              )}
+            >
+              Ver y Compartir <ExternalLink className="size-4" />
+            </a>
+          ) : null}
+          {/* 
           <Button
             className="flex grow flex-row gap-2 bg-white text-black"
             variant="outline"
-            onClick={() => {
-              // setSelectedTicket(ticket.id);
-            }}
+            onClick={() => {}}
           >
             <DownloadIcon className="size-4" /> Descargar
-          </Button>
+          </Button>          
           <Button
             className="flex grow flex-row gap-2 bg-white text-black"
             variant="outline"
-            onClick={() => {
-              // setSelectedTicket(ticket.id);
-            }}
+            onClick={() => {}}
           >
             <Mail className="size-4" /> Enviar por email
           </Button>
+           */}
         </div>
       </CardContent>
     </Card>
@@ -137,8 +154,6 @@ const Ticket = ({
 };
 
 export const MyEvent = ({ id }: { id: string }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_selectedTicket, setSelectedTicket] = useState<string | null>(null);
   const { data } = useMyEventSuspenseQuery({
     variables: {
       input: {
@@ -160,66 +175,52 @@ export const MyEvent = ({ id }: { id: string }) => {
   const formattedTime = formatTime(parsedDate);
   const formatedAddress = event.address;
 
-  // onOpenChange signature is: (open: boolean) => void
-  // so, we can't use the setShowTicket directly cuz types inconsitency
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleChange = (open: boolean) => {
-    if (!open) {
-      setSelectedTicket(null);
-    }
-  };
-
   return (
     <div className="flex flex-col gap-12">
       {!event ? (
-        <div className="text-center text-gray-400">No hay eventos</div>
+        <div className="text-center text-gray-400">
+          El evento que buscas no existe
+        </div>
       ) : null}
 
       {event ? (
-        <div className="flex basis-8/12 flex-col gap-4">
-          <Card>
-            <CardHeader className="px-7">
-              {event.bannerImageSanityRef ? (
-                <img
-                  className="mx-auto mb-4 h-40 rounded-md lg:h-96"
-                  src={event.bannerImageSanityRef}
-                  alt="Imagen representativa del evento"
-                />
-              ) : (
-                <>
-                  <div className="mx-auto mb-4 h-40 w-full rounded-md bg-primary/10 lg:h-96" />
-                  <span className="sr-only">Imagen del evento</span>
-                </>
+        <div className="flex w-full flex-col gap-4">
+          <div className="flex basis-4/12 flex-col gap-2">
+            <div
+              className={cn(
+                "mx-auto h-20 w-full rounded-md bg-primary/10 lg:h-40",
+                event.bannerImage?.url ? "bg-cover bg-center" : "",
               )}
-              <CardTitle className="text-2xl font-bold">{event.name}</CardTitle>
-              <div>{event.description}</div>
-            </CardHeader>
-            <CardContent>
-              <div className="flex basis-4/12 flex-col gap-2">
-                <div className="flex flex-row items-center gap-1 text-muted-foreground">
-                  <Calendar className="size-4" />
-                  {[formattedDate, formattedTime].filter(Boolean).join(" - ")}
-                </div>
-                {formatedAddress ? (
-                  <a
-                    href={encodeURI(
-                      `https://www.google.com/maps/search/${formatedAddress}?source=opensearch`,
-                    )}
-                    target="_blank"
-                    className="flex flex-row items-center gap-1 text-muted-foreground"
-                    rel="noreferrer"
-                  >
-                    <MapPin className="size-4" />
-                    {formatedAddress}
-                    <ExternalLink className="size-4" />
-                    <span className="sr-only">Ver en Google Maps</span>
-                  </a>
-                ) : null}
-              </div>
-            </CardContent>
-          </Card>
-
-          <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-4 md:grid-cols-3">
+              style={
+                event.bannerImage?.url
+                  ? { backgroundImage: `url(${event.bannerImage?.url})` }
+                  : {}
+              }
+            />
+            <h2 className="font-cal text-2xl">{event.name}</h2>
+            <p className="text-sm text-muted-foreground">{event.description}</p>
+            <div className="flex flex-row items-center gap-1 text-sm">
+              <Calendar className="size-4" />
+              {[formattedDate, formattedTime].filter(Boolean).join(" - ")}
+            </div>
+            {formatedAddress ? (
+              <a
+                href={encodeURI(
+                  `https://www.google.com/maps/search/${formatedAddress}?source=opensearch`,
+                )}
+                target="_blank"
+                className="flex flex-row items-center gap-1 text-sm"
+                rel="noreferrer"
+              >
+                <MapPin className="size-4" />
+                {formatedAddress}
+                <ExternalLink className="size-4" />
+                <span className="sr-only">Ver en Google Maps</span>
+              </a>
+            ) : null}
+          </div>
+          <Separator className="my-2" />
+          <div className="mx-auto grid w-full grid-cols-1 gap-4 md:grid-cols-3">
             {tickets.map((ticket) => (
               <Ticket key={ticket.id} event={event} ticket={ticket} />
             ))}

@@ -10,7 +10,16 @@ query myEvent(
       startDateTime
       endDateTime
       address
-      bannerImageSanityRef
+      publicShareURL
+      previewImage {
+        url
+      }
+      bannerImage {
+        url
+      }
+      mobileBannerImage {
+        url
+      }
       community {
         id
         name
