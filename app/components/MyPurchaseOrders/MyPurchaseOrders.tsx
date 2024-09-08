@@ -40,13 +40,18 @@ export const MyPurchaseOrders = () => {
   });
 
   const purchaseOrders = data?.myPurchaseOrders?.data ?? [];
+  const showedPurchasedOrders = purchaseOrders.filter(
+    (purchaseOrder) => purchaseOrder.tickets.length,
+  );
 
   return (
     <div className="flex flex-col gap-12">
-      {!purchaseOrders?.length && (
-        <div className="text-center text-gray-400">No hay eventos</div>
+      {!showedPurchasedOrders?.length && (
+        <div className="text-center text-gray-400">
+          No hay Ordenes de Compra
+        </div>
       )}
-      {purchaseOrders.length ? (
+      {showedPurchasedOrders.length ? (
         <Card>
           <CardHeader className="px-7">
             <CardTitle className="text-2xl">Ordenes de Compra</CardTitle>
@@ -69,8 +74,13 @@ export const MyPurchaseOrders = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {purchaseOrders.map((purchaseOrder) => {
-                  const event = purchaseOrder.tickets[0].ticketTemplate.event;
+                {showedPurchasedOrders.map((purchaseOrder) => {
+                  const event =
+                    purchaseOrder?.tickets[0]?.ticketTemplate?.event;
+
+                  if (!event) {
+                    return;
+                  }
 
                   return (
                     <TableRow key={purchaseOrder.id}>
@@ -99,7 +109,7 @@ export const MyPurchaseOrders = () => {
                           to={urls.myEvents.details(event.id)}
                           className={cn(
                             buttonVariants({ variant: "link" }),
-                            "m-0 flex flex-row justify-start gap-1 p-0",
+                            "m-0 flex h-full flex-row justify-start gap-1 p-0",
                           )}
                         >
                           <div>
@@ -124,10 +134,12 @@ export const MyPurchaseOrders = () => {
                         {formatDate(purchaseOrder.createdAt as string)}
                       </TableCell>
                       <TableCell className="text-right">
-                        {formatCurrency(
-                          purchaseOrder.finalPrice as number,
-                          purchaseOrder.currency?.currency,
-                        )}
+                        {purchaseOrder.finalPrice
+                          ? formatCurrency(
+                              purchaseOrder.finalPrice,
+                              purchaseOrder.currency?.currency,
+                            )
+                          : "Gratis"}
                       </TableCell>
                     </TableRow>
                   );
