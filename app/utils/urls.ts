@@ -11,10 +11,8 @@ export const urls = {
     root: `/my-events`,
     details: (id: string) => `/my-events/${id}`,
   },
-  ordenes: {
-    root: "/ordenes",
-    orden: (id: string) => `/ordenes/${id}`,
-    tickets: (id: string) => `/ordenes/${id}/tickets`,
+  myOrders: {
+    root: "/my-orders",
   },
   comunidades: "/comunidades",
   tickets: {

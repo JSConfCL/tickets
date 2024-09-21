@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent } from "~/components/ui/card";
 import { Skeleton } from "~/components/ui/skeleton";
 import {
   Table,
@@ -19,12 +13,11 @@ export const MyPurchaseOrdersLoadingSkeleton = () => {
   const purchaseOrders = Array.from({ length: 5 }).map((_, index) => index);
 
   return (
-    <div className="flex flex-col gap-12">
+    <div className="flex flex-col gap-10">
+      <div className="flex w-full items-center justify-between">
+        <h1 className="font-cal text-3xl">Ordenes de Compra</h1>
+      </div>
       <Card>
-        <CardHeader className="px-7">
-          <CardTitle className="text-2xl">Ordenes de Compra</CardTitle>
-          <CardDescription>Revisa todas tus ordenes de compra.</CardDescription>
-        </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
