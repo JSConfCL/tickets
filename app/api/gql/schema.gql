@@ -161,6 +161,7 @@ type Event {
   mobileBannerImage: Image
   name: String!
   previewImage: Image
+  publicShareURL: String
   schedules: [Schedule!]!
   speakers: [Speaker!]!
   startDateTime: DateTime!

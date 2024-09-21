@@ -172,6 +172,7 @@ export type Event = {
   mobileBannerImage?: Maybe<Image>;
   name: Scalars["String"]["output"];
   previewImage?: Maybe<Image>;
+  publicShareURL?: Maybe<Scalars["String"]["output"]>;
   schedules: Array<Schedule>;
   speakers: Array<Speaker>;
   startDateTime: Scalars["DateTime"]["output"];
@@ -1363,8 +1364,11 @@ export type MyEventQuery = {
       startDateTime: string;
       endDateTime?: string | null;
       address?: string | null;
-      bannerImageSanityRef?: string | null;
+      publicShareURL?: string | null;
       status: EventStatus;
+      previewImage?: { url: string } | null;
+      bannerImage?: { url: string } | null;
+      mobileBannerImage?: { url: string } | null;
       community?: { id: string; name?: string | null } | null;
       usersTickets: Array<{
         id: string;
@@ -1401,8 +1405,8 @@ export type MyEventsQuery = {
       description?: string | null;
       startDateTime: string;
       address?: string | null;
-      bannerImageSanityRef?: string | null;
       status: EventStatus;
+      previewImage?: { url: string } | null;
       community?: { id: string; name?: string | null } | null;
       usersTickets: Array<{
         id: string;
@@ -1515,7 +1519,8 @@ export type CheckPurchaseOrderStatusMutation = {
           startDateTime: string;
           endDateTime?: string | null;
           status: EventStatus;
-          bannerImageSanityRef?: string | null;
+          publicShareURL?: string | null;
+          logoImage?: { url: string } | null;
           community?: { name?: string | null } | null;
         };
         prices?: Array<{
@@ -1527,6 +1532,22 @@ export type CheckPurchaseOrderStatusMutation = {
     }>;
   };
 };
+
+export type EventTicketFragmentFragment = {
+  id: string;
+  name: string;
+  description?: string | null;
+  quantity?: number | null;
+  isFree: boolean;
+  startDateTime: string;
+  status: TicketTemplateStatus;
+  isUnlimited: boolean;
+  prices?: Array<{
+    id: string;
+    amount: number;
+    currency: { currency: string; id: string };
+  }> | null;
+} & { " $fragmentName"?: "EventTicketFragmentFragment" };
 
 export type CreatePurchaseOrderMutationVariables = Exact<{
   input: TicketClaimInput;
@@ -1555,22 +1576,6 @@ export type CreatePurchaseOrderMutation = {
       };
 };
 
-export type EventTicketFragmentFragment = {
-  id: string;
-  name: string;
-  description?: string | null;
-  quantity?: number | null;
-  isFree: boolean;
-  startDateTime: string;
-  status: TicketTemplateStatus;
-  isUnlimited: boolean;
-  prices?: Array<{
-    id: string;
-    amount: number;
-    currency: { currency: string; id: string };
-  }> | null;
-} & { " $fragmentName"?: "EventTicketFragmentFragment" };
-
 export type GetEventAndTicketsQueryVariables = Exact<{
   input: Scalars["String"]["input"];
 }>;
@@ -1584,6 +1589,9 @@ export type GetEventAndTicketsQuery = {
     startDateTime: string;
     endDateTime?: string | null;
     status: EventStatus;
+    logoImage?: { url: string } | null;
+    bannerImage?: { url: string } | null;
+    mobileBannerImage?: { url: string } | null;
     community?: { name?: string | null } | null;
     users: Array<{ id: string; name?: string | null }>;
     tickets: Array<{
@@ -1829,7 +1837,46 @@ export const MyEventDocument = {
                       },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "bannerImageSanityRef" },
+                        name: { kind: "Name", value: "publicShareURL" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "previewImage" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "url" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "bannerImage" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "url" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "mobileBannerImage" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "url" },
+                            },
+                          ],
+                        },
                       },
                       {
                         kind: "Field",
@@ -2029,7 +2076,16 @@ export const MyEventsDocument = {
                       },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "bannerImageSanityRef" },
+                        name: { kind: "Name", value: "previewImage" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "url" },
+                            },
+                          ],
+                        },
                       },
                       {
                         kind: "Field",
@@ -2593,7 +2649,20 @@ export const CheckPurchaseOrderStatusDocument = {
                                     kind: "Field",
                                     name: {
                                       kind: "Name",
-                                      value: "bannerImageSanityRef",
+                                      value: "publicShareURL",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "logoImage" },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "url" },
+                                        },
+                                      ],
                                     },
                                   },
                                   {
@@ -2860,6 +2929,36 @@ export const GetEventAndTicketsDocument = {
                 },
                 { kind: "Field", name: { kind: "Name", value: "endDateTime" } },
                 { kind: "Field", name: { kind: "Name", value: "status" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "logoImage" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "url" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "bannerImage" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "url" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "mobileBannerImage" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "url" } },
+                    ],
+                  },
+                },
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "community" },
