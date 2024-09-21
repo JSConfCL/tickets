@@ -48,7 +48,7 @@ export const MobileNavbarItem = ({
   if (item.children) {
     return (
       <>
-        <h4 className="font-medium text-muted-foreground">{item.content}</h4>
+        <h4 className="font-bold text-primary">{item.content}</h4>
         {item.children
           .filter((children) => children.content !== "separator")
           .map(mobileItemMapper)}
