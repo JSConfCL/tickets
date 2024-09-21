@@ -1491,11 +1491,39 @@ export type CheckPurchaseOrderStatusMutationVariables = Exact<{
 
 export type CheckPurchaseOrderStatusMutation = {
   checkPurchaseOrderStatus: {
+    id: string;
+    paymentLink?: string | null;
     status?: PurchaseOrderStatusEnum | null;
+    finalPrice?: number | null;
+    paymentPlatform?: string | null;
+    createdAt?: string | null;
+    currency?: { id: string; currency: string } | null;
     tickets: Array<{
+      id: string;
       approvalStatus: TicketApprovalStatus;
       paymentStatus?: PurchaseOrderPaymentStatusEnum | null;
       redemptionStatus: TicketRedemptionStatus;
+      ticketTemplate: {
+        id: string;
+        name: string;
+        description?: string | null;
+        event: {
+          id: string;
+          name: string;
+          address?: string | null;
+          description?: string | null;
+          startDateTime: string;
+          endDateTime?: string | null;
+          status: EventStatus;
+          bannerImageSanityRef?: string | null;
+          community?: { name?: string | null } | null;
+        };
+        prices?: Array<{
+          id: string;
+          amount: number;
+          currency: { currency: string; id: string };
+        }> | null;
+      };
     }>;
   };
 };
@@ -2458,13 +2486,36 @@ export const CheckPurchaseOrderStatusDocument = {
             selectionSet: {
               kind: "SelectionSet",
               selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "paymentLink" } },
                 { kind: "Field", name: { kind: "Name", value: "status" } },
+                { kind: "Field", name: { kind: "Name", value: "finalPrice" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "paymentPlatform" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "currency" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "currency" },
+                      },
+                    ],
+                  },
+                },
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "tickets" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "approvalStatus" },
@@ -2476,6 +2527,130 @@ export const CheckPurchaseOrderStatusDocument = {
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "redemptionStatus" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "ticketTemplate" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "description" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "event" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "address" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "description",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "startDateTime",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "endDateTime",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "status" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "bannerImageSanityRef",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "community" },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "name" },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "prices" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "amount" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "currency" },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "currency",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "id" },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
                       },
                     ],
                   },

@@ -13,11 +13,18 @@ export const urls = {
   },
   myOrders: {
     root: "/my-orders",
+    callback: "/my-orders/callback",
   },
   comunidades: "/comunidades",
   tickets: {
     root: "/tickets",
     ticket: (ticketId: string) => `/ticket/:${ticketId}`,
+  },
+  public: {
+    po: (purchaseOrderId: string, eventUrl = "/public") =>
+      `${eventUrl}/po/${purchaseOrderId}`,
+    ticket: (ticketId: string, eventUrl = "/public") =>
+      `${eventUrl}/ticket/${ticketId}`,
   },
   login: "/login",
 };
