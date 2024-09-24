@@ -13,7 +13,7 @@ export default function Layout() {
   return (
     <div className={cx(sharedLayoutStyle, "flex flex-col gap-10")}>
       <div className="flex w-full items-center justify-between">
-        <h1 className="text-3xl">Eventos</h1>
+        <h1 className="font-cal text-3xl">Mis Eventos</h1>
         <div>
           <Tabs
             defaultValue="future"
@@ -28,8 +28,12 @@ export default function Layout() {
         </div>
       </div>
       <Suspense fallback={<MyTicketsLoadingSkeleton />}>
-        {tab === "future" && <MyTicketsList startDateTimeFrom={now} />}
-        {tab === "past" && <MyTicketsList startDateTimeTo={now} />}
+        {tab === "future" && (
+          <MyTicketsList key="future" startDateTimeFrom={now} order="ASC" />
+        )}
+        {tab === "past" && (
+          <MyTicketsList key="past" startDateTimeTo={now} order="DESC" />
+        )}
       </Suspense>
     </div>
   );

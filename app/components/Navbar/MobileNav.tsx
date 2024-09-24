@@ -1,4 +1,4 @@
-import { Menu, PackageOpen } from "lucide-react";
+import { Menu, Tickets } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "~/components/ui/button";
@@ -28,9 +28,9 @@ export function MobileNav({ items }: NavBarProps) {
       </SheetTrigger>
       <SheetContent side="left" className="pr-0">
         <MobileLink href="/" className="flex items-center" onClick={closeNav}>
-          <PackageOpen className="size-5" />
+          <Tickets className="size-5" />
         </MobileLink>
-        <ScrollArea className="my-4 h-[calc(100vh-8rem)] px-6 pb-10">
+        <ScrollArea className="my-4 h-[calc(100vh-8rem)] px-0 pb-10">
           <div className="flex flex-col space-y-2">
             <div className="flex flex-col space-y-3 pt-6">
               {items

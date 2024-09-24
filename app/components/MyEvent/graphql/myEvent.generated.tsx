@@ -25,8 +25,11 @@ export type MyEventQuery = {
       startDateTime: any;
       endDateTime?: any | null;
       address?: string | null;
-      bannerImageSanityRef?: string | null;
+      publicShareURL?: string | null;
       status: Types.EventStatus;
+      previewImage?: { __typename?: "Image"; url: string } | null;
+      bannerImage?: { __typename?: "Image"; url: string } | null;
+      mobileBannerImage?: { __typename?: "Image"; url: string } | null;
       community?: {
         __typename?: "Community";
         id: string;
@@ -70,7 +73,16 @@ export const MyEventDocument = gql`
         startDateTime
         endDateTime
         address
-        bannerImageSanityRef
+        publicShareURL
+        previewImage {
+          url
+        }
+        bannerImage {
+          url
+        }
+        mobileBannerImage {
+          url
+        }
         community {
           id
           name

@@ -7,6 +7,15 @@ query getEventAndTickets($input: String!) {
     startDateTime
     endDateTime
     status
+    logoImage {
+      url
+    }
+    bannerImage {
+      url
+    }
+    mobileBannerImage {
+      url
+    }
     community {
       name
     }

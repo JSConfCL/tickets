@@ -1,0 +1,49 @@
+mutation CheckPurchaseOrderStatus($input: CheckForPurchaseOrderInput!) {
+  checkPurchaseOrderStatus(input: $input) {
+    id
+    paymentLink
+    status
+    finalPrice
+    paymentPlatform
+    createdAt
+    currency {
+      id
+      currency
+    }
+    tickets {
+      id
+      approvalStatus
+      paymentStatus
+      redemptionStatus
+      ticketTemplate {
+        id
+        name
+        description
+        event {
+          id
+          name
+          address
+          description
+          startDateTime
+          endDateTime
+          status
+          publicShareURL
+          logoImage {
+            url
+          }
+          community {
+            name
+          }
+        }
+        prices {
+          id
+          amount
+          currency {
+            currency
+            id
+          }
+        }
+      }
+    }
+  }
+}

@@ -11,7 +11,12 @@ import { es } from "date-fns/locale";
 import "./tailwind.css";
 import { AnimatePresence, motion } from "framer-motion";
 
+import "cal-sans";
+import "@fontsource/poppins/300.css";
+import "@fontsource/poppins/400.css";
+
 import { ApolloWrapper } from "~/api/ApolloWrapper";
+import { Footer } from "~/components/Footer";
 import { Navbar } from "~/components/Navbar";
 import { Toaster } from "~/components/ui/sonner";
 import { getDefaultThemeKey } from "~/rootHelpers";
@@ -21,7 +26,10 @@ setDefaultOptions({ locale: es });
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`h-dvh bg-slate-100 dark:bg-slate-950`}>
+    <html
+      lang="en"
+      className={`h-dvh bg-slate-100 font-poppins dark:bg-slate-950`}
+    >
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -56,10 +64,12 @@ export default function App() {
             animate="animate"
             exit="exit"
             transition={transition}
+            className="flex min-h-[calc(100dvh-20rem)] flex-row md:min-h-[calc(100dvh-10.5rem)]"
           >
             <Outlet />
           </motion.div>
         </AnimatePresence>
+        <Footer />
         <Toaster />
       </ApolloWrapper>
     </AuthProvider>

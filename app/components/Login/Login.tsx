@@ -17,7 +17,7 @@ export const Login = () => {
   return (
     <div className="flex w-full max-w-lg shrink-0 flex-col gap-4 rounded-2xl border bg-background p-10 shadow-xl">
       <div>
-        <h1 className="text-left text-2xl font-bold">Regístrate.</h1>
+        <h1 className="text-left font-cal text-2xl">Regístrate.</h1>
         <p className="text-left text-sm text-muted-foreground">
           Mantente al tanto de las novedades de JavaScript Chile.
         </p>

@@ -2,14 +2,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Suspense } from "react";
 
 import { EventStatus } from "~/api/gql/graphql";
-import { useGetEventAndTicketsSuspenseQuery } from "~/components/TicketsSaleFlow/graphql/getEventAndTickets.generated";
-import { TicketsSaleFlowSkeleton } from "~/components/TicketsSaleFlow/skeleton";
-import Tickets from "~/components/TicketsSaleFlow/ticketSaleFlow";
 import { Badge } from "~/components/ui/badge";
+import { cn } from "~/utils/utils";
 
-// import { useGetEventAndTicketsSuspenseQuery } from "~/components/features/TicketsSaleFlow/graphql/getEventAndTickets.generated";
-// import { TicketsSaleFlowSkeleton } from "~/features/TicketsSaleFlow/skeleton";
-// import Tickets from "~/features/TicketsSaleFlow/ticketSaleFlow";
+import { useGetEventAndTicketsSuspenseQuery } from "./graphql/getEventAndTickets.generated";
+import Tickets from "./ticketSaleFlow";
+import { TicketsSaleFlowSkeleton } from "./TicketsSaleFlowSkeleton";
 
 const StatusBadge = ({
   status,
@@ -51,17 +49,23 @@ const LoadTickets = ({ id }: { id: string | null }) => {
 
   return (
     <>
-      <h1 className="text-center text-5xl font-extrabold">
-        <span className="inline-flex flex-wrap items-center justify-center gap-4">
-          {event.name}
+      {!isActive || hasFinished ? (
+        <div>
+          <div
+            className={cn(
+              "mx-auto h-20 w-full rounded-md bg-primary/10 lg:h-40",
+              event.bannerImage?.url ? "bg-cover bg-center" : "",
+            )}
+            style={
+              event.bannerImage?.url
+                ? { backgroundImage: `url(${event.bannerImage?.url})` }
+                : {}
+            }
+          />
           <StatusBadge status={event.status} hasFinished={hasFinished} />
-        </span>
-      </h1>
-      <Tickets
-        isActive={isActive}
-        hasFinished={hasFinished}
-        tickets={event.tickets}
-      />
+        </div>
+      ) : null}
+      <Tickets isActive={isActive} hasFinished={hasFinished} event={event} />
     </>
   );
 };
@@ -72,7 +76,7 @@ export default function EventPage({ id }: { id: string }) {
       <AnimatePresence mode="popLayout">
         <Suspense fallback={<TicketsSaleFlowSkeleton />}>
           <motion.div
-            className="flex flex-col gap-10"
+            className="flex w-full flex-col gap-10"
             key="lazyComponent"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}

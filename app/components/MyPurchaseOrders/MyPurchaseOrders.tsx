@@ -3,13 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 
 import { PurchaseOrder as PurchaseOrderType } from "~/api/gql/graphql";
 import { buttonVariants } from "~/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent } from "~/components/ui/card";
 import {
   Table,
   TableBody,
@@ -45,7 +39,10 @@ export const MyPurchaseOrders = () => {
   );
 
   return (
-    <div className="flex flex-col gap-12">
+    <div className="flex flex-col gap-10">
+      <div className="flex w-full items-center justify-between">
+        <h1 className="font-cal text-3xl">Ordenes de Compra</h1>
+      </div>
       {!showedPurchasedOrders?.length && (
         <div className="text-center text-gray-400">
           No hay Ordenes de Compra
@@ -53,12 +50,6 @@ export const MyPurchaseOrders = () => {
       )}
       {showedPurchasedOrders.length ? (
         <Card>
-          <CardHeader className="px-7">
-            <CardTitle className="text-2xl">Ordenes de Compra</CardTitle>
-            <CardDescription>
-              Revisa todas tus ordenes de compra.
-            </CardDescription>
-          </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>

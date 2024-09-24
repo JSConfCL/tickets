@@ -1,19 +1,23 @@
-import React, { MouseEventHandler, useCallback } from "react";
+import { MouseEventHandler, useCallback } from "react";
 import { toast } from "sonner";
 
 import { Card, CardContent } from "~/components/ui/card";
-import { Separator } from "~/components/ui/separator";
-import { formatCurrency } from "~/utils/numbers";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "~/components/ui/table";
 
 import { useCreatePurchaseOrderMutation } from "./graphql/createPurchaseOrder.generated";
 import { EventTicketFragmentFragment } from "./graphql/EventTicketFragment.generated";
-import { SecondStepFooter, StepHeader } from "./Stepper";
+import { SecondStepFooter } from "./Stepper";
 import { Step, TicketsState } from "./types";
 
 export const ConfirmationTab = ({
-  step,
-  steps,
-  activeStep,
   tickets,
   selectedTickets,
   numberOfTickets,
@@ -83,56 +87,66 @@ export const ConfirmationTab = ({
   }, [currencyId, purchaseOrderMutation, selectedTickets]);
 
   return (
-    <Card>
-      <StepHeader steps={steps} step={step} activeStep={activeStep} />
-      <CardContent>
-        <div className="flex flex-col gap-4 pt-4">
-          {tickets
-            .filter((ticket) => selectedTickets[ticket.id])
-            .map((ticket, index, originalArr) => {
-              return (
-                <React.Fragment key={ticket.id}>
-                  <div className="flex w-full flex-row items-center justify-between gap-4 md:w-auto md:flex-row md:gap-8">
-                    <div className="flex w-full grow flex-col gap-1">
-                      <div className="font-bold text-slate-900 dark:text-white">
-                        {ticket.name}
-                      </div>
-                      {ticket.description ? (
-                        <div className="w-auto ">{ticket.description}</div>
-                      ) : null}
-                      <div className="flex w-auto gap-2 font-medium text-muted-foreground">
-                        {ticket.prices?.length
-                          ? ticket.prices
-                              .map((price) =>
-                                formatCurrency(
-                                  price.amount,
-                                  price.currency.currency,
-                                ),
-                              )
-                              .join(" | ")
-                          : ""}
-                      </div>
-                    </div>
-                    <div className="flex flex-row items-center justify-end gap-2 font-bold md:w-40">
-                      <div className="flex flex-row items-center gap-3">
-                        {selectedTickets[ticket.id]}
-                      </div>
-                      <div className="">×</div>
-                      <div className="">
-                        {ticket.isFree
-                          ? "Gratis"
-                          : getFormmatedTicketPrice(ticket)}
-                      </div>
-                    </div>
-                  </div>
-                  {originalArr.at(-1)?.id !== ticket.id && (
-                    <Separator className="my-3" />
+    <div className="flex flex-col gap-4">
+      <Card>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[200px] text-center font-cal text-lg ">
+                  Tipo de Ticket
+                </TableHead>
+                <TableHead className="text-center font-cal text-lg">
+                  Descripción
+                </TableHead>
+                <TableHead className="w-[200px] text-center font-cal text-lg">
+                  Cantidad
+                </TableHead>
+                <TableHead className="w-[150px] text-center font-cal text-lg">
+                  Precio
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {tickets
+                .filter((ticket) => selectedTickets[ticket.id])
+                .map((ticket) => (
+                  <TableRow key={ticket.id}>
+                    <TableCell className="p-4 text-center font-cal">
+                      {ticket.name}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {ticket.description}
+                    </TableCell>
+                    <TableCell className="text-center font-cal">
+                      {selectedTickets[ticket.id]}
+                    </TableCell>
+                    <TableCell className="text-center font-cal">
+                      {" "}
+                      {ticket.isFree
+                        ? "Gratis"
+                        : getFormmatedTicketPrice(ticket)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+            <TableFooter>
+              <TableRow className="bg-background">
+                <TableCell className="text-right font-cal text-lg" colSpan={4}>
+                  {formattedTotal ? (
+                    <span className="flex flex-row justify-end gap-4">
+                      <span className="w-full grow">Total a Pagar</span>
+                      <span>{formattedTotal}</span>
+                    </span>
+                  ) : (
+                    "Gratis"
                   )}
-                </React.Fragment>
-              );
-            })}
-        </div>
-      </CardContent>
+                </TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </CardContent>
+      </Card>
       <SecondStepFooter
         onClickPrevious={previousStep}
         onClickNext={() => {
@@ -146,6 +160,6 @@ export const ConfirmationTab = ({
         }
         total={formattedTotal}
       />
-    </Card>
+    </div>
   );
 };

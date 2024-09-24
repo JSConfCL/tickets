@@ -4,22 +4,27 @@ export const urls = {
     root: "/profile",
   },
   events: {
-    root: "/eventos",
-    tickets: (id: string) => `/eventos/${id}/tickets`,
+    root: "/events",
+    tickets: (id: string) => `/events/${id}/tickets`,
   },
   myEvents: {
     root: `/my-events`,
     details: (id: string) => `/my-events/${id}`,
   },
-  ordenes: {
-    root: "/ordenes",
-    orden: (id: string) => `/ordenes/${id}`,
-    tickets: (id: string) => `/ordenes/${id}/tickets`,
+  myOrders: {
+    root: "/my-orders",
+    callback: "/my-orders/callback",
   },
   comunidades: "/comunidades",
   tickets: {
     root: "/tickets",
     ticket: (ticketId: string) => `/ticket/:${ticketId}`,
+  },
+  public: {
+    po: (purchaseOrderId: string, eventUrl = "/public") =>
+      `${eventUrl}/po/${purchaseOrderId}`,
+    ticket: (ticketId: string, eventUrl = "/public") =>
+      `${eventUrl}/ticket/${ticketId}`,
   },
   login: "/login",
 };
