@@ -1,4 +1,4 @@
-import { MouseEventHandler, useCallback } from "react";
+import { MouseEventHandler, useCallback, useState } from "react";
 import { toast } from "sonner";
 
 import { Card, CardContent } from "~/components/ui/card";
@@ -39,17 +39,16 @@ export const ConfirmationTab = ({
   ) => string | null;
   currencyId: string;
 }) => {
-  const [purchaseOrderMutation, purchaseOrderMutationResults] =
-    useCreatePurchaseOrderMutation();
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [purchaseOrderMutation] = useCreatePurchaseOrderMutation();
   const createPurchaseOrder = useCallback(async () => {
-    // calls the mutation
+    setIsDisabled(true);
     const purchaseOrder = Object.entries(selectedTickets)
       .filter(([, quantity]) => quantity > 0)
       .map(([ticketId, quantity]) => ({
         ticketId,
         quantity,
-      }),
-    );
+      }));
 
     await purchaseOrderMutation({
       variables: {
@@ -74,18 +73,20 @@ export const ConfirmationTab = ({
             }, 2000);
           }
         } else {
+          setIsDisabled(false);
           toast.error(
             "Ocurrió un error al intentar comprar tus tickets. Por favor intenta de nuevo.",
           );
         }
       },
       onError() {
+        setIsDisabled(false);
         toast.error(
           "Ocurrió un error al intentar comprar tus tickets. Por favor intenta de nuevo.",
         );
       },
     });
-  }, [currencyId, purchaseOrderMutation, selectedTickets]);
+  }, [currencyId, purchaseOrderMutation, selectedTickets, setIsDisabled]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -156,9 +157,7 @@ export const ConfirmationTab = ({
             console.error(error);
           });
         }}
-        isDisabled={
-          numberOfTickets === 0 || purchaseOrderMutationResults.loading
-        }
+        isDisabled={numberOfTickets === 0 || isDisabled}
         total={formattedTotal}
       />
     </div>
