@@ -48,7 +48,7 @@ const Ticket = ({
     <Card className="h-full bg-white p-6 text-black">
       <div className="relative mx-auto mt-4 w-full max-w-[90%] text-center">
         <div className={cn(showQR ? "" : "blur-lg")}>
-          <QRCode className="mx-auto" value={ticket.id} />
+          <QRCode className="mx-auto max-w-[90%]" value={ticket.id} />
         </div>
         <Button
           className="mt-8"
