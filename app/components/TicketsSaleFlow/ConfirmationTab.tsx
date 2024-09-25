@@ -43,8 +43,9 @@ export const ConfirmationTab = ({
     useCreatePurchaseOrderMutation();
   const createPurchaseOrder = useCallback(async () => {
     // calls the mutation
-    const purchaseOrder = Object.entries(selectedTickets).map(
-      ([ticketId, quantity]) => ({
+    const purchaseOrder = Object.entries(selectedTickets)
+      .filter(([, quantity]) => quantity > 0)
+      .map(([ticketId, quantity]) => ({
         ticketId,
         quantity,
       }),
