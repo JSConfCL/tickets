@@ -83,7 +83,8 @@ const PurchaseStatusAlert = ({
       classNames:
         "border-green-800/50 text-green-800 dark:border-green-400/50 dark:text-green-400  [&>svg]:text-green-800 dark:[&>svg]:text-green-400",
       title: "Compra completada",
-      description: "Felicidades vas a asistir a la próxima",
+      description:
+        "YA ESTAS LIST@! 🎉. Cuéntale al mundo, Compártelo tus redes!",
     },
     [PurchaseOrderStatusEnum.Expired]: {
       icon: <CircleCheck className="size-4" />,
