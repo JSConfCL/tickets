@@ -31,6 +31,7 @@ query myEvent(
         paymentStatus
         redemptionStatus
         createdAt
+        publicId
         ticketTemplate {
           id
           name

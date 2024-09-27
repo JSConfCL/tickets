@@ -1376,6 +1376,7 @@ export type MyEventQuery = {
         paymentStatus?: PurchaseOrderPaymentStatusEnum | null;
         redemptionStatus: TicketRedemptionStatus;
         createdAt: string;
+        publicId: string;
         ticketTemplate: {
           id: string;
           name: string;
@@ -1937,6 +1938,10 @@ export const MyEventDocument = {
                             {
                               kind: "Field",
                               name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "publicId" },
                             },
                             {
                               kind: "Field",
