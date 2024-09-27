@@ -22,6 +22,7 @@ export type CheckPurchaseOrderStatusMutation = {
     finalPrice?: number | null;
     paymentPlatform?: string | null;
     createdAt?: any | null;
+    publicId?: string | null;
     currency?: {
       __typename?: "AllowedCurrency";
       id: string;
@@ -33,6 +34,7 @@ export type CheckPurchaseOrderStatusMutation = {
       approvalStatus: Types.TicketApprovalStatus;
       paymentStatus?: Types.PurchaseOrderPaymentStatusEnum | null;
       redemptionStatus: Types.TicketRedemptionStatus;
+      publicId: string;
       ticketTemplate: {
         __typename?: "Ticket";
         id: string;
@@ -75,6 +77,7 @@ export const CheckPurchaseOrderStatusDocument = gql`
       finalPrice
       paymentPlatform
       createdAt
+      publicId
       currency {
         id
         currency
@@ -84,6 +87,7 @@ export const CheckPurchaseOrderStatusDocument = gql`
         approvalStatus
         paymentStatus
         redemptionStatus
+        publicId
         ticketTemplate {
           id
           name

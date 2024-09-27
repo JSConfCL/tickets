@@ -670,6 +670,7 @@ type PurchaseOrder {
   id: ID!
   paymentLink: String
   paymentPlatform: String
+  publicId: String
   purchasePaymentStatus: PurchaseOrderPaymentStatusEnum
   status: PurchaseOrderStatusEnum
   tickets: [UserTicket!]!
