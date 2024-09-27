@@ -42,6 +42,7 @@ export type MyEventQuery = {
         paymentStatus?: Types.PurchaseOrderPaymentStatusEnum | null;
         redemptionStatus: Types.TicketRedemptionStatus;
         createdAt: any;
+        publicId: string;
         ticketTemplate: {
           __typename?: "Ticket";
           id: string;
@@ -94,6 +95,7 @@ export const MyEventDocument = gql`
           paymentStatus
           redemptionStatus
           createdAt
+          publicId
           ticketTemplate {
             id
             name

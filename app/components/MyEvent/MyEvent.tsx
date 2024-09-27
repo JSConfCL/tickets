@@ -41,7 +41,7 @@ const Ticket = ({
 }) => {
   const [showQR, setShowQR] = useState(false);
   const publicUrl = event?.publicShareURL
-    ? urls.public.ticket(ticket.id, event.publicShareURL)
+    ? urls.public.ticket(ticket.publicId, event.publicShareURL)
     : undefined;
 
   return (

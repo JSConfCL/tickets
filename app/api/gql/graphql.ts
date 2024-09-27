@@ -690,6 +690,7 @@ export type PurchaseOrder = {
   id: Scalars["ID"]["output"];
   paymentLink?: Maybe<Scalars["String"]["output"]>;
   paymentPlatform?: Maybe<Scalars["String"]["output"]>;
+  publicId?: Maybe<Scalars["String"]["output"]>;
   purchasePaymentStatus?: Maybe<PurchaseOrderPaymentStatusEnum>;
   status?: Maybe<PurchaseOrderStatusEnum>;
   tickets: Array<UserTicket>;
@@ -1376,6 +1377,7 @@ export type MyEventQuery = {
         paymentStatus?: PurchaseOrderPaymentStatusEnum | null;
         redemptionStatus: TicketRedemptionStatus;
         createdAt: string;
+        publicId: string;
         ticketTemplate: {
           id: string;
           name: string;
@@ -1501,12 +1503,14 @@ export type CheckPurchaseOrderStatusMutation = {
     finalPrice?: number | null;
     paymentPlatform?: string | null;
     createdAt?: string | null;
+    publicId?: string | null;
     currency?: { id: string; currency: string } | null;
     tickets: Array<{
       id: string;
       approvalStatus: TicketApprovalStatus;
       paymentStatus?: PurchaseOrderPaymentStatusEnum | null;
       redemptionStatus: TicketRedemptionStatus;
+      publicId: string;
       ticketTemplate: {
         id: string;
         name: string;
@@ -1937,6 +1941,10 @@ export const MyEventDocument = {
                             {
                               kind: "Field",
                               name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "publicId" },
                             },
                             {
                               kind: "Field",
@@ -2551,6 +2559,7 @@ export const CheckPurchaseOrderStatusDocument = {
                   name: { kind: "Name", value: "paymentPlatform" },
                 },
                 { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                { kind: "Field", name: { kind: "Name", value: "publicId" } },
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "currency" },
@@ -2583,6 +2592,10 @@ export const CheckPurchaseOrderStatusDocument = {
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "redemptionStatus" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "publicId" },
                       },
                       {
                         kind: "Field",

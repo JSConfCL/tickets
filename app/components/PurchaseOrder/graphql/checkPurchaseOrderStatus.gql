@@ -6,6 +6,7 @@ mutation CheckPurchaseOrderStatus($input: CheckForPurchaseOrderInput!) {
     finalPrice
     paymentPlatform
     createdAt
+    publicId
     currency {
       id
       currency
@@ -15,6 +16,7 @@ mutation CheckPurchaseOrderStatus($input: CheckForPurchaseOrderInput!) {
       approvalStatus
       paymentStatus
       redemptionStatus
+      publicId
       ticketTemplate {
         id
         name
