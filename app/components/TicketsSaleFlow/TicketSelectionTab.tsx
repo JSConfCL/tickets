@@ -2,11 +2,6 @@ import { Minus, Plus } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
-
-import { EventTicketFragmentFragment } from "./graphql/EventTicketFragment.generated";
-import { TicketAmountInput } from "./inputs";
-import { FirstStepFooter } from "./Stepper";
-import { Step, TicketsState } from "./types";
 import {
   Table,
   TableBody,
@@ -15,7 +10,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
+} from "~/components/ui/table";
+
+import { EventTicketFragmentFragment } from "./graphql/EventTicketFragment.generated";
+import { TicketAmountInput } from "./inputs";
+import { FirstStepFooter } from "./Stepper";
+import { Step, TicketsState } from "./types";
 
 export const TicketSelectionTab = ({
   getFormmatedTicketPrice,
@@ -50,22 +50,25 @@ export const TicketSelectionTab = ({
   ) => string | null;
 }) => {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-9">
       <Card>
-        <CardContent id="card-content">
+        <CardContent className="pb-2">
+          <h2 className="mt-4	text-2xl font-bold leading-[52px]">
+            Entrada General
+          </h2>
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead className="w-[200px] text-center font-cal text-lg ">
+              <TableRow className="border-t hover:bg-transparent">
+                <TableHead className="h-[52px] w-[200px] text-center text-base font-bold text-white">
                   Tipo de Ticket
                 </TableHead>
-                <TableHead className="text-center font-cal text-lg">
+                <TableHead className="h-[52px] text-center text-base font-bold text-white">
                   Descripción
                 </TableHead>
-                <TableHead className="w-[150px] text-center font-cal text-lg">
+                <TableHead className="h-[52px] w-[100px] grow-0 text-center text-base font-bold text-white">
                   Cantidad
                 </TableHead>
-                <TableHead className="w-[150px] text-center font-cal text-lg">
+                <TableHead className="h-[52px] w-[150px] text-center text-base font-bold text-white">
                   Precio
                 </TableHead>
               </TableRow>
@@ -73,20 +76,20 @@ export const TicketSelectionTab = ({
             <TableBody>
               {tickets.map((ticket) => (
                 <TableRow key={ticket.id}>
-                  <TableCell className="p-4 text-center font-cal">
+                  <TableCell className="p-4 py-6 text-center font-bold">
                     {ticket.name}
                   </TableCell>
-                  <TableCell className="text-center">
+                  <TableCell className="py-6 text-center text-muted-foreground">
                     {ticket.description}
                   </TableCell>
-                  <TableCell className="text-center font-cal">
-                    <div className="flex flex-row items-center justify-between gap-3 font-medium">
+                  <TableCell className="py-6 text-center">
+                    <div className="flex w-[100px] flex-row items-center justify-between gap-2 font-medium">
                       <Button
-                        className="size-6 shrink-0 rounded-full p-0"
+                        className="size-[20px] shrink-0 rounded-full p-0 "
                         disabled={!selectedTickets[ticket.id]}
                         onClick={() => onMinusButtonClick(ticket.id)}
                       >
-                        <Minus size={16} />
+                        <Minus size={14} />
                         <span className="sr-only">Remover Entradar</span>
                       </Button>
                       <div className="w-16">
@@ -102,16 +105,16 @@ export const TicketSelectionTab = ({
                         />
                       </div>
                       <Button
-                        className="size-6 shrink-0 rounded-full p-0"
+                        className="size-[20px] shrink-0 rounded-full p-0"
                         size="sm"
                         onClick={() => onPlusButtonClick(ticket.id)}
                       >
-                        <Plus size={16} />
+                        <Plus size={14} />
                         <span className="sr-only">Agregar Entradar</span>
                       </Button>
                     </div>
                   </TableCell>
-                  <TableCell className="text-center font-cal">
+                  <TableCell className="py-6 text-center font-bold">
                     {" "}
                     {ticket.isFree || !ticket.prices?.length
                       ? "Gratis"
@@ -121,20 +124,17 @@ export const TicketSelectionTab = ({
               ))}
             </TableBody>
             <TableFooter>
-              <TableRow className="bg-background">
-                <TableCell className="text-right font-cal text-lg" colSpan={4}>
-                  {numberOfTickets ? (
-                    formattedTotal ? (
-                      <span className="flex flex-row justify-end gap-4">
-                        <span>Total a Pagar</span>
-                        <span>{formattedTotal}</span>
-                      </span>
-                    ) : (
-                      "Gratis"
-                    )
-                  ) : (
-                    " "
-                  )}
+              <TableRow className="bg-background hover:bg-background">
+                <TableCell
+                  className="pt-9 text-right text-lg font-bold uppercase"
+                  colSpan={3}
+                >
+                  Total a Pagar
+                </TableCell>
+                <TableCell className="pt-9 text-right text-lg font-bold md:pr-11">
+                  {!numberOfTickets || formattedTotal
+                    ? formattedTotal
+                    : "Gratis"}
                 </TableCell>
               </TableRow>
             </TableFooter>

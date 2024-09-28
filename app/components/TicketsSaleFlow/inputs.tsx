@@ -12,7 +12,7 @@ export const TicketAmountInput = ({
   return (
     <Input
       type="number"
-      className="appearance-none"
+      className="border-0 p-0 text-center text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
       value={value}
       min={0}
       max={100}

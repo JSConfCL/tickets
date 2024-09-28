@@ -13,27 +13,31 @@ export const TicketsSaleFlowSkeleton = () => {
   const tickets = Array.from({ length: 5 }).map((_, index) => index);
 
   return (
-    <div className="flex w-full flex-col gap-4">
-      <div className="flex basis-4/12 flex-col gap-2">
+    <div className="mx-auto flex w-full max-w-[1076px] flex-col gap-9">
+      <div className="flex flex-col gap-9">
         <Skeleton className="mx-auto h-20 w-full rounded-md md:h-40" />
-        <div className="flex w-full justify-end">
+        <div className="flex w-full items-center justify-between">
+          <div className="flex flex-col gap-4">
+            <Skeleton className="h-16 w-48" />
+            <Skeleton className="h-8 w-96" />
+          </div>
           <Skeleton className="h-8 w-24" />
         </div>
         <Card>
           <CardContent>
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[200px] text-center font-cal text-lg ">
+                <TableRow className="border-t hover:bg-transparent">
+                  <TableHead className="h-[52px] w-[200px] text-center text-base font-bold text-white">
                     Tipo de Ticket
                   </TableHead>
-                  <TableHead className="text-center font-cal text-lg">
+                  <TableHead className="h-[52px] text-center text-base font-bold text-white">
                     Descripción
                   </TableHead>
-                  <TableHead className="w-[200px] text-center font-cal text-lg">
+                  <TableHead className="h-[52px] w-[100px] grow-0 text-center text-base font-bold text-white">
                     Cantidad
                   </TableHead>
-                  <TableHead className="w-[150px] text-center font-cal text-lg">
+                  <TableHead className="h-[52px] w-[150px] text-center text-base font-bold text-white">
                     Precio
                   </TableHead>
                 </TableRow>

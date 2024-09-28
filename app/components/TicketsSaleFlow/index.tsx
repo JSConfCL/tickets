@@ -1,4 +1,3 @@
-import { AnimatePresence, motion } from "framer-motion";
 import { Suspense } from "react";
 
 import { EventStatus } from "~/api/gql/graphql";
@@ -73,19 +72,11 @@ const LoadTickets = ({ id }: { id: string | null }) => {
 export default function EventPage({ id }: { id: string }) {
   return (
     <main className="mx-auto flex w-full max-w-[1360px] px-6 py-12">
-      <AnimatePresence mode="popLayout">
-        <Suspense fallback={<TicketsSaleFlowSkeleton />}>
-          <motion.div
-            className="flex w-full flex-col gap-10"
-            key="lazyComponent"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -50 }}
-          >
-            <LoadTickets id={id} />
-          </motion.div>
-        </Suspense>
-      </AnimatePresence>
+      <Suspense fallback={<TicketsSaleFlowSkeleton />}>
+        <div className="flex w-full flex-col gap-10">
+          <LoadTickets id={id} />
+        </div>
+      </Suspense>
     </main>
   );
 }
