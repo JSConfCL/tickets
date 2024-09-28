@@ -63,7 +63,7 @@ export default function App() {
             animate="animate"
             exit="exit"
             transition={transition}
-            className="flex min-h-[calc(100dvh-20rem)] flex-row md:min-h-[calc(100dvh-10.5rem)]"
+            className="flex min-h-[calc(100dvh-20rem)] flex-row md:min-h-[calc(100dvh-11rem)]"
           >
             <Outlet />
           </motion.div>
