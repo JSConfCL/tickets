@@ -15,7 +15,7 @@ export const MyPurchaseOrdersLoadingSkeleton = () => {
   return (
     <div className="flex flex-col gap-10">
       <div className="flex w-full items-center justify-between">
-        <h1 className="font-cal text-3xl">Ordenes de Compra</h1>
+        <h1 className="text-3xl font-semibold">Ordenes de Compra</h1>
       </div>
       <Card>
         <CardContent>

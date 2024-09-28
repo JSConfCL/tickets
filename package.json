@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.10.8",
-    "@fontsource/poppins": "^5.0.15",
+    "@fontsource-variable/inter": "^5.1.0",
     "@icons-pack/react-simple-icons": "^10.0.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-avatar": "^1.1.0",

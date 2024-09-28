@@ -28,7 +28,7 @@ module.exports = {
     extend: {
       fontFamily: {
         "cal": ["Cal Sans", "sans-serif"],
-        "poppins": ["Poppins", "sans-serif"],
+        "inter": ["Inter Variable", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
