@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react";
-import { CircleCheck } from "lucide-react";
+import { CircleCheck, CircleX } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
 import { toast } from "sonner";
 
@@ -71,14 +71,15 @@ const PurchaseStatusAlert = ({
 }) => {
   const alerts = {
     [PurchaseOrderStatusEnum.Open]: {
-      icon: <CircleCheck className="size-4" />,
+      icon: <CircleX className="size-6" />,
       variant: "destructive",
       classNames: "",
       title: "Pago pendiente",
-      description: "Tu pago está pendiente",
+      description:
+        "Tu compra está pendiente de pago. Si pagaste espera unos segundos y refresca la página. Si el error persiste comunica con el equipo.",
     },
     [PurchaseOrderStatusEnum.Complete]: {
-      icon: <CircleCheck className="size-4" />,
+      icon: <CircleCheck className="size-6" />,
       variant: "default",
       classNames:
         "border-green-800/50 text-green-800 dark:border-green-400/50 dark:text-green-400  [&>svg]:text-green-800 dark:[&>svg]:text-green-400",
@@ -87,11 +88,11 @@ const PurchaseStatusAlert = ({
         "YA ESTAS LIST@! 🎉. Cuéntale al mundo, Compártelo tus redes!",
     },
     [PurchaseOrderStatusEnum.Expired]: {
-      icon: <CircleCheck className="size-4" />,
+      icon: <CircleX className="size-6" />,
       variant: "destructive",
       classNames: "",
-      title: "Pago fallido",
-      description: "Tu pago ha fallado",
+      title: "Error en el proceso de pago",
+      description: "Hubo un problema con el pago, por favor intente nuevamente",
     },
   };
 
@@ -103,7 +104,10 @@ const PurchaseStatusAlert = ({
   ) as "destructive" | "default";
 
   return (
-    <Alert variant={alertVariant} className={cn(alertInfo.classNames)}>
+    <Alert
+      variant={alertVariant}
+      className={cn(alertInfo.classNames, "[&>svg~*]:pl-11")}
+    >
       {alertInfo.icon}
       <AlertTitle>{alertInfo.title}</AlertTitle>
       <AlertDescription>{alertInfo.description}</AlertDescription>
@@ -178,140 +182,139 @@ export const PurchaseCallback = ({
   }
 
   return (
-    <>
+    <div className="mx-auto flex max-w-[856px] flex-col gap-9">
       <img
         className="mx-auto w-60"
         src={event.logoImage?.url}
         alt={event.name}
       />
       <PurchaseStatusAlert status={purchaseOrder.status} />
-      <div>
-        <Card className="mx-auto">
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[200px] text-center font-cal text-lg ">
-                    Tipo de Ticket
-                  </TableHead>
-                  <TableHead className="text-center font-cal text-lg">
-                    Descripción
-                  </TableHead>
-                  <TableHead className="w-[200px] text-center font-cal text-lg">
-                    Cantidad
-                  </TableHead>
-                  <TableHead className="w-[150px] text-center font-cal text-lg">
-                    Precio
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {tickets.map(({ count, ticket }, index) => (
-                  <TableRow key={index}>
-                    <TableCell className="p-4 text-center font-cal">
-                      {ticket.name}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {ticket.description}
-                    </TableCell>
-                    <TableCell className="text-center font-cal">
-                      {count}
-                    </TableCell>
-                    <TableCell className="text-center font-cal">
-                      {ticket.isFree && selectedCurrency
-                        ? "Gratis"
-                        : getFormmatedTicketPrice(
-                            ticket,
-                            selectedCurrency as Currency,
-                          )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-              <TableFooter>
-                <TableRow className="bg-background">
-                  <TableCell
-                    className="text-right font-cal text-lg"
-                    colSpan={4}
-                  >
-                    {purchaseOrder.finalPrice
-                      ? formatCurrency(
-                          purchaseOrder.finalPrice,
-                          selectedCurrency?.currency as string,
-                        )
-                      : "Gratis"}
+      <Card className="mx-auto">
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow className="border-t hover:bg-transparent">
+                <TableHead className="h-[52px] w-[200px] text-center text-base font-bold text-white">
+                  Tipo de Ticket
+                </TableHead>
+                <TableHead className="h-[52px] text-center text-base font-bold text-white">
+                  Descripción
+                </TableHead>
+                <TableHead className="h-[52px] w-[100px] grow-0 text-center text-base font-bold text-white">
+                  Cantidad
+                </TableHead>
+                <TableHead className="h-[52px] w-[150px] text-center text-base font-bold text-white">
+                  Precio
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {tickets.map(({ count, ticket }, index) => (
+                <TableRow key={index}>
+                  <TableCell className="p-4 py-6 text-center font-bold">
+                    {ticket.name}
+                  </TableCell>
+                  <TableCell className="py-6 text-center text-muted-foreground">
+                    {ticket.description}
+                  </TableCell>
+                  <TableCell className="py-6 text-center">{count}</TableCell>
+                  <TableCell className="py-6 text-center font-bold">
+                    {ticket.isFree && selectedCurrency
+                      ? "Gratis"
+                      : getFormmatedTicketPrice(
+                          ticket,
+                          selectedCurrency as Currency,
+                        )}
                   </TableCell>
                 </TableRow>
-              </TableFooter>
-            </Table>
-          </CardContent>
-        </Card>
-        {purchaseOrder.status === PurchaseOrderStatusEnum.Expired && (
-          <div className="mt-2 flex justify-end gap-2">
-            <Link
-              to={urls.events.root}
-              className={buttonVariants({ variant: "secondary" })}
-            >
-              Eventos
-            </Link>
-            <Link
-              to={urls.events.tickets(event.id)}
+              ))}
+            </TableBody>
+            <TableFooter>
+              <TableRow className="bg-background hover:bg-background">
+                <TableCell
+                  className="pt-9 text-right text-lg font-bold uppercase"
+                  colSpan={3}
+                >
+                  {purchaseOrder.status !== PurchaseOrderStatusEnum.Complete
+                    ? "Total a Pagar"
+                    : null}
+                </TableCell>
+                <TableCell className="pt-9 text-right text-lg font-bold md:pr-11">
+                  {purchaseOrder.finalPrice
+                    ? formatCurrency(
+                        purchaseOrder.finalPrice,
+                        selectedCurrency?.currency as string,
+                      )
+                    : "Gratis"}
+                </TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </CardContent>
+      </Card>
+      {purchaseOrder.status === PurchaseOrderStatusEnum.Expired && (
+        <div className="mt-2 flex justify-end gap-2">
+          <Link
+            to={urls.events.root}
+            className={buttonVariants({ variant: "secondary" })}
+          >
+            Eventos
+          </Link>
+          <Link
+            to={urls.events.tickets(event.id)}
+            className={buttonVariants({ variant: "default" })}
+          >
+            Volver al Evento
+          </Link>
+        </div>
+      )}
+      {purchaseOrder.status === PurchaseOrderStatusEnum.Open && (
+        <div className="mt-2 flex justify-end gap-2">
+          <Link
+            to={urls.events.tickets(event.id)}
+            className={buttonVariants({ variant: "secondary" })}
+          >
+            Atras
+          </Link>
+
+          {paymentLink ? (
+            <a
+              href={paymentLink}
+              onClick={(e) => {
+                e.preventDefault();
+
+                if (purchaseOrder.paymentLink) {
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                  window.location.href = paymentLink;
+                }
+              }}
               className={buttonVariants({ variant: "default" })}
             >
-              Volver al Evento
-            </Link>
-          </div>
-        )}
-        {purchaseOrder.status === PurchaseOrderStatusEnum.Open && (
-          <div className="mt-2 flex justify-end gap-2">
-            <Link
-              to={urls.events.tickets(event.id)}
+              Pagar
+            </a>
+          ) : null}
+        </div>
+      )}
+      {purchaseOrder.status === PurchaseOrderStatusEnum.Complete ? (
+        <div className="mt-2 flex flex-col justify-end gap-2 md:flex-row">
+          {publicURL ? (
+            <a
+              href={publicURL}
+              target="_blank"
+              rel="noreferrer noopener"
               className={buttonVariants({ variant: "secondary" })}
             >
-              Atras
-            </Link>
-
-            {paymentLink ? (
-              <a
-                href={paymentLink}
-                onClick={(e) => {
-                  e.preventDefault();
-
-                  if (purchaseOrder.paymentLink) {
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                    window.location.href = paymentLink;
-                  }
-                }}
-                className={buttonVariants({ variant: "default" })}
-              >
-                Pagar
-              </a>
-            ) : null}
-          </div>
-        )}
-        {purchaseOrder.status === PurchaseOrderStatusEnum.Complete ? (
-          <div className="mt-2 flex flex-col justify-end gap-2 md:flex-row">
-            <Link
-              to={urls.myEvents.details(event.id)}
-              className={buttonVariants({
-                variant: publicURL ? "secondary" : "default",
-              })}
-            >
-              Ver en mis Eventos
-            </Link>
-            {publicURL ? (
-              <a
-                href={publicURL}
-                target="_blank"
-                rel="noreferrer noopener"
-                className={buttonVariants({ variant: "default" })}
-              >
-                Ver ticket y compartir
-              </a>
-            ) : null}
-          </div>
-        ) : null}
-      </div>
-    </>
+              Compartir
+            </a>
+          ) : null}
+          <Link
+            to={urls.myEvents.details(event.id)}
+            className={buttonVariants({ variant: "default" })}
+          >
+            Ver en mis Eventos
+          </Link>
+        </div>
+      ) : null}
+    </div>
   );
 };
