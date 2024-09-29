@@ -8,15 +8,15 @@ import {
   Mail,
   EyeIcon,
   EyeOffIcon,
+  Sparkles,
 } from "lucide-react";
 import { useState } from "react";
 import QRCode from "react-qr-code";
 
-import { Badge } from "~/components/ui/badge";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { Card, CardContent, CardTitle } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
-import { formatDate, formatTime } from "~/utils/date";
+import { formatCalendarDate, formatDate, formatTime } from "~/utils/date";
 import {
   redemptionStatusLabel,
   redemptionStatusColor,
@@ -45,93 +45,114 @@ const Ticket = ({
     : undefined;
 
   return (
-    <Card className="h-full bg-white p-6 text-black">
-      <div className="relative mx-auto mt-4 w-full max-w-[90%] text-center">
-        <div className={cn(showQR ? "" : "blur-lg")}>
-          <QRCode className="mx-auto max-w-[90%]" value={ticket.id} />
+    <Card className="flex h-full flex-col justify-between gap-6 bg-white p-6 text-black">
+      <div className="flex w-full flex-col gap-6">
+        <div className="relative mx-auto mt-4 w-full max-w-[90%] text-center">
+          <div
+            className={cn(
+              "mx-auto max-w-[90%] overflow-hidden",
+              showQR ? "" : " max-w-[80%] overflow-hidden",
+            )}
+          >
+            <QRCode
+              className={cn("aspect-square w-full", showQR ? "" : "blur-md")}
+              value={ticket.id}
+            />
+          </div>
         </div>
+        <CardTitle className="text-center font-bold">
+          ID Ref: {ticketIdReference(ticket.id)}
+        </CardTitle>
+        <CardContent className="p-0 text-sm">
+          <div className="grid gap-3">
+            <ul className="grid gap-3">
+              <li className="flex items-center justify-between text-base">
+                <span className="shrink-0 font-bold">Evento</span>
+                <span className="text-right">{event.name}</span>
+              </li>
+            </ul>
+            <Separator className="my-2 bg-[#e7e5e4]" />
+            <ul className="grid gap-3">
+              <li className="flex items-center justify-between">
+                <span className="shrink-0 font-bold">Fecha de inicio</span>
+                <span className="text-right">
+                  {formatDate(event.startDateTime as string)}
+                </span>
+              </li>
+              {event.endDateTime ? (
+                <li className="flex items-center justify-between">
+                  <span className="shrink-0 font-bold">Fecha de fin</span>
+                  <span className="text-right">
+                    {formatDate(event.endDateTime as string)}
+                  </span>
+                </li>
+              ) : null}
+            </ul>
+            <Separator className="my-2 bg-[#e7e5e4]" />
+            <ul className="grid gap-3">
+              <li className="flex items-center justify-between">
+                <span className="shrink-0 font-bold">Tipo de Ticket</span>
+                <span className="text-right">{ticket.ticketTemplate.name}</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span className="shrink-0 font-bold">Estado</span>
+                <span className="text-right">
+                  <span className="flex flex-row items-center gap-2">
+                    <span
+                      className={cn(
+                        "flex h-2 w-2 rounded-full",
+                        redemptionStatusColor(ticket.redemptionStatus),
+                      )}
+                    />
+                    {redemptionStatusLabel(ticket.redemptionStatus)}
+                  </span>
+                </span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span className="shrink-0 font-bold">Fecha de Compra</span>
+                <span className="text-right">
+                  {formatCalendarDate(ticket.createdAt as string)}
+                </span>
+              </li>
+            </ul>
+          </div>
+        </CardContent>
+      </div>
+      <div className="flex flex-col gap-2 p-0 md:flex-row">
         <Button
-          className="mt-8"
+          className={cn(
+            buttonVariants({ variant: "outline" }),
+            "flex grow flex-row gap-2 bg-white text-black",
+          )}
           onClick={() => {
             setShowQR((show) => !show);
           }}
         >
           {showQR ? (
             <>
-              <EyeIcon className="size-4" /> Ocultar QR
+              <EyeOffIcon className="size-4" /> Ocultar QR
             </>
           ) : (
             <>
-              <EyeOffIcon className="size-4" /> Ver QR
+              <EyeIcon className="size-4" /> Ver QR
             </>
           )}
         </Button>
-      </div>
-      <CardTitle className="my-6 text-center">
-        ID Ref: {ticketIdReference(ticket.id)}
-      </CardTitle>
-      <CardContent className="text-sm">
-        <div className="grid gap-3">
-          <ul className="grid gap-3">
-            <li className="flex items-center justify-between">
-              <span className="font-semibold">Evento</span>
-              <span>{event.name}</span>
-            </li>
-          </ul>
-          <Separator className="my-2" />
-          <ul className="grid gap-3">
-            <li className="flex items-center justify-between">
-              <span className="font-semibold">Fecha de inicio</span>
-              <span>{formatDate(event.startDateTime as string)}</span>
-            </li>
-            {event.endDateTime ? (
-              <li className="flex items-center justify-between">
-                <span className="font-semibold">Fecha de fin</span>
-                <span>{formatDate(event.endDateTime as string)}</span>
-              </li>
-            ) : null}
-          </ul>
-          <Separator className="my-2" />
-          <ul className="grid gap-3">
-            <li className="flex items-center justify-between">
-              <span className="font-semibold">Tipo de Ticket</span>
-              <span>{ticket.ticketTemplate.name}</span>
-            </li>
-            <li className="flex items-center justify-between">
-              <span className="font-semibold">Estado</span>
-              <span>
-                <Badge className="gap-2 text-black" variant="outline">
-                  <span
-                    className={cn(
-                      "flex h-2 w-2 rounded-full",
-                      redemptionStatusColor(ticket.redemptionStatus),
-                    )}
-                  />
-                  {redemptionStatusLabel(ticket.redemptionStatus)}
-                </Badge>
-              </span>
-            </li>
-            <li className="flex items-center justify-between">
-              <span className="font-semibold">Fecha de Compra</span>
-              <span>{formatDate(ticket.createdAt as string)}</span>
-            </li>
-          </ul>
-        </div>
-        <div className="mt-4 flex flex-col gap-2 md:flex-row">
-          {publicUrl ? (
-            <a
-              href={publicUrl}
-              target="_blank"
-              rel="noreferrer noopener"
-              className={cn(
-                buttonVariants({ variant: "outline" }),
-                "flex grow flex-row gap-2 bg-white text-black",
-              )}
-            >
-              Ver y Compartir <ExternalLink className="size-4" />
-            </a>
-          ) : null}
-          {/* 
+        {publicUrl ? (
+          <a
+            href={publicUrl}
+            target="_blank"
+            rel="noreferrer noopener"
+            className={cn(
+              buttonVariants({ variant: "outline" }),
+              "flex grow flex-row gap-2 bg-white text-black",
+            )}
+          >
+            <Sparkles className="size-4" />
+            Compartir
+          </a>
+        ) : null}
+        {/*
           <Button
             className="flex grow flex-row gap-2 bg-white text-black"
             variant="outline"
@@ -147,8 +168,7 @@ const Ticket = ({
             <Mail className="size-4" /> Enviar por email
           </Button>
            */}
-        </div>
-      </CardContent>
+      </div>
     </Card>
   );
 };
@@ -184,8 +204,8 @@ export const MyEvent = ({ id }: { id: string }) => {
       ) : null}
 
       {event ? (
-        <div className="flex w-full flex-col gap-4">
-          <div className="flex basis-4/12 flex-col gap-2">
+        <div className="flex w-full flex-col gap-6">
+          <div className="flex basis-4/12 flex-col gap-6">
             <div
               className={cn(
                 "mx-auto h-20 w-full rounded-md bg-primary/10 lg:h-40",
@@ -197,29 +217,32 @@ export const MyEvent = ({ id }: { id: string }) => {
                   : {}
               }
             />
-            <h2 className="font-cal text-2xl">{event.name}</h2>
-            <p className="text-sm text-muted-foreground">{event.description}</p>
-            <div className="flex flex-row items-center gap-1 text-sm">
-              <Calendar className="size-4" />
-              {[formattedDate, formattedTime].filter(Boolean).join(" - ")}
+            <h2 className="text-2xl font-semibold">{event.name}</h2>
+            <p className="text-base text-muted-foreground">
+              {event.description}
+            </p>
+            <div className="flex flex-col gap-3 font-medium">
+              {formatedAddress ? (
+                <a
+                  href={encodeURI(
+                    `https://www.google.com/maps/search/${formatedAddress}?source=opensearch`,
+                  )}
+                  target="_blank"
+                  className="flex flex-row items-center gap-2.5 text-sm"
+                  rel="noreferrer"
+                >
+                  <MapPin className="size-6" />
+                  {formatedAddress}
+                  <ExternalLink className="size-6" />
+                  <span className="sr-only">Ver en Google Maps</span>
+                </a>
+              ) : null}
+              <div className="flex flex-row items-center gap-2.5 text-sm">
+                <Calendar className="size-6" />
+                {[formattedDate, formattedTime].filter(Boolean).join(" - ")}
+              </div>
             </div>
-            {formatedAddress ? (
-              <a
-                href={encodeURI(
-                  `https://www.google.com/maps/search/${formatedAddress}?source=opensearch`,
-                )}
-                target="_blank"
-                className="flex flex-row items-center gap-1 text-sm"
-                rel="noreferrer"
-              >
-                <MapPin className="size-4" />
-                {formatedAddress}
-                <ExternalLink className="size-4" />
-                <span className="sr-only">Ver en Google Maps</span>
-              </a>
-            ) : null}
           </div>
-          <Separator className="my-2" />
           <div className="mx-auto grid w-full grid-cols-1 gap-4 md:grid-cols-3">
             {tickets.map((ticket) => (
               <Ticket key={ticket.id} event={event} ticket={ticket} />
