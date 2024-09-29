@@ -13,7 +13,7 @@ export default function Layout() {
   return (
     <div className={cx(sharedLayoutStyle, "flex flex-col gap-10")}>
       <div className="flex w-full items-center justify-between">
-        <h1 className="font-cal text-3xl">Mis Eventos</h1>
+        <h1 className="text-3xl font-semibold">Mis Eventos</h1>
         <div>
           <Tabs
             defaultValue="future"
