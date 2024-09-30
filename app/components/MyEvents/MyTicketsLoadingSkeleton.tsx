@@ -3,17 +3,14 @@ import { Skeleton } from "~/components/ui/skeleton";
 
 const LoadingCard = () => {
   return (
-    <Card className="h-full p-6">
+    <Card className="flex h-full flex-col gap-6 p-6">
       <Skeleton className="mx-auto size-60 rounded-md" />
-      <Skeleton className="mx-auto my-6 h-8 w-40" />
-      <span className="flex flex-col gap-2">
+      <Skeleton className="mx-auto h-4 w-24" />
+      <Skeleton className="mx-auto h-8 w-40" />
+      <span className="flex flex-col gap-4">
         <Skeleton className="h-6 w-full" />
         <Skeleton className="h-6 w-full" />
       </span>
-      <div className="mt-4 flex items-end justify-between">
-        <Skeleton className="h-8 w-24" />
-        <Skeleton className="h-8 w-24" />
-      </div>
     </Card>
   );
 };

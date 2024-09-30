@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react";
-import { ArrowRight, Calendar, MapPin } from "lucide-react";
+import { Calendar, MapPin } from "lucide-react";
 import { useMemo } from "react";
 
 import {
@@ -7,7 +7,6 @@ import {
   useMyEventsSuspenseQuery,
 } from "~/components/MyEvents/graphql/myEvents.generated";
 import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
 import { Card, CardDescription, CardTitle } from "~/components/ui/card";
 import { formatDate, formatTime } from "~/utils/date";
 import { pluralize } from "~/utils/string";
@@ -25,53 +24,45 @@ const EventCard = ({
   const imageUrl = event?.previewImage?.url;
 
   return (
-    <Card className="flex h-full flex-col justify-between p-6">
-      <div>
-        {imageUrl ? (
-          <img
-            className="mx-auto size-60 rounded-md"
-            src={imageUrl}
-            alt="Imagen representativa del evento"
-          />
-        ) : (
-          <>
-            <div className="mx-auto size-60 rounded-md bg-primary/10 " />
-            <span className="sr-only">Imagen del evento</span>
-          </>
-        )}
-        <CardTitle className="my-6 text-center font-cal text-2xl">
-          {event.name}
-        </CardTitle>
-        {formatedAddress ? (
-          <CardDescription className="flex flex-row items-center gap-2">
-            <MapPin className="size-6 shrink-0" />
-            {formatedAddress}
+    <Card className="flex h-full flex-col justify-between gap-6 p-6">
+      <div className="flex flex-col gap-6">
+        <Link
+          className="flex cursor-pointer flex-col gap-6"
+          to={urls.myEvents.details(event.id)}
+        >
+          {imageUrl ? (
+            <img
+              className="mx-auto size-60 rounded-md"
+              src={imageUrl}
+              alt="Imagen representativa del evento"
+            />
+          ) : (
+            <>
+              <div className="mx-auto size-60 rounded-md bg-primary/10 " />
+              <span className="sr-only">Imagen del evento</span>
+            </>
+          )}
+          <div className="text-center">
+            <Badge className="rounded-full text-sm capitalize">
+              {event.usersTickets.length}{" "}
+              {pluralize(event.usersTickets.length, "ticket", "tickets")}
+            </Badge>
+          </div>
+          <CardTitle className="text-center text-2xl font-bold">
+            {event.name}
+          </CardTitle>
+        </Link>
+        <div className="flex flex-col gap-4">
+          {formatedAddress ? (
+            <CardDescription className="flex flex-row items-center gap-2 font-medium text-primary">
+              <MapPin className="size-6 shrink-0" />
+              {formatedAddress}
+            </CardDescription>
+          ) : null}
+          <CardDescription className="flex flex-row items-center gap-2 font-medium text-primary">
+            <Calendar className="size-6 shrink-0" />
+            {[formattedDate, formattedTime].filter(Boolean).join(" - ")}
           </CardDescription>
-        ) : null}
-        <CardDescription className="flex flex-row items-center gap-2">
-          <Calendar className="size-6 shrink-0" />
-          {[formattedDate, formattedTime].filter(Boolean).join(" - ")}
-        </CardDescription>
-      </div>
-      <div className="mt-4 flex items-end justify-between">
-        <div>
-          <Button asChild variant="secondary">
-            <Link
-              to={urls.myEvents.details(event.id)}
-              className="flex items-center gap-2"
-            >
-              <span className="capitalize">
-                {event.usersTickets.length}{" "}
-                {pluralize(event.usersTickets.length, "ticket", "tickets")}
-              </span>
-              <ArrowRight size={16} />
-            </Link>
-          </Button>
-        </div>
-        <div>
-          <Badge variant="outline" className="text-sm">
-            {event.community?.name}
-          </Badge>
         </div>
       </div>
     </Card>

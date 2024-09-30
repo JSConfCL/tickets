@@ -12,8 +12,7 @@ import "./tailwind.css";
 import { AnimatePresence, motion } from "framer-motion";
 
 import "cal-sans";
-import "@fontsource/poppins/300.css";
-import "@fontsource/poppins/400.css";
+import "@fontsource-variable/inter";
 
 import { ApolloWrapper } from "~/api/ApolloWrapper";
 import { Footer } from "~/components/Footer";
@@ -28,7 +27,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
-      className={`h-dvh bg-slate-100 font-poppins dark:bg-slate-950`}
+      className={`h-dvh bg-slate-100 font-inter dark:bg-slate-950`}
     >
       <head>
         <meta charSet="utf-8" />
@@ -64,7 +63,7 @@ export default function App() {
             animate="animate"
             exit="exit"
             transition={transition}
-            className="flex min-h-[calc(100dvh-20rem)] flex-row md:min-h-[calc(100dvh-10.5rem)]"
+            className="flex min-h-[calc(100dvh-20rem)] flex-row md:min-h-[calc(100dvh-11rem)]"
           >
             <Outlet />
           </motion.div>

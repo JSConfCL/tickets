@@ -91,20 +91,23 @@ export const ConfirmationTab = ({
   return (
     <div className="flex flex-col gap-4">
       <Card>
-        <CardContent>
+        <CardContent className="pb-2">
+          <h2 className="mt-4	text-2xl font-bold leading-[52px]">
+            Entrada General
+          </h2>
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead className="w-[200px] text-center font-cal text-lg ">
+              <TableRow className="border-t hover:bg-transparent">
+                <TableHead className="h-[52px] w-[200px] text-center text-base font-bold text-white">
                   Tipo de Ticket
                 </TableHead>
-                <TableHead className="text-center font-cal text-lg">
+                <TableHead className="h-[52px] text-center text-base font-bold text-white">
                   Descripción
                 </TableHead>
-                <TableHead className="w-[200px] text-center font-cal text-lg">
+                <TableHead className="h-[52px] w-[100px] grow-0 text-center text-base font-bold text-white">
                   Cantidad
                 </TableHead>
-                <TableHead className="w-[150px] text-center font-cal text-lg">
+                <TableHead className="h-[52px] w-[150px] text-center text-base font-bold text-white">
                   Precio
                 </TableHead>
               </TableRow>
@@ -114,16 +117,16 @@ export const ConfirmationTab = ({
                 .filter((ticket) => selectedTickets[ticket.id])
                 .map((ticket) => (
                   <TableRow key={ticket.id}>
-                    <TableCell className="p-4 text-center font-cal">
+                    <TableCell className="p-4 py-6 text-center font-bold">
                       {ticket.name}
                     </TableCell>
-                    <TableCell className="text-center">
+                    <TableCell className="py-6 text-center text-muted-foreground">
                       {ticket.description}
                     </TableCell>
-                    <TableCell className="text-center font-cal">
+                    <TableCell className="py-6 text-center">
                       {selectedTickets[ticket.id]}
                     </TableCell>
-                    <TableCell className="text-center font-cal">
+                    <TableCell className="py-6 text-center font-bold">
                       {" "}
                       {ticket.isFree
                         ? "Gratis"
@@ -133,16 +136,17 @@ export const ConfirmationTab = ({
                 ))}
             </TableBody>
             <TableFooter>
-              <TableRow className="bg-background">
-                <TableCell className="text-right font-cal text-lg" colSpan={4}>
-                  {formattedTotal ? (
-                    <span className="flex flex-row justify-end gap-4">
-                      <span className="w-full grow">Total a Pagar</span>
-                      <span>{formattedTotal}</span>
-                    </span>
-                  ) : (
-                    "Gratis"
-                  )}
+              <TableRow className="bg-background hover:bg-background">
+                <TableCell
+                  className="pt-9 text-right text-lg font-bold uppercase"
+                  colSpan={3}
+                >
+                  Total a Pagar
+                </TableCell>
+                <TableCell className="pt-9 text-right text-lg font-bold md:pr-11">
+                  {!numberOfTickets || formattedTotal
+                    ? formattedTotal
+                    : "Gratis"}
                 </TableCell>
               </TableRow>
             </TableFooter>

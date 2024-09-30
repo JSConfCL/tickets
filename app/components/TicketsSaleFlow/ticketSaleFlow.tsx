@@ -207,7 +207,10 @@ export default function Tickets({
       value={steps[step].slug}
       onValueChange={customStep}
     >
-      <TabsContent value={steps[0].slug} className="flex flex-col gap-4">
+      <TabsContent
+        value={steps[0].slug}
+        className="mx-auto flex max-w-[1076px] flex-col gap-9"
+      >
         <div
           className={cn(
             "mx-auto h-20 w-full rounded-md bg-primary/10 lg:h-40",
@@ -219,10 +222,17 @@ export default function Tickets({
               : {}
           }
         />
-        <div className="flex items-center">
-          <div className="ml-auto flex items-center gap-2">
+        <div className="flex flex-col items-center gap-4 md:flex-row">
+          <div className="flex w-full flex-col gap-4">
+            <h2 className="text-3xl font-semibold">Compra de tickets</h2>
+            <p className="text-muted-foreground">
+              Selecciona la cantidad de tickets que quieres comprar
+            </p>
+          </div>
+          <div className="ml-auto flex w-full gap-4">
             {Object.values(currencies).length > 1 ? (
-              <div className="flex justify-end">
+              <div className="flex w-full flex-col items-start justify-start gap-4 md:flex-row md:items-center md:justify-end">
+                <span className="text-muted-foreground">Tipo de Moneda</span>
                 <Select
                   onValueChange={handleChangeCurrency}
                   defaultValue={selectedCurrencyId}
@@ -261,12 +271,21 @@ export default function Tickets({
           hasFinished={hasFinished}
         />
       </TabsContent>
-      <TabsContent value={steps[1].slug} className="flex flex-col gap-4">
+      <TabsContent
+        value={steps[1].slug}
+        className="mx-auto flex max-w-[856px] flex-col gap-9"
+      >
         <img
           className="mx-auto w-60"
           src={event.logoImage?.url}
           alt={event.name}
         />
+        <div className="flex flex-col items-center gap-4">
+          <h2 className="text-3xl font-semibold">Confirmación</h2>
+          <p className="text-center text-muted-foreground">
+            Revisa los detalles del evento y tus tickets antes de continuar
+          </p>
+        </div>
         <ConfirmationTab
           step={step}
           steps={steps}

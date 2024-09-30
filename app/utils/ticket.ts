@@ -4,24 +4,24 @@ export const idReference = (id: string) => id.split("-")[4];
 
 export const approvalStatusLabel = (status: string) =>
   ({
-    approved: "aprobado",
-    cancelled: "cancelado",
-    not_required: "no requerido",
-    pending: "pendiente",
-    rejected: "rechazado",
+    approved: "Aprobado",
+    cancelled: "Cancelado",
+    not_required: "No requerido",
+    pending: "Pendiente",
+    rejected: "Rechazado",
   })[status] ?? "";
 
 export const paymentStatusLabel = (status: string) =>
   ({
-    not_required: "no requerido",
-    paid: "pagado",
-    unpaid: "no pagado",
+    not_required: "No requerido",
+    paid: "Pagado",
+    unpaid: "No pagado",
   })[status] ?? "";
 
 export const redemptionStatusLabel = (status: string) =>
   ({
-    pending: "por reclamar",
-    redeemed: "reclamado",
+    pending: "Por utilizar",
+    redeemed: "Utilizado",
   })[status] ?? "";
 
 export const approvalStatusColor = (status: string) =>

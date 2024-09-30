@@ -15,21 +15,28 @@ export const MyPurchaseOrdersLoadingSkeleton = () => {
   return (
     <div className="flex flex-col gap-10">
       <div className="flex w-full items-center justify-between">
-        <h1 className="font-cal text-3xl">Ordenes de Compra</h1>
+        <h1 className="text-3xl font-semibold">Ordenes de Compra</h1>
       </div>
       <Card>
         <CardContent>
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Id</TableHead>
-                <TableHead>Evento</TableHead>
-                <TableHead className="md:table-cell">Descripción</TableHead>
-                <TableHead className="hidden md:table-cell">
-                  Método de Pago
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="h-[52px] text-center text-base font-bold text-white">
+                  Id
                 </TableHead>
-                <TableHead className="hidden sm:table-cell">Fecha</TableHead>
-                <TableHead className="text-right">Precio</TableHead>
+                <TableHead className="h-[52px] text-center text-base font-bold text-white">
+                  Evento
+                </TableHead>
+                <TableHead className="h-[52px] text-center text-base font-bold text-white">
+                  Descripción
+                </TableHead>
+                <TableHead className="h-[52px] text-center text-base font-bold text-white">
+                  Fecha
+                </TableHead>
+                <TableHead className="h-[52px] text-center text-base font-bold text-white">
+                  Precio
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -41,16 +48,13 @@ export const MyPurchaseOrdersLoadingSkeleton = () => {
                   <TableCell>
                     <Skeleton className="h-4 w-48" />
                   </TableCell>
-                  <TableCell className="sm:table-cell">
+                  <TableCell>
                     <Skeleton className="h-4 w-64" />
                   </TableCell>
-                  <TableCell className="hidden sm:table-cell">
+                  <TableCell>
                     <Skeleton className="h-4 w-24" />
                   </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    <Skeleton className="h-4 w-24" />
-                  </TableCell>
-                  <TableCell className="flex items-center justify-end">
+                  <TableCell>
                     <Skeleton className="h-4 w-24" />
                   </TableCell>
                 </TableRow>

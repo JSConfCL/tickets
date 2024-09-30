@@ -34,9 +34,9 @@ export const Footer = () => {
   return (
     <footer className="border-t bg-background/95 text-sm text-primary">
       <div className="container flex flex-col justify-between gap-4 py-8 md:flex-row">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4">
           <div>© {year} Proudly Powered by CommunityOS</div>
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             {socials.map(({ icon, name, url }) => (
               <a
                 key={name}
