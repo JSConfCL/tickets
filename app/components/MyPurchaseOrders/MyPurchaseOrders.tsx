@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import { formatDate } from "~/utils/date";
+import { formatCalendarDate } from "~/utils/date";
 import { formatCurrency } from "~/utils/numbers";
 import { groupedTickets } from "~/utils/purchase-order";
 import { urls } from "~/utils/urls";
@@ -53,15 +53,22 @@ export const MyPurchaseOrders = () => {
           <CardContent>
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Id</TableHead>
-                  <TableHead>Evento</TableHead>
-                  <TableHead className="md:table-cell">Descripción</TableHead>
-                  <TableHead className="hidden md:table-cell">
-                    Método de Pago
+                <TableRow className="hover:bg-transparent">
+                  <TableHead className="h-[52px] text-center text-base font-bold text-white">
+                    Id
                   </TableHead>
-                  <TableHead className="hidden sm:table-cell">Fecha</TableHead>
-                  <TableHead className="text-right">Precio</TableHead>
+                  <TableHead className="h-[52px] text-center text-base font-bold text-white">
+                    Evento
+                  </TableHead>
+                  <TableHead className="h-[52px] text-center text-base font-bold text-white">
+                    Descripción
+                  </TableHead>
+                  <TableHead className="h-[52px] text-center text-base font-bold text-white">
+                    Fecha
+                  </TableHead>
+                  <TableHead className="h-[52px] text-center text-base font-bold text-white">
+                    Precio
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -118,11 +125,8 @@ export const MyPurchaseOrders = () => {
                           </div>
                         </Link>
                       </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        {purchaseOrder.paymentPlatform}
-                      </TableCell>
                       <TableCell className="hidden md:table-cell">
-                        {formatDate(purchaseOrder.createdAt as string)}
+                        {formatCalendarDate(purchaseOrder.createdAt as string)}
                       </TableCell>
                       <TableCell className="text-right">
                         {purchaseOrder.finalPrice
