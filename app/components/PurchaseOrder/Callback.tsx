@@ -161,12 +161,10 @@ export const PurchaseCallback = ({
   const publicURL =
     event?.publicShareURL &&
     purchaseOrder.status === PurchaseOrderStatusEnum.Complete
-      ? purchaseOrder.tickets.length > 1
-        ? urls.public.po(purchaseOrder.publicId as string, event.publicShareURL)
-        : urls.public.ticket(
-            purchaseOrder.tickets[0].publicId,
-            event.publicShareURL,
-          )
+      ? urls.public.ticket(
+          purchaseOrder.tickets[0].publicId,
+          event.publicShareURL,
+        )
       : null;
   const purchaseOrderStatuses = [
     PurchaseOrderStatusEnum.Open,
