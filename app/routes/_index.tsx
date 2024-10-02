@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Link } from "@remix-run/react";
 
 import { CommunityOS } from "~/components/Icons/communityos";
@@ -43,6 +42,15 @@ export default function Index() {
             >
               Contactar
             </a>
+            <Link
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                "border-[#F0E040] bg-black text-white",
+              )}
+              to="https://tickets.communityos.io/events/7dfe393e-7c8f-4d5c-903d-aa65e28e4227/tickets"
+            >
+              JSConf 2024
+            </Link>
             <Button
               className={cn(
                 buttonVariants({ variant: "default" }),
