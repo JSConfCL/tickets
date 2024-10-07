@@ -2,6 +2,7 @@ export const urls = {
   home: "/",
   profile: {
     root: "/profile",
+    editInfo: "/profile/info",
   },
   events: {
     root: "/events",

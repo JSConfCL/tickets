@@ -18,6 +18,7 @@ const LoadingCard = () => {
         <Separator className="sm:max-w-md" />
         <div className="w-full">
           <div className="flex flex-col gap-2">
+            <Skeleton className="h-6 w-40" />
             <Skeleton className="h-6 w-64" />
             <Skeleton className="h-6 w-40" />
           </div>
