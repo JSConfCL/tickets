@@ -26,7 +26,7 @@ const errorPromotionLink = new ApolloLink((operation, forward) => {
     if (
       data.errors &&
       data.errors.length > 0 &&
-      data.errors.some((error) => error.extensions.code === "UNAUTHENTICATED")
+      data.errors.some((error) => error?.extensions?.code === "UNAUTHENTICATED")
     ) {
       throw new Error("GraphQL Authentication Error. Retriable");
     }
@@ -77,7 +77,7 @@ const useErrorLink = () => {
   return onError(({ graphQLErrors, networkError, operation, forward }) => {
     if (graphQLErrors) {
       for (const err of graphQLErrors) {
-        if (err.extensions.type === "UNAUTHENTICATED") {
+        if (err?.extensions?.type === "UNAUTHENTICATED") {
           refreshSession()
             .then(() => {
               forward(operation);

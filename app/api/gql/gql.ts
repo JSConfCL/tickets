@@ -23,6 +23,8 @@ const documents = {
     types.MyPurchaseOrdersDocument,
   "query SearchUsers($input: PaginatedInputUserSearchValues!) {\n  userSearch(input: $input) {\n    data {\n      id\n      username\n      name\n      lastName\n      imageUrl\n      email\n    }\n    pagination {\n      currentPage\n      pageSize\n      totalPages\n      totalRecords\n    }\n  }\n}":
     types.SearchUsersDocument,
+  "mutation updateUser($input: userEditInput!) {\n  updateUser(input: $input) {\n    id\n    name\n    lastName\n    username\n    bio\n    email\n  }\n}":
+    types.UpdateUserDocument,
   "query myProfile {\n  me {\n    id\n    bio\n    lastName\n    username\n    imageUrl\n    isSuperAdmin\n    email\n    name\n    impersonatedUser {\n      id\n      name\n    }\n    communities {\n      id\n      name\n    }\n  }\n}":
     types.MyProfileDocument,
   "mutation CheckPurchaseOrderStatus($input: CheckForPurchaseOrderInput!) {\n  checkPurchaseOrderStatus(input: $input) {\n    id\n    paymentLink\n    status\n    finalPrice\n    paymentPlatform\n    createdAt\n    publicId\n    currency {\n      id\n      currency\n    }\n    tickets {\n      id\n      approvalStatus\n      paymentStatus\n      redemptionStatus\n      publicId\n      ticketTemplate {\n        id\n        name\n        description\n        event {\n          id\n          name\n          address\n          description\n          startDateTime\n          endDateTime\n          status\n          publicShareURL\n          logoImage {\n            url\n          }\n          community {\n            name\n          }\n        }\n        prices {\n          id\n          amount\n          currency {\n            currency\n            id\n          }\n        }\n      }\n    }\n  }\n}":
@@ -79,6 +81,12 @@ export function graphql(
 export function graphql(
   source: "query SearchUsers($input: PaginatedInputUserSearchValues!) {\n  userSearch(input: $input) {\n    data {\n      id\n      username\n      name\n      lastName\n      imageUrl\n      email\n    }\n    pagination {\n      currentPage\n      pageSize\n      totalPages\n      totalRecords\n    }\n  }\n}",
 ): (typeof documents)["query SearchUsers($input: PaginatedInputUserSearchValues!) {\n  userSearch(input: $input) {\n    data {\n      id\n      username\n      name\n      lastName\n      imageUrl\n      email\n    }\n    pagination {\n      currentPage\n      pageSize\n      totalPages\n      totalRecords\n    }\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "mutation updateUser($input: userEditInput!) {\n  updateUser(input: $input) {\n    id\n    name\n    lastName\n    username\n    bio\n    email\n  }\n}",
+): (typeof documents)["mutation updateUser($input: userEditInput!) {\n  updateUser(input: $input) {\n    id\n    name\n    lastName\n    username\n    bio\n    email\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

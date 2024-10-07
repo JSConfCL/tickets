@@ -29,11 +29,12 @@ export const MyProfile = () => {
         <div className="w-full">
           <ul className="flex flex-col gap-2">
             {[
+              ["Configuración", urls.profile.editInfo],
               ["Mis Ordenes de Compra", urls.myOrders.root],
               ["Mis eventos", urls.myEvents.root],
             ].map(([text, link], index) => (
               <li key={index}>
-                <Link to={link} className="text-lg underline">
+                <Link to={link} className="text-base underline">
                   {text}
                 </Link>
               </li>
