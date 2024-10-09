@@ -19,7 +19,7 @@ export const Login = () => {
       <div>
         <h1 className="text-left text-2xl font-semibold">Regístrate.</h1>
         <p className="text-left text-sm text-muted-foreground">
-          Mantente al tanto de las novedades de JavaScript Chile.
+          Mantente al tanto de las novedades de CommunityOS.
         </p>
       </div>
 
