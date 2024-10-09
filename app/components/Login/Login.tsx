@@ -24,7 +24,7 @@ export const Login = () => {
       </div>
 
       <Auth
-        providers={["github", "twitter"]}
+        providers={["github", "twitter", "google"]}
         supabaseClient={supabaseClient}
         socialLayout="horizontal"
         showLinks={false}
