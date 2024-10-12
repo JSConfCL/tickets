@@ -92,7 +92,7 @@ export const TicketSelectionTab = ({
                       {ticket.description}
                     </TableCell>
                     <TableCell className="py-6 text-center">
-                      {ticket.status !== TicketTemplateStatus.Active ? (
+                      {ticket.status === TicketTemplateStatus.Active ? (
                         <div className="flex w-[100px] flex-row items-center justify-between gap-2 font-medium">
                           <Button
                             className="size-[20px] shrink-0 rounded-full p-0 "
