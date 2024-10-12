@@ -29,7 +29,7 @@ const documents = {
     types.MyProfileDocument,
   "mutation CheckPurchaseOrderStatus($input: CheckForPurchaseOrderInput!) {\n  checkPurchaseOrderStatus(input: $input) {\n    id\n    paymentLink\n    status\n    finalPrice\n    paymentPlatform\n    createdAt\n    publicId\n    currency {\n      id\n      currency\n    }\n    tickets {\n      id\n      approvalStatus\n      paymentStatus\n      redemptionStatus\n      publicId\n      ticketTemplate {\n        id\n        name\n        description\n        event {\n          id\n          name\n          address\n          description\n          startDateTime\n          endDateTime\n          status\n          publicShareURL\n          logoImage {\n            url\n          }\n          community {\n            name\n          }\n        }\n        prices {\n          id\n          amount\n          currency {\n            currency\n            id\n          }\n        }\n      }\n    }\n  }\n}":
     types.CheckPurchaseOrderStatusDocument,
-  "fragment EventTicketFragment on Ticket {\n  id\n  name\n  description\n  quantity\n  isFree\n  startDateTime\n  status\n  isUnlimited\n  prices {\n    id\n    amount\n    currency {\n      currency\n      id\n    }\n  }\n}":
+  "fragment EventTicketFragment on Ticket {\n  id\n  name\n  description\n  quantity\n  isFree\n  startDateTime\n  status\n  isUnlimited\n  visibility\n  prices {\n    id\n    amount\n    currency {\n      currency\n      id\n    }\n  }\n}":
     types.EventTicketFragmentFragmentDoc,
   "mutation createPurchaseOrder($input: TicketClaimInput!) {\n  claimUserTicket(input: $input) {\n    __typename\n    ... on PurchaseOrder {\n      __typename\n      id\n      currency {\n        id\n      }\n      finalPrice\n      paymentLink\n      status\n      tickets {\n        id\n        approvalStatus\n        redemptionStatus\n        paymentStatus\n      }\n    }\n    ... on RedeemUserTicketError {\n      __typename\n      error\n      errorMessage\n    }\n  }\n}":
     types.CreatePurchaseOrderDocument,
@@ -103,8 +103,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "fragment EventTicketFragment on Ticket {\n  id\n  name\n  description\n  quantity\n  isFree\n  startDateTime\n  status\n  isUnlimited\n  prices {\n    id\n    amount\n    currency {\n      currency\n      id\n    }\n  }\n}",
-): (typeof documents)["fragment EventTicketFragment on Ticket {\n  id\n  name\n  description\n  quantity\n  isFree\n  startDateTime\n  status\n  isUnlimited\n  prices {\n    id\n    amount\n    currency {\n      currency\n      id\n    }\n  }\n}"];
+  source: "fragment EventTicketFragment on Ticket {\n  id\n  name\n  description\n  quantity\n  isFree\n  startDateTime\n  status\n  isUnlimited\n  visibility\n  prices {\n    id\n    amount\n    currency {\n      currency\n      id\n    }\n  }\n}",
+): (typeof documents)["fragment EventTicketFragment on Ticket {\n  id\n  name\n  description\n  quantity\n  isFree\n  startDateTime\n  status\n  isUnlimited\n  visibility\n  prices {\n    id\n    amount\n    currency {\n      currency\n      id\n    }\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
