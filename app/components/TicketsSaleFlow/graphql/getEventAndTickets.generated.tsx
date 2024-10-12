@@ -39,6 +39,7 @@ export type GetEventAndTicketsQuery = {
       startDateTime: any;
       status: Types.TicketTemplateStatus;
       isUnlimited: boolean;
+      visibility: Types.TicketTemplateVisibility;
       prices?: Array<{
         __typename?: "Price";
         id: string;

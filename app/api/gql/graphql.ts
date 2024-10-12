@@ -1561,6 +1561,7 @@ export type EventTicketFragmentFragment = {
   startDateTime: string;
   status: TicketTemplateStatus;
   isUnlimited: boolean;
+  visibility: TicketTemplateVisibility;
   prices?: Array<{
     id: string;
     amount: number;
@@ -1642,6 +1643,7 @@ export const EventTicketFragmentFragmentDoc = {
           { kind: "Field", name: { kind: "Name", value: "startDateTime" } },
           { kind: "Field", name: { kind: "Name", value: "status" } },
           { kind: "Field", name: { kind: "Name", value: "isUnlimited" } },
+          { kind: "Field", name: { kind: "Name", value: "visibility" } },
           {
             kind: "Field",
             name: { kind: "Name", value: "prices" },
@@ -3101,6 +3103,7 @@ export const GetEventAndTicketsDocument = {
           { kind: "Field", name: { kind: "Name", value: "startDateTime" } },
           { kind: "Field", name: { kind: "Name", value: "status" } },
           { kind: "Field", name: { kind: "Name", value: "isUnlimited" } },
+          { kind: "Field", name: { kind: "Name", value: "visibility" } },
           {
             kind: "Field",
             name: { kind: "Name", value: "prices" },

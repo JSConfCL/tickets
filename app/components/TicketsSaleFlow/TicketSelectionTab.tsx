@@ -1,5 +1,9 @@
 import { Minus, Plus } from "lucide-react";
 
+import {
+  TicketTemplateStatus,
+  TicketTemplateVisibility,
+} from "~/api/gql/graphql";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
 import {
@@ -74,54 +78,63 @@ export const TicketSelectionTab = ({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {tickets.map((ticket) => (
-                <TableRow key={ticket.id}>
-                  <TableCell className="p-4 py-6 text-center font-bold">
-                    {ticket.name}
-                  </TableCell>
-                  <TableCell className="py-6 text-center text-muted-foreground">
-                    {ticket.description}
-                  </TableCell>
-                  <TableCell className="py-6 text-center">
-                    <div className="flex w-[100px] flex-row items-center justify-between gap-2 font-medium">
-                      <Button
-                        className="size-[20px] shrink-0 rounded-full p-0 "
-                        disabled={!selectedTickets[ticket.id]}
-                        onClick={() => onMinusButtonClick(ticket.id)}
-                      >
-                        <Minus size={14} />
-                        <span className="sr-only">Remover Entradar</span>
-                      </Button>
-                      <div className="w-16">
-                        <TicketAmountInput
-                          value={selectedTickets[ticket.id] ?? 0}
-                          onChange={(e) => {
-                            onInputChange(
-                              ticket.id,
-                              parseInt(e.target.value, 10),
-                            );
-                            // handleChange(ticket.id, parseInt(e.target.value, 10));
-                          }}
-                        />
-                      </div>
-                      <Button
-                        className="size-[20px] shrink-0 rounded-full p-0"
-                        size="sm"
-                        onClick={() => onPlusButtonClick(ticket.id)}
-                      >
-                        <Plus size={14} />
-                        <span className="sr-only">Agregar Entradar</span>
-                      </Button>
-                    </div>
-                  </TableCell>
-                  <TableCell className="py-6 text-center font-bold">
-                    {" "}
-                    {ticket.isFree || !ticket.prices?.length
-                      ? "Gratis"
-                      : getFormmatedTicketPrice(ticket)}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {tickets
+                .filter(
+                  (ticket) =>
+                    ticket.visibility === TicketTemplateVisibility.Public,
+                )
+                .map((ticket) => (
+                  <TableRow key={ticket.id}>
+                    <TableCell className="p-4 py-6 text-center font-bold">
+                      {ticket.name}
+                    </TableCell>
+                    <TableCell className="py-6 text-center text-muted-foreground">
+                      {ticket.description}
+                    </TableCell>
+                    <TableCell className="py-6 text-center">
+                      {ticket.status !== TicketTemplateStatus.Active ? (
+                        <div className="flex w-[100px] flex-row items-center justify-between gap-2 font-medium">
+                          <Button
+                            className="size-[20px] shrink-0 rounded-full p-0 "
+                            disabled={!selectedTickets[ticket.id]}
+                            onClick={() => onMinusButtonClick(ticket.id)}
+                          >
+                            <Minus size={14} />
+                            <span className="sr-only">Remover Entradar</span>
+                          </Button>
+                          <div className="w-16">
+                            <TicketAmountInput
+                              value={selectedTickets[ticket.id] ?? 0}
+                              onChange={(e) => {
+                                onInputChange(
+                                  ticket.id,
+                                  parseInt(e.target.value, 10),
+                                );
+                                // handleChange(ticket.id, parseInt(e.target.value, 10));
+                              }}
+                            />
+                          </div>
+                          <Button
+                            className="size-[20px] shrink-0 rounded-full p-0"
+                            size="sm"
+                            onClick={() => onPlusButtonClick(ticket.id)}
+                          >
+                            <Plus size={14} />
+                            <span className="sr-only">Agregar Entradar</span>
+                          </Button>
+                        </div>
+                      ) : (
+                        <span className="font-medium">No Disponible</span>
+                      )}
+                    </TableCell>
+                    <TableCell className="py-6 text-center font-bold">
+                      {" "}
+                      {ticket.isFree || !ticket.prices?.length
+                        ? "Gratis"
+                        : getFormmatedTicketPrice(ticket)}
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
             <TableFooter>
               <TableRow className="bg-background hover:bg-background">

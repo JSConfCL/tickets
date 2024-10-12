@@ -16,6 +16,7 @@ export type EventTicketFragmentFragment = {
   startDateTime: any;
   status: Types.TicketTemplateStatus;
   isUnlimited: boolean;
+  visibility: Types.TicketTemplateVisibility;
   prices?: Array<{
     __typename?: "Price";
     id: string;
@@ -34,6 +35,7 @@ export const EventTicketFragmentFragmentDoc = gql`
     startDateTime
     status
     isUnlimited
+    visibility
     prices {
       id
       amount
