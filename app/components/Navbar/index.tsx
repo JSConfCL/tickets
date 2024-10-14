@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
 import { LogOut, Tickets, UserIcon, VenetianMaskIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 
@@ -18,6 +18,7 @@ import { ThemeSwitcher } from "./ThemeSwitcher";
 import type { NavbarMenuItem } from "./types";
 
 export const Navbar = () => {
+  const navigate = useNavigate();
   const isLogged = useIsLoggedIn();
   const isAuthReady = useIsAuthReady();
   const myProfile = useMyProfileQuery({
@@ -87,6 +88,7 @@ export const Navbar = () => {
               icon: <LogOut className="mr-2 size-4" />,
               onClick: () => {
                 logout().catch(console.error);
+                navigate(urls.home);
               },
             },
           ],
@@ -104,6 +106,7 @@ export const Navbar = () => {
       isLogged,
       myProfile?.data?.me?.isSuperAdmin,
       setImpersonation,
+      navigate,
     ],
   );
 
