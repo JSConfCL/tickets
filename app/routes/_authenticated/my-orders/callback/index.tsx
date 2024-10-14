@@ -1,9 +1,14 @@
+import { MetaFunction } from "@remix-run/cloudflare";
 import { useSearchParams } from "@remix-run/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Suspense } from "react";
 import { toast } from "sonner";
 
 import { PurchaseCallback } from "~/components/PurchaseOrder/Callback";
+
+export const meta: MetaFunction = () => {
+  return [{ title: "Mi Orden de Compra | Tickets" }];
+};
 
 export default function Index() {
   const [params] = useSearchParams();

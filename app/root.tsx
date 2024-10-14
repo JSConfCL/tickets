@@ -1,3 +1,4 @@
+import { LinksFunction, MetaFunction } from "@remix-run/cloudflare";
 import {
   Links,
   Meta,
@@ -8,7 +9,6 @@ import {
 } from "@remix-run/react";
 import { setDefaultOptions } from "date-fns";
 import { es } from "date-fns/locale";
-import "./tailwind.css";
 import { AnimatePresence, motion } from "framer-motion";
 
 import "cal-sans";
@@ -20,6 +20,8 @@ import { Navbar } from "~/components/Navbar";
 import { Toaster } from "~/components/ui/sonner";
 import { getDefaultThemeKey } from "~/rootHelpers";
 import { AuthProvider } from "~/utils/supabase/AuthProvider";
+
+import "./tailwind.css";
 
 setDefaultOptions({ locale: es });
 
@@ -50,6 +52,41 @@ const variants = {
   exit: { opacity: 0, scale: 0.99 },
 };
 const transition = { duration: 0.3 };
+
+export const links: LinksFunction = () => {
+  return [
+    {
+      rel: "icon",
+      href: "light-mode-favicon.ico",
+      media: "(prefers-color-scheme: light)",
+    },
+    {
+      rel: "icon",
+      href: "dark-mode-favicon.ico",
+      media: "(prefers-color-scheme: dark)",
+    },
+  ];
+};
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Tickets - Plataforma de Entradas Open-Source para Eventos." },
+    {
+      property: "og:title",
+      content: "Tickets - Plataforma de Entradas Open-Source para Eventos.",
+    },
+    {
+      name: "description",
+      content:
+        "Tickets - Descubre y compra entradas para eventos emocionantes, la solución open-source para la gestión de eventos. Ya sea que asistas o organices, nuestra plataforma te ayuda a descubrir, gestionar y vender entradas, todo impulsado por una comunidad colaborativa.",
+    },
+    {
+      property: "og:image",
+      content: "/og.jpg",
+    },
+  ];
+};
+
 export default function App() {
   return (
     <AuthProvider>

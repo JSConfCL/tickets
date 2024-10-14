@@ -1,9 +1,25 @@
+import { MetaFunction } from "@remix-run/cloudflare";
 import { useNavigate } from "@remix-run/react";
 import { useEffect } from "react";
 
 import { Login } from "~/components/Login/Login";
 import { useIsAuthReady, useIsLoggedIn } from "~/utils/supabase/AuthProvider";
 import { urls } from "~/utils/urls";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Tickets - Entrar a mi cuenta" },
+    {
+      property: "og:title",
+      content: "Tickets - Entrar a mi cuenta",
+    },
+    {
+      name: "description",
+      content:
+        "Tickets - Entrar a mi cuenta de Tickets para asistir a eventos, o gestionarlos.",
+    },
+  ];
+};
 
 const Redirecting = () => {
   const navigate = useNavigate();
