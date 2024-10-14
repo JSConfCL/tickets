@@ -1,3 +1,4 @@
+import { MetaFunction } from "@remix-run/cloudflare";
 import { cx } from "class-variance-authority";
 import { Suspense, useMemo, useState } from "react";
 
@@ -5,6 +6,10 @@ import { MyTicketsList } from "~/components/MyEvents/MyTicketsList";
 import { MyTicketsLoadingSkeleton } from "~/components/MyEvents/MyTicketsLoadingSkeleton";
 import { sharedLayoutStyle } from "~/components/sharedLayouts";
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
+
+export const meta: MetaFunction = () => {
+  return [{ title: "Mi Eventos | Tickets" }];
+};
 
 export default function Layout() {
   const [tab, setTab] = useState<"future" | "past">("future");

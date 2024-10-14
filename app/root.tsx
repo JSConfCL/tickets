@@ -1,4 +1,4 @@
-import { LinksFunction } from "@remix-run/cloudflare";
+import { LinksFunction, MetaFunction } from "@remix-run/cloudflare";
 import {
   Links,
   Meta,
@@ -64,6 +64,25 @@ export const links: LinksFunction = () => {
       rel: "icon",
       href: "dark-mode-favicon.ico",
       media: "(prefers-color-scheme: dark)",
+    },
+  ];
+};
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Tickets - Plataforma de Entradas Open-Source para Eventos." },
+    {
+      property: "og:title",
+      content: "Tickets - Plataforma de Entradas Open-Source para Eventos.",
+    },
+    {
+      name: "description",
+      content:
+        "Tickets - Descubre y compra entradas para eventos emocionantes, la solución open-source para la gestión de eventos. Ya sea que asistas o organices, nuestra plataforma te ayuda a descubrir, gestionar y vender entradas, todo impulsado por una comunidad colaborativa.",
+    },
+    {
+      property: "og:image",
+      content: "/og.jpg",
     },
   ];
 };
