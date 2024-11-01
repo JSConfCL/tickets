@@ -406,6 +406,8 @@ export type Mutation = {
   approvalUserTicket: UserTicket;
   /** Cancel a ticket */
   cancelUserTicket: UserTicket;
+  /** Cancel multiple user ticket addons */
+  cancelUserTicketAddons: Array<UserTicketAddon>;
   /** Check the status of a purchase order */
   checkPurchaseOrderStatus: PurchaseOrder;
   /** Attempt to claim and/or transfer tickets */
@@ -488,6 +490,10 @@ export type MutationApprovalUserTicketArgs = {
 
 export type MutationCancelUserTicketArgs = {
   userTicketId: Scalars["String"]["input"];
+};
+
+export type MutationCancelUserTicketAddonsArgs = {
+  userTicketAddonIds: Array<Scalars["String"]["input"]>;
 };
 
 export type MutationCheckPurchaseOrderStatusArgs = {
@@ -1674,6 +1680,23 @@ export type MyEventsQuery = {
   };
 };
 
+export type MyReceivedTransfersQueryVariables = Exact<{ [key: string]: never }>;
+
+export type MyReceivedTransfersQuery = {
+  myTicketTransfers: Array<{
+    createdAt: string;
+    expirationDate: string;
+    id: string;
+    status: TicketTransferAttemptStatus;
+    transferMessage?: string | null;
+    sender: { email: string; name?: string | null };
+    userTicket: {
+      id: string;
+      ticketTemplate: { name: string; event: { id: string; name: string } };
+    };
+  }>;
+};
+
 export type MyPurchaseOrdersQueryVariables = Exact<{
   input: PaginatedInputMyPurchaseOrdersInput;
 }>;
@@ -2625,6 +2648,102 @@ export const MyEventsDocument = {
     },
   ],
 } as unknown as DocumentNode<MyEventsQuery, MyEventsQueryVariables>;
+export const MyReceivedTransfersDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "myReceivedTransfers" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "myTicketTransfers" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "type" },
+                value: { kind: "EnumValue", value: "RECEIVED" },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "expirationDate" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "sender" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "email" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "status" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "transferMessage" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "userTicket" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "ticketTemplate" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "event" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  MyReceivedTransfersQuery,
+  MyReceivedTransfersQueryVariables
+>;
 export const MyPurchaseOrdersDocument = {
   kind: "Document",
   definitions: [

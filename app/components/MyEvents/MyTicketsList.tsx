@@ -1,16 +1,24 @@
 import { Link } from "@remix-run/react";
-import { Calendar, MapPin } from "lucide-react";
-import { useMemo } from "react";
+import { Bell, Calendar, MapPin } from "lucide-react";
+import { useMemo, useState } from "react";
+import { toast } from "sonner";
 
+import { TicketTransferAttemptStatus } from "~/api/gql/graphql";
 import {
   MyEventsQuery,
   useMyEventsSuspenseQuery,
 } from "~/components/MyEvents/graphql/myEvents.generated";
+import { useAcceptTransferredTicketMutation } from "~/components/MyTransfers/graphql/acceptTransferedTicket.generated";
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Badge } from "~/components/ui/badge";
+import { Button, buttonVariants } from "~/components/ui/button";
 import { Card, CardDescription, CardTitle } from "~/components/ui/card";
 import { formatDate, formatTime } from "~/utils/date";
 import { pluralize } from "~/utils/string";
 import { urls } from "~/utils/urls";
+import { cn } from "~/utils/utils";
+
+import { useMyReceivedTransfersSuspenseQuery } from "./graphql/myReceivedTransfers.generated";
 
 const EventCard = ({
   event,
@@ -78,7 +86,7 @@ export const MyTicketsList = ({
   startDateTimeTo?: string | null;
   order?: string;
 }) => {
-  const { data } = useMyEventsSuspenseQuery({
+  const { data, refetch: refetchMyEvents } = useMyEventsSuspenseQuery({
     variables: {
       input: {
         search: {
@@ -97,6 +105,10 @@ export const MyTicketsList = ({
       },
     },
   });
+  const { data: receivedTransfersData, refetch: refetchReceivedTransfers } =
+    useMyReceivedTransfersSuspenseQuery();
+  const [acceptTicket] = useAcceptTransferredTicketMutation();
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const { groupedByDate, orderedDates } = useMemo(() => {
     const groupedByDate = data.searchEvents.data.reduce(
@@ -140,13 +152,82 @@ export const MyTicketsList = ({
     groupedByDate[date].map((event) => event),
   );
 
+  const myTicketTransfers =
+    receivedTransfersData?.myTicketTransfers.filter(
+      (ticketTransfer) =>
+        ticketTransfer.status === TicketTransferAttemptStatus.Pending,
+    ) ?? [];
+  const ticketTransfer = myTicketTransfers?.[0];
+
+  const handleAcceptTransfer = async () => {
+    setIsDisabled(true);
+
+    await acceptTicket({
+      variables: {
+        transferId: ticketTransfer.id,
+      },
+      onCompleted(data) {
+        if (data.acceptTransferredTicket.id) {
+          setIsDisabled(false);
+          toast.success(
+            `La transferenciaha se ha confirmado exitosamente. Hemos notificado al ${ticketTransfer.sender.email}.`,
+          );
+          void refetchReceivedTransfers();
+          void refetchMyEvents();
+        } else {
+          setIsDisabled(false);
+          toast.error(
+            "Ocurrió un error al intentar confirmar la transferencia. Por favor intenta de nuevo.",
+          );
+        }
+      },
+      onError() {
+        setIsDisabled(false);
+        toast.error(
+          "Ocurrió un error al intentar confirmar la transferencia. Por favor intenta de nuevo.",
+        );
+      },
+    });
+  };
+
   return (
-    <div className="mx-auto grid w-full grid-cols-1 gap-4 md:grid-cols-3">
-      {sorted.map((event, index) => (
-        <div key={`${event.id}-${index}`} className="basis-full md:basis-1/3">
-          <EventCard event={event} />
-        </div>
-      ))}
-    </div>
+    <>
+      {ticketTransfer ? (
+        <Alert key={ticketTransfer.id}>
+          <Bell className="size-4" />
+          <AlertTitle>Te han envíado un Ticket</AlertTitle>
+          <AlertDescription className="flex flex-col gap-2">
+            <div>
+              Te han envíado un ticket:{" "}
+              {ticketTransfer.userTicket.ticketTemplate.name} para el evento:{" "}
+              {ticketTransfer.userTicket.ticketTemplate.event.name}.
+            </div>
+            <div className="flex flex-col justify-end gap-2 md:flex-row">
+              <Link
+                className={cn(buttonVariants({ variant: "outline" }))}
+                to={urls.myTransfers}
+              >
+                Ver mis Transferencia
+              </Link>
+              <Button
+                onClick={() => {
+                  void handleAcceptTransfer();
+                }}
+                disabled={isDisabled}
+              >
+                Aceptar Transferencia
+              </Button>
+            </div>
+          </AlertDescription>
+        </Alert>
+      ) : null}
+      <div className="mx-auto grid w-full grid-cols-1 gap-4 md:grid-cols-3">
+        {sorted.map((event, index) => (
+          <div key={`${event.id}-${index}`} className="basis-full md:basis-1/3">
+            <EventCard event={event} />
+          </div>
+        ))}
+      </div>
+    </>
   );
 };

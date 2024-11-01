@@ -1,0 +1,23 @@
+query myReceivedTransfers {
+  myTicketTransfers(type: RECEIVED) {
+    createdAt
+    expirationDate
+    id
+    sender {
+      email
+      name
+    }
+    status
+    transferMessage
+    userTicket {
+      id
+      ticketTemplate {
+        name
+        event {
+          id
+          name
+        }
+      }
+    }
+  }
+}
