@@ -21,6 +21,7 @@ const LoadingCard = () => {
             <Skeleton className="h-6 w-40" />
             <Skeleton className="h-6 w-64" />
             <Skeleton className="h-6 w-40" />
+            <Skeleton className="h-6 w-48" />
           </div>
         </div>
       </div>
