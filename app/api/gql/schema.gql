@@ -16,7 +16,73 @@ type AddUserToTeamResponseRef {
 }
 
 """
-Representation of a workEmail
+Representation of an Addon
+"""
+type Addon {
+  availableStock: Int
+  constraints: [AddonConstraint!]!
+  description: String
+  id: ID!
+  isFree: Boolean!
+  isUnlimited: Boolean!
+  maxPerTicket: Int
+  name: String!
+  prices: [Price!]!
+  ticketAddons: [TicketAddon!]!
+  totalStock: Int
+}
+
+input AddonClaimInput {
+  addonId: String!
+  quantity: Int!
+}
+
+"""
+Representation of an Addon Constraint
+"""
+type AddonConstraint {
+  addon: Addon!
+  addonId: ID!
+  constraintType: AddonConstraintType!
+  id: ID!
+  relatedAddon: Addon!
+  relatedAddonId: ID!
+}
+
+enum AddonConstraintType {
+  DEPENDENCY
+  MUTUAL_EXCLUSION
+}
+
+input AddonInput {
+  constraints: [CreateAddonConstraintInput!]
+  description: String
+  eventId: String!
+
+  """
+  Cannot be true if prices are passed.
+  """
+  isFree: Boolean!
+
+  """
+  If true, totalStock must not be passed.
+  """
+  isUnlimited: Boolean!
+  maxPerTicket: Int
+  name: String!
+  prices: [PricingInputField!]
+  tags: [String!]
+  tickets: [AddonInputTicket!]
+  totalStock: Int
+}
+
+input AddonInputTicket {
+  orderDisplay: Int!
+  ticketId: String!
+}
+
+"""
+Representation of an allowed currency
 """
 type AllowedCurrency {
   currency: String!
@@ -26,6 +92,23 @@ type AllowedCurrency {
 
 input CheckForPurchaseOrderInput {
   purchaseOrderId: String!
+}
+
+input ClaimUserTicketAddonInput {
+  """
+  The ID of the addon to claim
+  """
+  addonId: String!
+
+  """
+  The quantity of the addon to claim
+  """
+  quantity: Int!
+
+  """
+  The ID of the user ticket to add the addon to
+  """
+  userTicketId: String!
 }
 
 enum CommnunityStatus {
@@ -80,6 +163,11 @@ type ConsolidatedPaymentLogEntry {
   id: ID!
   platform: String!
   totalTransactionAmount: Float!
+}
+
+input CreateAddonConstraintInput {
+  constraintType: AddonConstraintType!
+  relatedAddonId: String!
 }
 
 input CreateCommunityInput {
@@ -316,12 +404,11 @@ enum ImageHostingEnum {
 }
 
 type Mutation {
-  acceptGiftedTicket(userTicketId: String!): UserTicket!
-
   """
   Accept the user's invitation to a team
   """
   acceptTeamInvitation(input: AcceptTeamInvitationInput!): TeamRef!
+  acceptTransferredTicket(transferId: String!): UserTicketTransfer!
 
   """
   Try to add a person to a team
@@ -349,9 +436,22 @@ type Mutation {
   checkPurchaseOrderStatus(input: CheckForPurchaseOrderInput!): PurchaseOrder!
 
   """
-  Attempt to claim a certain ammount of tickets
+  Attempt to claim and/or transfer tickets
   """
   claimUserTicket(input: TicketClaimInput!): RedeemUserTicketResponse!
+
+  """
+  Claim addons for multiple user tickets
+  """
+  claimUserTicketAddons(
+    addonsClaims: [ClaimUserTicketAddonInput!]!
+
+    """
+    The currency id to use for the purchase order. If any addon is not free, this parameter is required
+    """
+    currencyId: String
+  ): RedeemUserTicketAddonsResponse!
+  createAddon(input: AddonInput!): Addon!
 
   """
   Create an community
@@ -387,6 +487,7 @@ type Mutation {
   Create a ticket
   """
   createTicket(input: TicketCreateInput!): Ticket!
+  deleteAddons(ids: [String!]!): Addon!
 
   """
   Try to add a person to a team
@@ -437,10 +538,15 @@ type Mutation {
   Kickoff the email validation flow. This flow will links an email to a user, create a company if it does not exist, and allows filling data for that email's position
   """
   startWorkEmailValidation(email: String!): WorkEmail!
+  transferMyTicketToUser(
+    input: UserTicketTransferInfoInput!
+    ticketId: String!
+  ): UserTicketTransfer!
   triggerUserTicketApprovalReview(
     eventId: String!
     userId: String!
   ): [UserTicket!]!
+  updateAddon(input: UpdateAddonInput!): Addon!
 
   """
   Update a company
@@ -674,11 +780,18 @@ type PurchaseOrder {
   purchasePaymentStatus: PurchaseOrderPaymentStatusEnum
   status: PurchaseOrderStatusEnum
   tickets: [UserTicket!]!
+  userTicketAddons: [UserTicketAddon!]!
 }
 
 input PurchaseOrderInput {
+  itemsDetails: [PurchaseOrderItemDetailsInput!]
   quantity: Int!
   ticketId: String!
+}
+
+input PurchaseOrderItemDetailsInput {
+  addons: [AddonClaimInput!]!
+  transferInfo: UserTicketTransferInfoInput
 }
 
 enum PurchaseOrderPaymentStatusEnum {
@@ -749,6 +862,11 @@ type Query {
   ): PaginatedPurchaseOrder!
 
   """
+  Get a list of user ticket transfers sent or received by the current user
+  """
+  myTicketTransfers(type: TicketTransferType = ALL): [UserTicketTransfer!]!
+
+  """
   Get a list of tickets for the current user
   """
   myTickets(input: PaginatedInputMyTicketsSearchValues!): PaginatedUserTicket!
@@ -776,11 +894,17 @@ type Query {
   schedule(scheduleId: String!): Schedule!
 
   """
+  Get addons for a specific event
+  """
+  searchAddons(eventId: String!): [Addon!]!
+
+  """
   Search a consolidated payment logs, by date, aggregated by platform and currency_id
   """
   searchConsolidatedPaymentLogs(
     input: SearchPaymentLogsInput!
   ): [ConsolidatedPaymentLogEntry!]!
+  searchCurrencies: [AllowedCurrency!]!
 
   """
   Get a list of events. Filter by name, id, status or date
@@ -833,6 +957,15 @@ type Query {
 input RSVPFilterInput {
   eventIds: [String!]
 }
+
+type RedeemUserTicketAddonsError {
+  error: Boolean!
+  errorMessage: String!
+}
+
+union RedeemUserTicketAddonsResponse =
+  | PurchaseOrder
+  | RedeemUserTicketAddonsError
 
 type RedeemUserTicketError {
   error: Boolean!
@@ -1043,6 +1176,18 @@ type Ticket {
   visibility: TicketTemplateVisibility!
 }
 
+"""
+Representation of a Ticket Addon
+"""
+type TicketAddon {
+  addon: Addon!
+  addonId: ID!
+  id: ID!
+  orderDisplay: Int!
+  ticket: Ticket!
+  ticketId: ID!
+}
+
 enum TicketApprovalStatus {
   approved
   cancelled
@@ -1051,6 +1196,8 @@ enum TicketApprovalStatus {
   not_required
   pending
   rejected
+  transfer_accepted
+  transfer_pending
 }
 
 input TicketClaimInput {
@@ -1129,10 +1276,58 @@ enum TicketTemplateVisibility {
   unlisted
 }
 
+enum TicketTransferAttemptStatus {
+  Accepted
+  Cancelled
+  Expired
+  Pending
+  Rejected
+}
+
+enum TicketTransferType {
+  ALL
+  RECEIVED
+  SENT
+}
+
+type TicketTransferUserInfo {
+  email: String!
+  name: String
+}
+
 enum TypeOfEmployment {
   freelance
   fullTime
   partTime
+}
+
+input UpdateAddonConstraintInput {
+  constraintType: AddonConstraintType!
+  id: String!
+  relatedAddonId: String!
+}
+
+input UpdateAddonInput {
+  deleteConstraintIds: [String!]
+  deletePriceIds: [String!]
+  deleteTicketIds: [String!]
+  description: String
+  id: String!
+
+  """
+  Cannot be true if prices are passed.
+  """
+  isFree: Boolean
+  isUnlimited: Boolean
+  maxPerTicket: Int
+  name: String
+  newConstraints: [CreateAddonConstraintInput!]
+  newTickets: [AddonInputTicket!]
+  prices: [PricingInputField!]
+  tags: [String!]
+  totalStock: Int
+  updateConstraints: [UpdateAddonConstraintInput!]
+  updateTickets: [AddonInputTicket!]
 }
 
 input UpdateCommunityInput {
@@ -1234,7 +1429,57 @@ type UserTicket {
   purchaseOrder: PurchaseOrder
   redemptionStatus: TicketRedemptionStatus!
   ticketTemplate: Ticket!
+  transferAttempts: [UserTicketTransfer!]!
   user: User
+  userTicketAddons: [UserTicketAddon!]!
+}
+
+"""
+Representation of a User Ticket Addon
+"""
+type UserTicketAddon {
+  addon: Addon!
+  addonId: ID!
+  approvalStatus: UserTicketAddonApprovalStatus!
+  id: ID!
+  purchaseOrder: PurchaseOrder!
+  purchaseOrderId: ID!
+  quantity: Int!
+  redemptionStatus: UserTicketAddonStatus!
+  unitPriceInCents: Int!
+  userTicket: UserTicket!
+  userTicketId: ID!
+}
+
+enum UserTicketAddonApprovalStatus {
+  APPROVED
+  CANCELLED
+  PENDING
+}
+
+enum UserTicketAddonStatus {
+  PENDING
+  REDEEMED
+}
+
+"""
+Representation of a user ticket transfer
+"""
+type UserTicketTransfer {
+  createdAt: DateTime!
+  expirationDate: DateTime!
+  id: ID!
+  recipient: TicketTransferUserInfo!
+  sender: TicketTransferUserInfo!
+  status: TicketTransferAttemptStatus!
+  transferMessage: String
+  userTicket: UserTicket!
+}
+
+input UserTicketTransferInfoInput {
+  email: String!
+  message: String
+  name: String!
 }
 
 """
