@@ -1624,6 +1624,23 @@ export type MyEventQuery = {
   };
 };
 
+export type TransferTicketMutationVariables = Exact<{
+  ticketId: Scalars["String"]["input"];
+  input: UserTicketTransferInfoInput;
+}>;
+
+export type TransferTicketMutation = {
+  transferMyTicketToUser: {
+    id: string;
+    status: TicketTransferAttemptStatus;
+    expirationDate: string;
+    transferMessage?: string | null;
+    sender: { email: string; name?: string | null };
+    recipient: { email: string; name?: string | null };
+    userTicket: { id: string; approvalStatus: TicketApprovalStatus };
+  };
+};
+
 export type MyEventsQueryVariables = Exact<{
   input: PaginatedInputEventsSearchInput;
   userTicketSearchInput?: InputMaybe<EventsTicketsSearchInput>;
@@ -2256,6 +2273,127 @@ export const MyEventDocument = {
     },
   ],
 } as unknown as DocumentNode<MyEventQuery, MyEventQueryVariables>;
+export const TransferTicketDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "transferTicket" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "ticketId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "UserTicketTransferInfoInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "transferMyTicketToUser" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "ticketId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "ticketId" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "status" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "expirationDate" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "transferMessage" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "sender" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "email" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "recipient" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "email" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "userTicket" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "approvalStatus" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  TransferTicketMutation,
+  TransferTicketMutationVariables
+>;
 export const MyEventsDocument = {
   kind: "Document",
   definitions: [

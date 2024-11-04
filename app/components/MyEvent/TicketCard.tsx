@@ -1,7 +1,8 @@
-import { EyeIcon, EyeOffIcon, Sparkles } from "lucide-react";
+import { EyeIcon, EyeOffIcon, Sparkles, EllipsisVertical } from "lucide-react";
 import { useState } from "react";
 import QRCode from "react-qr-code";
 
+import { TicketApprovalStatus } from "~/api/gql/graphql";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { Card, CardContent, CardTitle } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
@@ -15,6 +16,7 @@ import { urls } from "~/utils/urls";
 import { cn } from "~/utils/utils";
 
 import { MyEventQuery } from "./graphql/myEvent.generated";
+import { TransferTicketDialog } from "./TransferTicketDialog";
 
 type Event = MyEventQuery["searchEvents"]["data"][0];
 
@@ -26,12 +28,18 @@ export const TicketCard = ({
   ticket: Event["usersTickets"]["0"];
 }) => {
   const [showQR, setShowQR] = useState(false);
+  const [showMore, setShowMore] = useState(false);
   const publicUrl = event?.publicShareURL
     ? urls.public.ticket(ticket.publicId, event.publicShareURL)
     : undefined;
 
   return (
     <>
+      <TransferTicketDialog
+        open={showMore}
+        onOpenChange={setShowMore}
+        ticketId={ticket.id}
+      />
       <Card className="flex h-full flex-col justify-between gap-6 bg-white p-6 text-black">
         <div className="flex w-full flex-col gap-6">
           <div className="relative mx-auto mt-4 w-full max-w-[90%] text-center">
@@ -141,6 +149,21 @@ export const TicketCard = ({
               Compartir
             </a>
           ) : null}
+          <Button
+            className={cn(
+              buttonVariants({ variant: "outline" }),
+              "flex grow-0 flex-row bg-white text-black",
+            )}
+            disabled={
+              ticket.approvalStatus === TicketApprovalStatus.TransferPending
+            }
+            onClick={() => {
+              setShowMore((show) => !show);
+            }}
+          >
+            <EllipsisVertical className="size-4" />
+            <span className="sr-only">Más</span>
+          </Button>
         </div>
       </Card>
     </>
