@@ -1,0 +1,27 @@
+query myTicketTransfers {
+  myTicketTransfers {
+    createdAt
+    expirationDate
+    id
+    recipient {
+      email
+      name
+    }
+    sender {
+      email
+      name
+    }
+    status
+    transferMessage
+    userTicket {
+      id
+      ticketTemplate {
+        name
+        event {
+          id
+          name
+        }
+      }
+    }
+  }
+}

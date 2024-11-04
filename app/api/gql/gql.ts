@@ -23,6 +23,8 @@ const documents = {
     types.MyEventsDocument,
   "query MyPurchaseOrders($input: PaginatedInputMyPurchaseOrdersInput!) {\n  myPurchaseOrders(input: $input) {\n    data {\n      id\n      finalPrice\n      paymentPlatform\n      createdAt\n      currency {\n        id\n        currency\n      }\n      tickets {\n        id\n        ticketTemplate {\n          id\n          name\n          event {\n            id\n            name\n          }\n        }\n      }\n    }\n  }\n}":
     types.MyPurchaseOrdersDocument,
+  "query myTicketTransfers {\n  myTicketTransfers {\n    createdAt\n    expirationDate\n    id\n    recipient {\n      email\n      name\n    }\n    sender {\n      email\n      name\n    }\n    status\n    transferMessage\n    userTicket {\n      id\n      ticketTemplate {\n        name\n        event {\n          id\n          name\n        }\n      }\n    }\n  }\n}":
+    types.MyTicketTransfersDocument,
   "query SearchUsers($input: PaginatedInputUserSearchValues!) {\n  userSearch(input: $input) {\n    data {\n      id\n      username\n      name\n      lastName\n      imageUrl\n      email\n    }\n    pagination {\n      currentPage\n      pageSize\n      totalPages\n      totalRecords\n    }\n  }\n}":
     types.SearchUsersDocument,
   "mutation updateUser($input: userEditInput!) {\n  updateUser(input: $input) {\n    id\n    name\n    lastName\n    username\n    bio\n    email\n  }\n}":
@@ -83,6 +85,12 @@ export function graphql(
 export function graphql(
   source: "query MyPurchaseOrders($input: PaginatedInputMyPurchaseOrdersInput!) {\n  myPurchaseOrders(input: $input) {\n    data {\n      id\n      finalPrice\n      paymentPlatform\n      createdAt\n      currency {\n        id\n        currency\n      }\n      tickets {\n        id\n        ticketTemplate {\n          id\n          name\n          event {\n            id\n            name\n          }\n        }\n      }\n    }\n  }\n}",
 ): (typeof documents)["query MyPurchaseOrders($input: PaginatedInputMyPurchaseOrdersInput!) {\n  myPurchaseOrders(input: $input) {\n    data {\n      id\n      finalPrice\n      paymentPlatform\n      createdAt\n      currency {\n        id\n        currency\n      }\n      tickets {\n        id\n        ticketTemplate {\n          id\n          name\n          event {\n            id\n            name\n          }\n        }\n      }\n    }\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "query myTicketTransfers {\n  myTicketTransfers {\n    createdAt\n    expirationDate\n    id\n    recipient {\n      email\n      name\n    }\n    sender {\n      email\n      name\n    }\n    status\n    transferMessage\n    userTicket {\n      id\n      ticketTemplate {\n        name\n        event {\n          id\n          name\n        }\n      }\n    }\n  }\n}",
+): (typeof documents)["query myTicketTransfers {\n  myTicketTransfers {\n    createdAt\n    expirationDate\n    id\n    recipient {\n      email\n      name\n    }\n    sender {\n      email\n      name\n    }\n    status\n    transferMessage\n    userTicket {\n      id\n      ticketTemplate {\n        name\n        event {\n          id\n          name\n        }\n      }\n    }\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

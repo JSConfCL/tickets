@@ -1698,6 +1698,24 @@ export type MyPurchaseOrdersQuery = {
   };
 };
 
+export type MyTicketTransfersQueryVariables = Exact<{ [key: string]: never }>;
+
+export type MyTicketTransfersQuery = {
+  myTicketTransfers: Array<{
+    createdAt: string;
+    expirationDate: string;
+    id: string;
+    status: TicketTransferAttemptStatus;
+    transferMessage?: string | null;
+    recipient: { email: string; name?: string | null };
+    sender: { email: string; name?: string | null };
+    userTicket: {
+      id: string;
+      ticketTemplate: { name: string; event: { id: string; name: string } };
+    };
+  }>;
+};
+
 export type SearchUsersQueryVariables = Exact<{
   input: PaginatedInputUserSearchValues;
 }>;
@@ -2736,6 +2754,106 @@ export const MyPurchaseOrdersDocument = {
 } as unknown as DocumentNode<
   MyPurchaseOrdersQuery,
   MyPurchaseOrdersQueryVariables
+>;
+export const MyTicketTransfersDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "myTicketTransfers" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "myTicketTransfers" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "expirationDate" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "recipient" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "email" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "sender" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "email" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "status" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "transferMessage" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "userTicket" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "ticketTemplate" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "event" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  MyTicketTransfersQuery,
+  MyTicketTransfersQueryVariables
 >;
 export const SearchUsersDocument = {
   kind: "Document",
