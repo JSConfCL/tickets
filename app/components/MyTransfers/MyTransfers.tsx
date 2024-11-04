@@ -1,8 +1,11 @@
 import { Link } from "@remix-run/react";
 import { ArrowUpRight } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
+import { TicketTransferAttemptStatus } from "~/api/gql/graphql";
 import { useMyProfileSuspenseQuery } from "~/components/Profile/graphql/myProfile.generated";
-import { buttonVariants } from "~/components/ui/button";
+import { Button, buttonVariants } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
 import {
   Table,
@@ -17,7 +20,11 @@ import { urls } from "~/utils/urls";
 import { statusColor, statusLabel } from "~/utils/userTicketTransfer";
 import { cn } from "~/utils/utils";
 
-import { useMyTicketTransfersSuspenseQuery } from "./graphql/myTransfers.generated";
+import { useAcceptTransferredTicketMutation } from "./graphql/acceptTransferedTicket.generated";
+import {
+  MyTicketTransfersQuery,
+  useMyTicketTransfersSuspenseQuery,
+} from "./graphql/myTransfers.generated";
 
 interface MinUser {
   email: string;
@@ -32,17 +39,49 @@ const getUserInfo = (user: MinUser, me: MinUser) => {
   return user.name ? user.name : user.email;
 };
 
+type TicketTransfer = MyTicketTransfersQuery["myTicketTransfers"][0];
+
 export const MyTransfers = () => {
   const {
     data: { me },
   } = useMyProfileSuspenseQuery();
   const { data } = useMyTicketTransfersSuspenseQuery();
-
+  const [acceptTicket] = useAcceptTransferredTicketMutation();
+  const [isDisabled, setIsDisabled] = useState<Record<string, boolean>>({});
   const myTicketTransfers = data?.myTicketTransfers;
   const sortedTickets = [...myTicketTransfers].sort(
     (ticketTransfer1, ticketTransfer2) =>
       ticketTransfer1.createdAt > ticketTransfer2.createdAt ? -1 : 1,
   );
+
+  const handleAcceptTransfer = async (ticketTransfer: TicketTransfer) => {
+    setIsDisabled((prev) => ({ ...prev, [ticketTransfer.id]: true }));
+
+    await acceptTicket({
+      variables: {
+        transferId: ticketTransfer.id,
+      },
+      onCompleted(data) {
+        if (data.acceptTransferredTicket.id) {
+          setIsDisabled((prev) => ({ ...prev, [ticketTransfer.id]: false }));
+          toast.success(
+            `La transferenciaha se ha confirmado exitosamente. Hemos notificado al ${ticketTransfer.sender.email}.`,
+          );
+        } else {
+          setIsDisabled((prev) => ({ ...prev, [ticketTransfer.id]: false }));
+          toast.error(
+            "Ocurrió un error al intentar confirmar la transferencia. Por favor intenta de nuevo.",
+          );
+        }
+      },
+      onError() {
+        setIsDisabled((prev) => ({ ...prev, [ticketTransfer.id]: false }));
+        toast.error(
+          "Ocurrió un error al intentar confirmar la transferencia. Por favor intenta de nuevo.",
+        );
+      },
+    });
+  };
 
   return (
     <div className="flex flex-col gap-10">
@@ -124,7 +163,7 @@ export const MyTransfers = () => {
                       <TableCell className="h-[52px] text-center">
                         {getUserInfo(ticketTransfer.recipient, me as MinUser)}
                       </TableCell>
-                      <TableCell className="h-[52px]">
+                      <TableCell className="flex h-[52px] justify-center gap-2">
                         <span className="flex flex-row items-center justify-center gap-2">
                           <span
                             className={cn(
@@ -134,6 +173,18 @@ export const MyTransfers = () => {
                           />
                           {statusLabel(ticketTransfer.status)}
                         </span>
+                        {ticketTransfer.status ===
+                          TicketTransferAttemptStatus.Pending &&
+                        me.email === ticketTransfer.recipient.email ? (
+                          <Button
+                            onClick={() =>
+                              void handleAcceptTransfer(ticketTransfer)
+                            }
+                            disabled={isDisabled[ticketTransfer.id] ?? false}
+                          >
+                            Aceptar
+                          </Button>
+                        ) : null}
                       </TableCell>
                     </TableRow>
                   );

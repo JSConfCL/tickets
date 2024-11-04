@@ -1698,6 +1698,18 @@ export type MyPurchaseOrdersQuery = {
   };
 };
 
+export type AcceptTransferredTicketMutationVariables = Exact<{
+  transferId: Scalars["String"]["input"];
+}>;
+
+export type AcceptTransferredTicketMutation = {
+  acceptTransferredTicket: {
+    id: string;
+    status: TicketTransferAttemptStatus;
+    userTicket: { id: string; user?: { id: string } | null };
+  };
+};
+
 export type MyTicketTransfersQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MyTicketTransfersQuery = {
@@ -2754,6 +2766,84 @@ export const MyPurchaseOrdersDocument = {
 } as unknown as DocumentNode<
   MyPurchaseOrdersQuery,
   MyPurchaseOrdersQueryVariables
+>;
+export const AcceptTransferredTicketDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "AcceptTransferredTicket" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "transferId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "acceptTransferredTicket" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "transferId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "transferId" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "status" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "userTicket" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "user" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  AcceptTransferredTicketMutation,
+  AcceptTransferredTicketMutationVariables
 >;
 export const MyTicketTransfersDocument = {
   kind: "Document",
