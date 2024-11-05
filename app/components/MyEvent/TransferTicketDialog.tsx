@@ -76,7 +76,7 @@ export const TransferTicketDialog = ({
         // Redirect to payment page
         if (data.transferMyTicketToUser?.id) {
           toast.success(
-            `La transferenciaha se ha hecho exitosamente. Hemos notificado al ${email}. Ahora, ${name} tiene 7 días para aceptar la transferencia o será revertida.`,
+            `La transferencia se ha hecho exitosamente. Hemos notificado a ${email}. Ahora, ${name} tiene 7 días para aceptar la transferencia o será revertida.`,
           );
           form.reset();
           onOpenChange(false);
