@@ -167,7 +167,7 @@ export const MyTicketsList = ({
       onCompleted(data) {
         if (data.acceptTransferredTicket.id) {
           toast.success(
-            `La transferenciaha se ha confirmado exitosamente. Hemos notificado al ${ticketTransfer.sender.email}.`,
+            `La transferencia se ha confirmado exitosamente. Hemos notificado a ${ticketTransfer.sender.email}.`,
           );
           void refetchReceivedTransfers();
           void refetchMyEvents();
