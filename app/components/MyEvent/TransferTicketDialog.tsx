@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle } from "lucide-react";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -50,8 +49,8 @@ export const TransferTicketDialog = ({
   onOpenChange: (open: boolean) => void;
   ticketId: string;
 }) => {
-  const [transferTicket] = useTransferTicketMutation();
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [transferTicket, { loading: tranferTicketLoading }] =
+    useTransferTicketMutation();
   const form = useForm<z.infer<typeof StartTransferTicketSchema>>({
     resolver: zodResolver(StartTransferTicketSchema),
     defaultValues: {
@@ -64,7 +63,6 @@ export const TransferTicketDialog = ({
     name,
     message,
   }: z.infer<typeof StartTransferTicketSchema>) => {
-    setIsDisabled(true);
     await transferTicket({
       variables: {
         ticketId,
@@ -77,21 +75,18 @@ export const TransferTicketDialog = ({
       onCompleted(data) {
         // Redirect to payment page
         if (data.transferMyTicketToUser?.id) {
-          setIsDisabled(false);
           toast.success(
             `La transferenciaha se ha hecho exitosamente. Hemos notificado al ${email}. Ahora, ${name} tiene 7 días para aceptar la transferencia o será revertida.`,
           );
           form.reset();
           onOpenChange(false);
         } else {
-          setIsDisabled(false);
           toast.error(
             "Ocurrió un error al intentar transferir el ticket. Por favor intenta de nuevo.",
           );
         }
       },
       onError() {
-        setIsDisabled(false);
         toast.error(
           "Ocurrió un error al intentar transferir el ticket. Por favor intenta de nuevo.",
         );
@@ -175,7 +170,7 @@ export const TransferTicketDialog = ({
             </Button>
           </AlertDialogCancel>
           <Button
-            disabled={isDisabled}
+            disabled={tranferTicketLoading}
             className={cn(
               "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
             )}

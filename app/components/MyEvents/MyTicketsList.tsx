@@ -1,6 +1,6 @@
 import { Link } from "@remix-run/react";
 import { Bell, Calendar, MapPin } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { toast } from "sonner";
 
 import { TicketTransferAttemptStatus } from "~/api/gql/graphql";
@@ -107,8 +107,8 @@ export const MyTicketsList = ({
   });
   const { data: receivedTransfersData, refetch: refetchReceivedTransfers } =
     useMyReceivedTransfersSuspenseQuery();
-  const [acceptTicket] = useAcceptTransferredTicketMutation();
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [acceptTicket, { loading: acceptTicketLoading }] =
+    useAcceptTransferredTicketMutation();
 
   const { groupedByDate, orderedDates } = useMemo(() => {
     const groupedByDate = data.searchEvents.data.reduce(
@@ -160,29 +160,24 @@ export const MyTicketsList = ({
   const ticketTransfer = myTicketTransfers?.[0];
 
   const handleAcceptTransfer = async () => {
-    setIsDisabled(true);
-
     await acceptTicket({
       variables: {
         transferId: ticketTransfer.id,
       },
       onCompleted(data) {
         if (data.acceptTransferredTicket.id) {
-          setIsDisabled(false);
           toast.success(
             `La transferenciaha se ha confirmado exitosamente. Hemos notificado al ${ticketTransfer.sender.email}.`,
           );
           void refetchReceivedTransfers();
           void refetchMyEvents();
         } else {
-          setIsDisabled(false);
           toast.error(
             "Ocurrió un error al intentar confirmar la transferencia. Por favor intenta de nuevo.",
           );
         }
       },
       onError() {
-        setIsDisabled(false);
         toast.error(
           "Ocurrió un error al intentar confirmar la transferencia. Por favor intenta de nuevo.",
         );
@@ -213,7 +208,7 @@ export const MyTicketsList = ({
                 onClick={() => {
                   void handleAcceptTransfer();
                 }}
-                disabled={isDisabled}
+                disabled={acceptTicketLoading}
               >
                 Aceptar Transferencia
               </Button>
