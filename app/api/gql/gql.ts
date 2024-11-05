@@ -17,10 +17,18 @@ const documents = {
     types.FetchExampleEventsDocument,
   "query myEvent($input: PaginatedInputEventsSearchInput!, $userTicketSearchInput: EventsTicketsSearchInput) {\n  searchEvents(input: $input) {\n    data {\n      id\n      name\n      description\n      startDateTime\n      endDateTime\n      address\n      publicShareURL\n      previewImage {\n        url\n      }\n      bannerImage {\n        url\n      }\n      mobileBannerImage {\n        url\n      }\n      community {\n        id\n        name\n      }\n      status\n      usersTickets(input: $userTicketSearchInput) {\n        id\n        approvalStatus\n        paymentStatus\n        redemptionStatus\n        createdAt\n        publicId\n        ticketTemplate {\n          id\n          name\n          description\n        }\n      }\n    }\n    pagination {\n      currentPage\n      pageSize\n      totalPages\n      totalRecords\n    }\n  }\n}":
     types.MyEventDocument,
+  "mutation transferTicket($ticketId: String!, $input: UserTicketTransferInfoInput!) {\n  transferMyTicketToUser(ticketId: $ticketId, input: $input) {\n    id\n    status\n    expirationDate\n    transferMessage\n    sender {\n      email\n      name\n    }\n    recipient {\n      email\n      name\n    }\n    userTicket {\n      id\n      approvalStatus\n    }\n  }\n}":
+    types.TransferTicketDocument,
   "query myEvents($input: PaginatedInputEventsSearchInput!, $userTicketSearchInput: EventsTicketsSearchInput) {\n  searchEvents(input: $input) {\n    data {\n      id\n      name\n      description\n      startDateTime\n      address\n      previewImage {\n        url\n      }\n      community {\n        id\n        name\n      }\n      status\n      usersTickets(input: $userTicketSearchInput) {\n        id\n        approvalStatus\n        paymentStatus\n        redemptionStatus\n        ticketTemplate {\n          description\n          id\n        }\n      }\n    }\n    pagination {\n      currentPage\n      pageSize\n      totalPages\n      totalRecords\n    }\n  }\n}":
     types.MyEventsDocument,
+  "query myReceivedTransfers {\n  myTicketTransfers(type: RECEIVED) {\n    createdAt\n    expirationDate\n    id\n    sender {\n      email\n      name\n    }\n    status\n    transferMessage\n    userTicket {\n      id\n      ticketTemplate {\n        name\n        event {\n          id\n          name\n        }\n      }\n    }\n  }\n}":
+    types.MyReceivedTransfersDocument,
   "query MyPurchaseOrders($input: PaginatedInputMyPurchaseOrdersInput!) {\n  myPurchaseOrders(input: $input) {\n    data {\n      id\n      finalPrice\n      paymentPlatform\n      createdAt\n      currency {\n        id\n        currency\n      }\n      tickets {\n        id\n        ticketTemplate {\n          id\n          name\n          event {\n            id\n            name\n          }\n        }\n      }\n    }\n  }\n}":
     types.MyPurchaseOrdersDocument,
+  "mutation AcceptTransferredTicket($transferId: String!) {\n  acceptTransferredTicket(transferId: $transferId) {\n    id\n    status\n    userTicket {\n      id\n      user {\n        id\n      }\n    }\n  }\n}":
+    types.AcceptTransferredTicketDocument,
+  "query myTicketTransfers {\n  myTicketTransfers {\n    createdAt\n    expirationDate\n    id\n    recipient {\n      email\n      name\n    }\n    sender {\n      email\n      name\n    }\n    status\n    transferMessage\n    userTicket {\n      id\n      ticketTemplate {\n        name\n        event {\n          id\n          name\n        }\n      }\n    }\n  }\n}":
+    types.MyTicketTransfersDocument,
   "query SearchUsers($input: PaginatedInputUserSearchValues!) {\n  userSearch(input: $input) {\n    data {\n      id\n      username\n      name\n      lastName\n      imageUrl\n      email\n    }\n    pagination {\n      currentPage\n      pageSize\n      totalPages\n      totalRecords\n    }\n  }\n}":
     types.SearchUsersDocument,
   "mutation updateUser($input: userEditInput!) {\n  updateUser(input: $input) {\n    id\n    name\n    lastName\n    username\n    bio\n    email\n  }\n}":
@@ -67,14 +75,38 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+  source: "mutation transferTicket($ticketId: String!, $input: UserTicketTransferInfoInput!) {\n  transferMyTicketToUser(ticketId: $ticketId, input: $input) {\n    id\n    status\n    expirationDate\n    transferMessage\n    sender {\n      email\n      name\n    }\n    recipient {\n      email\n      name\n    }\n    userTicket {\n      id\n      approvalStatus\n    }\n  }\n}",
+): (typeof documents)["mutation transferTicket($ticketId: String!, $input: UserTicketTransferInfoInput!) {\n  transferMyTicketToUser(ticketId: $ticketId, input: $input) {\n    id\n    status\n    expirationDate\n    transferMessage\n    sender {\n      email\n      name\n    }\n    recipient {\n      email\n      name\n    }\n    userTicket {\n      id\n      approvalStatus\n    }\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
   source: "query myEvents($input: PaginatedInputEventsSearchInput!, $userTicketSearchInput: EventsTicketsSearchInput) {\n  searchEvents(input: $input) {\n    data {\n      id\n      name\n      description\n      startDateTime\n      address\n      previewImage {\n        url\n      }\n      community {\n        id\n        name\n      }\n      status\n      usersTickets(input: $userTicketSearchInput) {\n        id\n        approvalStatus\n        paymentStatus\n        redemptionStatus\n        ticketTemplate {\n          description\n          id\n        }\n      }\n    }\n    pagination {\n      currentPage\n      pageSize\n      totalPages\n      totalRecords\n    }\n  }\n}",
 ): (typeof documents)["query myEvents($input: PaginatedInputEventsSearchInput!, $userTicketSearchInput: EventsTicketsSearchInput) {\n  searchEvents(input: $input) {\n    data {\n      id\n      name\n      description\n      startDateTime\n      address\n      previewImage {\n        url\n      }\n      community {\n        id\n        name\n      }\n      status\n      usersTickets(input: $userTicketSearchInput) {\n        id\n        approvalStatus\n        paymentStatus\n        redemptionStatus\n        ticketTemplate {\n          description\n          id\n        }\n      }\n    }\n    pagination {\n      currentPage\n      pageSize\n      totalPages\n      totalRecords\n    }\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+  source: "query myReceivedTransfers {\n  myTicketTransfers(type: RECEIVED) {\n    createdAt\n    expirationDate\n    id\n    sender {\n      email\n      name\n    }\n    status\n    transferMessage\n    userTicket {\n      id\n      ticketTemplate {\n        name\n        event {\n          id\n          name\n        }\n      }\n    }\n  }\n}",
+): (typeof documents)["query myReceivedTransfers {\n  myTicketTransfers(type: RECEIVED) {\n    createdAt\n    expirationDate\n    id\n    sender {\n      email\n      name\n    }\n    status\n    transferMessage\n    userTicket {\n      id\n      ticketTemplate {\n        name\n        event {\n          id\n          name\n        }\n      }\n    }\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
   source: "query MyPurchaseOrders($input: PaginatedInputMyPurchaseOrdersInput!) {\n  myPurchaseOrders(input: $input) {\n    data {\n      id\n      finalPrice\n      paymentPlatform\n      createdAt\n      currency {\n        id\n        currency\n      }\n      tickets {\n        id\n        ticketTemplate {\n          id\n          name\n          event {\n            id\n            name\n          }\n        }\n      }\n    }\n  }\n}",
 ): (typeof documents)["query MyPurchaseOrders($input: PaginatedInputMyPurchaseOrdersInput!) {\n  myPurchaseOrders(input: $input) {\n    data {\n      id\n      finalPrice\n      paymentPlatform\n      createdAt\n      currency {\n        id\n        currency\n      }\n      tickets {\n        id\n        ticketTemplate {\n          id\n          name\n          event {\n            id\n            name\n          }\n        }\n      }\n    }\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "mutation AcceptTransferredTicket($transferId: String!) {\n  acceptTransferredTicket(transferId: $transferId) {\n    id\n    status\n    userTicket {\n      id\n      user {\n        id\n      }\n    }\n  }\n}",
+): (typeof documents)["mutation AcceptTransferredTicket($transferId: String!) {\n  acceptTransferredTicket(transferId: $transferId) {\n    id\n    status\n    userTicket {\n      id\n      user {\n        id\n      }\n    }\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "query myTicketTransfers {\n  myTicketTransfers {\n    createdAt\n    expirationDate\n    id\n    recipient {\n      email\n      name\n    }\n    sender {\n      email\n      name\n    }\n    status\n    transferMessage\n    userTicket {\n      id\n      ticketTemplate {\n        name\n        event {\n          id\n          name\n        }\n      }\n    }\n  }\n}",
+): (typeof documents)["query myTicketTransfers {\n  myTicketTransfers {\n    createdAt\n    expirationDate\n    id\n    recipient {\n      email\n      name\n    }\n    sender {\n      email\n      name\n    }\n    status\n    transferMessage\n    userTicket {\n      id\n      ticketTemplate {\n        name\n        event {\n          id\n          name\n        }\n      }\n    }\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

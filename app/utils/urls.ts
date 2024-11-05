@@ -16,6 +16,7 @@ export const urls = {
     root: "/my-orders",
     callback: "/my-orders/callback",
   },
+  myTransfers: "/my-transfers",
   comunidades: "/comunidades",
   tickets: {
     root: "/tickets",

@@ -52,7 +52,63 @@ export type AddUserToTeamResponseRef = {
   userIsInOtherTeams: Scalars["Boolean"]["output"];
 };
 
-/** Representation of a workEmail */
+/** Representation of an Addon */
+export type Addon = {
+  availableStock?: Maybe<Scalars["Int"]["output"]>;
+  constraints: Array<AddonConstraint>;
+  description?: Maybe<Scalars["String"]["output"]>;
+  id: Scalars["ID"]["output"];
+  isFree: Scalars["Boolean"]["output"];
+  isUnlimited: Scalars["Boolean"]["output"];
+  maxPerTicket?: Maybe<Scalars["Int"]["output"]>;
+  name: Scalars["String"]["output"];
+  prices: Array<Price>;
+  ticketAddons: Array<TicketAddon>;
+  totalStock?: Maybe<Scalars["Int"]["output"]>;
+};
+
+export type AddonClaimInput = {
+  addonId: Scalars["String"]["input"];
+  quantity: Scalars["Int"]["input"];
+};
+
+/** Representation of an Addon Constraint */
+export type AddonConstraint = {
+  addon: Addon;
+  addonId: Scalars["ID"]["output"];
+  constraintType: AddonConstraintType;
+  id: Scalars["ID"]["output"];
+  relatedAddon: Addon;
+  relatedAddonId: Scalars["ID"]["output"];
+};
+
+export enum AddonConstraintType {
+  Dependency = "DEPENDENCY",
+  MutualExclusion = "MUTUAL_EXCLUSION",
+}
+
+export type AddonInput = {
+  constraints?: InputMaybe<Array<CreateAddonConstraintInput>>;
+  description?: InputMaybe<Scalars["String"]["input"]>;
+  eventId: Scalars["String"]["input"];
+  /** Cannot be true if prices are passed. */
+  isFree: Scalars["Boolean"]["input"];
+  /** If true, totalStock must not be passed. */
+  isUnlimited: Scalars["Boolean"]["input"];
+  maxPerTicket?: InputMaybe<Scalars["Int"]["input"]>;
+  name: Scalars["String"]["input"];
+  prices?: InputMaybe<Array<PricingInputField>>;
+  tags?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  tickets?: InputMaybe<Array<AddonInputTicket>>;
+  totalStock?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
+export type AddonInputTicket = {
+  orderDisplay: Scalars["Int"]["input"];
+  ticketId: Scalars["String"]["input"];
+};
+
+/** Representation of an allowed currency */
 export type AllowedCurrency = {
   currency: Scalars["String"]["output"];
   id: Scalars["ID"]["output"];
@@ -61,6 +117,15 @@ export type AllowedCurrency = {
 
 export type CheckForPurchaseOrderInput = {
   purchaseOrderId: Scalars["String"]["input"];
+};
+
+export type ClaimUserTicketAddonInput = {
+  /** The ID of the addon to claim */
+  addonId: Scalars["String"]["input"];
+  /** The quantity of the addon to claim */
+  quantity: Scalars["Int"]["input"];
+  /** The ID of the user ticket to add the addon to */
+  userTicketId: Scalars["String"]["input"];
 };
 
 export enum CommnunityStatus {
@@ -106,6 +171,11 @@ export type ConsolidatedPaymentLogEntry = {
   id: Scalars["ID"]["output"];
   platform: Scalars["String"]["output"];
   totalTransactionAmount: Scalars["Float"]["output"];
+};
+
+export type CreateAddonConstraintInput = {
+  constraintType: AddonConstraintType;
+  relatedAddonId: Scalars["String"]["input"];
 };
 
 export type CreateCommunityInput = {
@@ -325,9 +395,9 @@ export enum ImageHostingEnum {
 }
 
 export type Mutation = {
-  acceptGiftedTicket: UserTicket;
   /** Accept the user's invitation to a team */
   acceptTeamInvitation: TeamRef;
+  acceptTransferredTicket: UserTicketTransfer;
   /** Try to add a person to a team */
   addPersonToTeam: AddUserToTeamResponseRef;
   /** Apply to a waitlist */
@@ -336,10 +406,15 @@ export type Mutation = {
   approvalUserTicket: UserTicket;
   /** Cancel a ticket */
   cancelUserTicket: UserTicket;
+  /** Cancel multiple user ticket addons */
+  cancelUserTicketAddons: Array<UserTicketAddon>;
   /** Check the status of a purchase order */
   checkPurchaseOrderStatus: PurchaseOrder;
-  /** Attempt to claim a certain ammount of tickets */
+  /** Attempt to claim and/or transfer tickets */
   claimUserTicket: RedeemUserTicketResponse;
+  /** Claim addons for multiple user tickets */
+  claimUserTicketAddons: RedeemUserTicketAddonsResponse;
+  createAddon: Addon;
   /** Create an community */
   createCommunity: Community;
   /** Create a company */
@@ -354,6 +429,7 @@ export type Mutation = {
   createTeam: TeamRef;
   /** Create a ticket */
   createTicket: Ticket;
+  deleteAddons: Addon;
   /** Try to add a person to a team */
   deletePersonFomTeam: TeamRef;
   /** Edit an community */
@@ -374,7 +450,9 @@ export type Mutation = {
   rejectTeamInvitation: TeamRef;
   /** Kickoff the email validation flow. This flow will links an email to a user, create a company if it does not exist, and allows filling data for that email's position */
   startWorkEmailValidation: WorkEmail;
+  transferMyTicketToUser: UserTicketTransfer;
   triggerUserTicketApprovalReview: Array<UserTicket>;
+  updateAddon: Addon;
   /** Update a company */
   updateCompany: Company;
   updateMyUserData: User;
@@ -390,12 +468,12 @@ export type Mutation = {
   validateWorkEmail: WorkEmail;
 };
 
-export type MutationAcceptGiftedTicketArgs = {
-  userTicketId: Scalars["String"]["input"];
-};
-
 export type MutationAcceptTeamInvitationArgs = {
   input: AcceptTeamInvitationInput;
+};
+
+export type MutationAcceptTransferredTicketArgs = {
+  transferId: Scalars["String"]["input"];
 };
 
 export type MutationAddPersonToTeamArgs = {
@@ -414,12 +492,25 @@ export type MutationCancelUserTicketArgs = {
   userTicketId: Scalars["String"]["input"];
 };
 
+export type MutationCancelUserTicketAddonsArgs = {
+  userTicketAddonIds: Array<Scalars["String"]["input"]>;
+};
+
 export type MutationCheckPurchaseOrderStatusArgs = {
   input: CheckForPurchaseOrderInput;
 };
 
 export type MutationClaimUserTicketArgs = {
   input: TicketClaimInput;
+};
+
+export type MutationClaimUserTicketAddonsArgs = {
+  addonsClaims: Array<ClaimUserTicketAddonInput>;
+  currencyId?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type MutationCreateAddonArgs = {
+  input: AddonInput;
 };
 
 export type MutationCreateCommunityArgs = {
@@ -448,6 +539,10 @@ export type MutationCreateTeamArgs = {
 
 export type MutationCreateTicketArgs = {
   input: TicketCreateInput;
+};
+
+export type MutationDeleteAddonsArgs = {
+  ids: Array<Scalars["String"]["input"]>;
 };
 
 export type MutationDeletePersonFomTeamArgs = {
@@ -490,9 +585,18 @@ export type MutationStartWorkEmailValidationArgs = {
   email: Scalars["String"]["input"];
 };
 
+export type MutationTransferMyTicketToUserArgs = {
+  input: UserTicketTransferInfoInput;
+  ticketId: Scalars["String"]["input"];
+};
+
 export type MutationTriggerUserTicketApprovalReviewArgs = {
   eventId: Scalars["String"]["input"];
   userId: Scalars["String"]["input"];
+};
+
+export type MutationUpdateAddonArgs = {
+  input: UpdateAddonInput;
 };
 
 export type MutationUpdateCompanyArgs = {
@@ -694,11 +798,18 @@ export type PurchaseOrder = {
   purchasePaymentStatus?: Maybe<PurchaseOrderPaymentStatusEnum>;
   status?: Maybe<PurchaseOrderStatusEnum>;
   tickets: Array<UserTicket>;
+  userTicketAddons: Array<UserTicketAddon>;
 };
 
 export type PurchaseOrderInput = {
+  itemsDetails?: InputMaybe<Array<PurchaseOrderItemDetailsInput>>;
   quantity: Scalars["Int"]["input"];
   ticketId: Scalars["String"]["input"];
+};
+
+export type PurchaseOrderItemDetailsInput = {
+  addons: Array<AddonClaimInput>;
+  transferInfo?: InputMaybe<UserTicketTransferInfoInput>;
 };
 
 export enum PurchaseOrderPaymentStatusEnum {
@@ -734,6 +845,8 @@ export type Query = {
   me: User;
   /** Get a list of purchase orders for the authenticated user */
   myPurchaseOrders: PaginatedPurchaseOrder;
+  /** Get a list of user ticket transfers sent or received by the current user */
+  myTicketTransfers: Array<UserTicketTransfer>;
   /** Get a list of tickets for the current user */
   myTickets: PaginatedUserTicket;
   /** Get public event attendance info */
@@ -744,8 +857,11 @@ export type Query = {
   salaries: Array<Salary>;
   /** Get a schedule by its ID */
   schedule: Schedule;
+  /** Get addons for a specific event */
+  searchAddons: Array<Addon>;
   /** Search a consolidated payment logs, by date, aggregated by platform and currency_id */
   searchConsolidatedPaymentLogs: Array<ConsolidatedPaymentLogEntry>;
+  searchCurrencies: Array<AllowedCurrency>;
   /** Get a list of events. Filter by name, id, status or date */
   searchEvents: PaginatedEvent;
   /** Search on the payment logs by date, and returns a list of payment logs */
@@ -806,6 +922,10 @@ export type QueryMyPurchaseOrdersArgs = {
   input: PaginatedInputMyPurchaseOrdersInput;
 };
 
+export type QueryMyTicketTransfersArgs = {
+  type?: InputMaybe<TicketTransferType>;
+};
+
 export type QueryMyTicketsArgs = {
   input: PaginatedInputMyTicketsSearchValues;
 };
@@ -820,6 +940,10 @@ export type QueryPublicTicketInfoArgs = {
 
 export type QueryScheduleArgs = {
   scheduleId: Scalars["String"]["input"];
+};
+
+export type QuerySearchAddonsArgs = {
+  eventId: Scalars["String"]["input"];
 };
 
 export type QuerySearchConsolidatedPaymentLogsArgs = {
@@ -861,6 +985,15 @@ export type QueryWorkRoleSenioritiesArgs = {
 export type RsvpFilterInput = {
   eventIds?: InputMaybe<Array<Scalars["String"]["input"]>>;
 };
+
+export type RedeemUserTicketAddonsError = {
+  error: Scalars["Boolean"]["output"];
+  errorMessage: Scalars["String"]["output"];
+};
+
+export type RedeemUserTicketAddonsResponse =
+  | PurchaseOrder
+  | RedeemUserTicketAddonsError;
 
 export type RedeemUserTicketError = {
   error: Scalars["Boolean"]["output"];
@@ -1046,6 +1179,16 @@ export type Ticket = {
   visibility: TicketTemplateVisibility;
 };
 
+/** Representation of a Ticket Addon */
+export type TicketAddon = {
+  addon: Addon;
+  addonId: Scalars["ID"]["output"];
+  id: Scalars["ID"]["output"];
+  orderDisplay: Scalars["Int"]["output"];
+  ticket: Ticket;
+  ticketId: Scalars["ID"]["output"];
+};
+
 export enum TicketApprovalStatus {
   Approved = "approved",
   Cancelled = "cancelled",
@@ -1054,6 +1197,8 @@ export enum TicketApprovalStatus {
   NotRequired = "not_required",
   Pending = "pending",
   Rejected = "rejected",
+  TransferAccepted = "transfer_accepted",
+  TransferPending = "transfer_pending",
 }
 
 export type TicketClaimInput = {
@@ -1121,11 +1266,56 @@ export enum TicketTemplateVisibility {
   Unlisted = "unlisted",
 }
 
+export enum TicketTransferAttemptStatus {
+  Accepted = "Accepted",
+  Cancelled = "Cancelled",
+  Expired = "Expired",
+  Pending = "Pending",
+  Rejected = "Rejected",
+}
+
+export enum TicketTransferType {
+  All = "ALL",
+  Received = "RECEIVED",
+  Sent = "SENT",
+}
+
+export type TicketTransferUserInfo = {
+  email: Scalars["String"]["output"];
+  name?: Maybe<Scalars["String"]["output"]>;
+};
+
 export enum TypeOfEmployment {
   Freelance = "freelance",
   FullTime = "fullTime",
   PartTime = "partTime",
 }
+
+export type UpdateAddonConstraintInput = {
+  constraintType: AddonConstraintType;
+  id: Scalars["String"]["input"];
+  relatedAddonId: Scalars["String"]["input"];
+};
+
+export type UpdateAddonInput = {
+  deleteConstraintIds?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  deletePriceIds?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  deleteTicketIds?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  description?: InputMaybe<Scalars["String"]["input"]>;
+  id: Scalars["String"]["input"];
+  /** Cannot be true if prices are passed. */
+  isFree?: InputMaybe<Scalars["Boolean"]["input"]>;
+  isUnlimited?: InputMaybe<Scalars["Boolean"]["input"]>;
+  maxPerTicket?: InputMaybe<Scalars["Int"]["input"]>;
+  name?: InputMaybe<Scalars["String"]["input"]>;
+  newConstraints?: InputMaybe<Array<CreateAddonConstraintInput>>;
+  newTickets?: InputMaybe<Array<AddonInputTicket>>;
+  prices?: InputMaybe<Array<PricingInputField>>;
+  tags?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  totalStock?: InputMaybe<Scalars["Int"]["input"]>;
+  updateConstraints?: InputMaybe<Array<UpdateAddonConstraintInput>>;
+  updateTickets?: InputMaybe<Array<AddonInputTicket>>;
+};
 
 export type UpdateCommunityInput = {
   communityId: Scalars["String"]["input"];
@@ -1222,7 +1412,53 @@ export type UserTicket = {
   purchaseOrder?: Maybe<PurchaseOrder>;
   redemptionStatus: TicketRedemptionStatus;
   ticketTemplate: Ticket;
+  transferAttempts: Array<UserTicketTransfer>;
   user?: Maybe<User>;
+  userTicketAddons: Array<UserTicketAddon>;
+};
+
+/** Representation of a User Ticket Addon */
+export type UserTicketAddon = {
+  addon: Addon;
+  addonId: Scalars["ID"]["output"];
+  approvalStatus: UserTicketAddonApprovalStatus;
+  id: Scalars["ID"]["output"];
+  purchaseOrder: PurchaseOrder;
+  purchaseOrderId: Scalars["ID"]["output"];
+  quantity: Scalars["Int"]["output"];
+  redemptionStatus: UserTicketAddonStatus;
+  unitPriceInCents: Scalars["Int"]["output"];
+  userTicket: UserTicket;
+  userTicketId: Scalars["ID"]["output"];
+};
+
+export enum UserTicketAddonApprovalStatus {
+  Approved = "APPROVED",
+  Cancelled = "CANCELLED",
+  Pending = "PENDING",
+}
+
+export enum UserTicketAddonStatus {
+  Pending = "PENDING",
+  Redeemed = "REDEEMED",
+}
+
+/** Representation of a user ticket transfer */
+export type UserTicketTransfer = {
+  createdAt: Scalars["DateTime"]["output"];
+  expirationDate: Scalars["DateTime"]["output"];
+  id: Scalars["ID"]["output"];
+  recipient: TicketTransferUserInfo;
+  sender: TicketTransferUserInfo;
+  status: TicketTransferAttemptStatus;
+  transferMessage?: Maybe<Scalars["String"]["output"]>;
+  userTicket: UserTicket;
+};
+
+export type UserTicketTransferInfoInput = {
+  email: Scalars["String"]["input"];
+  message?: InputMaybe<Scalars["String"]["input"]>;
+  name: Scalars["String"]["input"];
 };
 
 /** Representation of a user in a team */
@@ -1394,6 +1630,23 @@ export type MyEventQuery = {
   };
 };
 
+export type TransferTicketMutationVariables = Exact<{
+  ticketId: Scalars["String"]["input"];
+  input: UserTicketTransferInfoInput;
+}>;
+
+export type TransferTicketMutation = {
+  transferMyTicketToUser: {
+    id: string;
+    status: TicketTransferAttemptStatus;
+    expirationDate: string;
+    transferMessage?: string | null;
+    sender: { email: string; name?: string | null };
+    recipient: { email: string; name?: string | null };
+    userTicket: { id: string; approvalStatus: TicketApprovalStatus };
+  };
+};
+
 export type MyEventsQueryVariables = Exact<{
   input: PaginatedInputEventsSearchInput;
   userTicketSearchInput?: InputMaybe<EventsTicketsSearchInput>;
@@ -1427,6 +1680,23 @@ export type MyEventsQuery = {
   };
 };
 
+export type MyReceivedTransfersQueryVariables = Exact<{ [key: string]: never }>;
+
+export type MyReceivedTransfersQuery = {
+  myTicketTransfers: Array<{
+    createdAt: string;
+    expirationDate: string;
+    id: string;
+    status: TicketTransferAttemptStatus;
+    transferMessage?: string | null;
+    sender: { email: string; name?: string | null };
+    userTicket: {
+      id: string;
+      ticketTemplate: { name: string; event: { id: string; name: string } };
+    };
+  }>;
+};
+
 export type MyPurchaseOrdersQueryVariables = Exact<{
   input: PaginatedInputMyPurchaseOrdersInput;
 }>;
@@ -1449,6 +1719,36 @@ export type MyPurchaseOrdersQuery = {
       }>;
     }>;
   };
+};
+
+export type AcceptTransferredTicketMutationVariables = Exact<{
+  transferId: Scalars["String"]["input"];
+}>;
+
+export type AcceptTransferredTicketMutation = {
+  acceptTransferredTicket: {
+    id: string;
+    status: TicketTransferAttemptStatus;
+    userTicket: { id: string; user?: { id: string } | null };
+  };
+};
+
+export type MyTicketTransfersQueryVariables = Exact<{ [key: string]: never }>;
+
+export type MyTicketTransfersQuery = {
+  myTicketTransfers: Array<{
+    createdAt: string;
+    expirationDate: string;
+    id: string;
+    status: TicketTransferAttemptStatus;
+    transferMessage?: string | null;
+    recipient: { email: string; name?: string | null };
+    sender: { email: string; name?: string | null };
+    userTicket: {
+      id: string;
+      ticketTemplate: { name: string; event: { id: string; name: string } };
+    };
+  }>;
 };
 
 export type SearchUsersQueryVariables = Exact<{
@@ -2026,6 +2326,127 @@ export const MyEventDocument = {
     },
   ],
 } as unknown as DocumentNode<MyEventQuery, MyEventQueryVariables>;
+export const TransferTicketDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "transferTicket" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "ticketId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "UserTicketTransferInfoInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "transferMyTicketToUser" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "ticketId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "ticketId" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "status" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "expirationDate" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "transferMessage" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "sender" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "email" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "recipient" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "email" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "userTicket" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "approvalStatus" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  TransferTicketMutation,
+  TransferTicketMutationVariables
+>;
 export const MyEventsDocument = {
   kind: "Document",
   definitions: [
@@ -2227,6 +2648,102 @@ export const MyEventsDocument = {
     },
   ],
 } as unknown as DocumentNode<MyEventsQuery, MyEventsQueryVariables>;
+export const MyReceivedTransfersDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "myReceivedTransfers" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "myTicketTransfers" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "type" },
+                value: { kind: "EnumValue", value: "RECEIVED" },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "expirationDate" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "sender" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "email" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "status" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "transferMessage" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "userTicket" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "ticketTemplate" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "event" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  MyReceivedTransfersQuery,
+  MyReceivedTransfersQueryVariables
+>;
 export const MyPurchaseOrdersDocument = {
   kind: "Document",
   definitions: [
@@ -2368,6 +2885,184 @@ export const MyPurchaseOrdersDocument = {
 } as unknown as DocumentNode<
   MyPurchaseOrdersQuery,
   MyPurchaseOrdersQueryVariables
+>;
+export const AcceptTransferredTicketDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "AcceptTransferredTicket" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "transferId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "acceptTransferredTicket" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "transferId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "transferId" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "status" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "userTicket" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "user" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  AcceptTransferredTicketMutation,
+  AcceptTransferredTicketMutationVariables
+>;
+export const MyTicketTransfersDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "myTicketTransfers" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "myTicketTransfers" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "expirationDate" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "recipient" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "email" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "sender" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "email" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "status" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "transferMessage" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "userTicket" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "ticketTemplate" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "event" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  MyTicketTransfersQuery,
+  MyTicketTransfersQueryVariables
 >;
 export const SearchUsersDocument = {
   kind: "Document",

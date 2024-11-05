@@ -1,0 +1,12 @@
+mutation AcceptTransferredTicket($transferId: String!) {
+  acceptTransferredTicket(transferId: $transferId) {
+    id
+    status
+    userTicket {
+      id
+      user {
+        id
+      }
+    }
+  }
+}

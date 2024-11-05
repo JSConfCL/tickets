@@ -31,7 +31,8 @@ export const MyProfile = () => {
             {[
               ["Configuración", urls.profile.editInfo],
               ["Mis Ordenes de Compra", urls.myOrders.root],
-              ["Mis eventos", urls.myEvents.root],
+              ["Mis Eventos", urls.myEvents.root],
+              ["Mis Transferencias", urls.myTransfers],
             ].map(([text, link], index) => (
               <li key={index}>
                 <Link to={link} className="text-base underline">
