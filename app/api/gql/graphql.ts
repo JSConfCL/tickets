@@ -325,6 +325,7 @@ export type EventsSearchInput = {
 };
 
 export type EventsTicketTemplateSearchInput = {
+  coupon?: InputMaybe<Scalars["String"]["input"]>;
   tags?: InputMaybe<Array<Scalars["String"]["input"]>>;
 };
 
@@ -1897,7 +1898,8 @@ export type CreatePurchaseOrderMutation = {
 };
 
 export type GetEventAndTicketsQueryVariables = Exact<{
-  input: Scalars["String"]["input"];
+  id: Scalars["String"]["input"];
+  coupon?: InputMaybe<Scalars["String"]["input"]>;
 }>;
 
 export type GetEventAndTicketsQuery = {
@@ -3668,10 +3670,7 @@ export const GetEventAndTicketsDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "input" },
-          },
+          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
           type: {
             kind: "NonNullType",
             type: {
@@ -3679,6 +3678,14 @@ export const GetEventAndTicketsDocument = {
               name: { kind: "Name", value: "String" },
             },
           },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "coupon" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
         },
       ],
       selectionSet: {
@@ -3693,7 +3700,7 @@ export const GetEventAndTicketsDocument = {
                 name: { kind: "Name", value: "id" },
                 value: {
                   kind: "Variable",
-                  name: { kind: "Name", value: "input" },
+                  name: { kind: "Name", value: "id" },
                 },
               },
             ],
@@ -3764,6 +3771,25 @@ export const GetEventAndTicketsDocument = {
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "tickets" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "input" },
+                      value: {
+                        kind: "ObjectValue",
+                        fields: [
+                          {
+                            kind: "ObjectField",
+                            name: { kind: "Name", value: "coupon" },
+                            value: {
+                              kind: "Variable",
+                              name: { kind: "Name", value: "coupon" },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [

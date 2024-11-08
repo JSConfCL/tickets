@@ -41,7 +41,7 @@ const documents = {
     types.EventTicketFragmentFragmentDoc,
   "mutation createPurchaseOrder($input: TicketClaimInput!) {\n  claimUserTicket(input: $input) {\n    __typename\n    ... on PurchaseOrder {\n      __typename\n      id\n      currency {\n        id\n      }\n      finalPrice\n      paymentLink\n      status\n      tickets {\n        id\n        approvalStatus\n        redemptionStatus\n        paymentStatus\n      }\n    }\n    ... on RedeemUserTicketError {\n      __typename\n      error\n      errorMessage\n    }\n  }\n}":
     types.CreatePurchaseOrderDocument,
-  "query getEventAndTickets($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    startDateTime\n    endDateTime\n    status\n    logoImage {\n      url\n    }\n    bannerImage {\n      url\n    }\n    mobileBannerImage {\n      url\n    }\n    community {\n      name\n    }\n    users {\n      id\n      name\n    }\n    tickets {\n      ...EventTicketFragment\n    }\n  }\n}":
+  "query getEventAndTickets($id: String!, $coupon: String) {\n  event(id: $id) {\n    id\n    name\n    address\n    description\n    startDateTime\n    endDateTime\n    status\n    logoImage {\n      url\n    }\n    bannerImage {\n      url\n    }\n    mobileBannerImage {\n      url\n    }\n    community {\n      name\n    }\n    users {\n      id\n      name\n    }\n    tickets(input: {coupon: $coupon}) {\n      ...EventTicketFragment\n    }\n  }\n}":
     types.GetEventAndTicketsDocument,
 };
 
@@ -147,8 +147,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "query getEventAndTickets($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    startDateTime\n    endDateTime\n    status\n    logoImage {\n      url\n    }\n    bannerImage {\n      url\n    }\n    mobileBannerImage {\n      url\n    }\n    community {\n      name\n    }\n    users {\n      id\n      name\n    }\n    tickets {\n      ...EventTicketFragment\n    }\n  }\n}",
-): (typeof documents)["query getEventAndTickets($input: String!) {\n  event(id: $input) {\n    id\n    name\n    address\n    description\n    startDateTime\n    endDateTime\n    status\n    logoImage {\n      url\n    }\n    bannerImage {\n      url\n    }\n    mobileBannerImage {\n      url\n    }\n    community {\n      name\n    }\n    users {\n      id\n      name\n    }\n    tickets {\n      ...EventTicketFragment\n    }\n  }\n}"];
+  source: "query getEventAndTickets($id: String!, $coupon: String) {\n  event(id: $id) {\n    id\n    name\n    address\n    description\n    startDateTime\n    endDateTime\n    status\n    logoImage {\n      url\n    }\n    bannerImage {\n      url\n    }\n    mobileBannerImage {\n      url\n    }\n    community {\n      name\n    }\n    users {\n      id\n      name\n    }\n    tickets(input: {coupon: $coupon}) {\n      ...EventTicketFragment\n    }\n  }\n}",
+): (typeof documents)["query getEventAndTickets($id: String!, $coupon: String) {\n  event(id: $id) {\n    id\n    name\n    address\n    description\n    startDateTime\n    endDateTime\n    status\n    logoImage {\n      url\n    }\n    bannerImage {\n      url\n    }\n    mobileBannerImage {\n      url\n    }\n    community {\n      name\n    }\n    users {\n      id\n      name\n    }\n    tickets(input: {coupon: $coupon}) {\n      ...EventTicketFragment\n    }\n  }\n}"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

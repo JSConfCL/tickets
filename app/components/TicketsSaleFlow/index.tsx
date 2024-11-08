@@ -26,10 +26,17 @@ const StatusBadge = ({
   return null;
 };
 
-const LoadTickets = ({ id }: { id: string | null }) => {
+const LoadTickets = ({
+  id,
+  coupon,
+}: {
+  id: string | null;
+  coupon?: string;
+}) => {
   const { data, error } = useGetEventAndTicketsSuspenseQuery({
     variables: {
-      input: id!,
+      id: id!,
+      ...(coupon ? { coupon } : {}),
     },
     skip: !id,
   });
@@ -69,12 +76,18 @@ const LoadTickets = ({ id }: { id: string | null }) => {
   );
 };
 
-export default function EventPage({ id }: { id: string }) {
+export default function EventPage({
+  id,
+  coupon,
+}: {
+  id: string;
+  coupon?: string;
+}) {
   return (
     <main className="mx-auto flex w-full max-w-[1360px] px-6 py-12">
       <Suspense fallback={<TicketsSaleFlowSkeleton />}>
         <div className="flex w-full flex-col gap-10">
-          <LoadTickets id={id} />
+          <LoadTickets id={id} coupon={coupon} />
         </div>
       </Suspense>
     </main>

@@ -6,7 +6,10 @@ export const urls = {
   },
   events: {
     root: "/events",
-    tickets: (id: string) => `/events/${id}/tickets`,
+    tickets: (id: string, coupon?: string) =>
+      coupon
+        ? `/events/${id}/tickets?coupon=${coupon}`
+        : `/events/${id}/tickets`,
   },
   myEvents: {
     root: `/my-events`,
