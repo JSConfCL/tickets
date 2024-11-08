@@ -330,6 +330,7 @@ input EventsSearchInput {
 }
 
 input EventsTicketTemplateSearchInput {
+  coupon: String
   tags: [String!]
 }
 

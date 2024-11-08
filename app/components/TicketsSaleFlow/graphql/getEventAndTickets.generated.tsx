@@ -10,7 +10,8 @@ import { EventTicketFragmentFragmentDoc } from "./EventTicketFragment.generated"
 import * as Apollo from "@apollo/client";
 const defaultOptions = {} as const;
 export type GetEventAndTicketsQueryVariables = Types.Exact<{
-  input: Types.Scalars["String"]["input"];
+  id: Types.Scalars["String"]["input"];
+  coupon?: Types.InputMaybe<Types.Scalars["String"]["input"]>;
 }>;
 
 export type GetEventAndTicketsQuery = {
@@ -55,8 +56,8 @@ export type GetEventAndTicketsQuery = {
 };
 
 export const GetEventAndTicketsDocument = gql`
-  query getEventAndTickets($input: String!) {
-    event(id: $input) {
+  query getEventAndTickets($id: String!, $coupon: String) {
+    event(id: $id) {
       id
       name
       address
@@ -80,7 +81,7 @@ export const GetEventAndTicketsDocument = gql`
         id
         name
       }
-      tickets {
+      tickets(input: { coupon: $coupon }) {
         ...EventTicketFragment
       }
     }
@@ -100,7 +101,8 @@ export const GetEventAndTicketsDocument = gql`
  * @example
  * const { data, loading, error } = useGetEventAndTicketsQuery({
  *   variables: {
- *      input: // value for 'input'
+ *      id: // value for 'id'
+ *      coupon: // value for 'coupon'
  *   },
  * });
  */

@@ -1,10 +1,13 @@
-import { useParams } from "@remix-run/react";
+import { useParams, useSearchParams } from "@remix-run/react";
 
 import EventPage from "~/components/TicketsSaleFlow";
 
 export default function Tickets() {
   const params = useParams<{ eventId: string }>();
-  const eventId = params.eventId!;
+  const [searchParams] = useSearchParams();
 
-  return <EventPage id={eventId} />;
+  const eventId = params.eventId!;
+  const coupon = searchParams.get("coupon") ?? undefined;
+
+  return <EventPage id={eventId} coupon={coupon} />;
 }

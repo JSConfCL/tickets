@@ -1,5 +1,5 @@
-query getEventAndTickets($input: String!) {
-  event(id: $input) {
+query getEventAndTickets($id: String!, $coupon: String) {
+  event(id: $id) {
     id
     name
     address
@@ -23,7 +23,7 @@ query getEventAndTickets($input: String!) {
       id
       name
     }
-    tickets {
+    tickets(input: { coupon: $coupon }) {
       ...EventTicketFragment
     }
   }

@@ -1,6 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
 
 import { GetEventAndTicketsQuery } from "~/components/TicketsSaleFlow/graphql/getEventAndTickets.generated";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -11,6 +13,7 @@ import {
 } from "~/components/ui/select";
 import { Tabs, TabsContent } from "~/components/ui/tabs";
 import { formatCurrency } from "~/utils/numbers";
+import { urls } from "~/utils/urls";
 import { cn } from "~/utils/utils";
 
 import { ConfirmationTab } from "./ConfirmationTab";
@@ -51,6 +54,7 @@ export default function Tickets({
   const tickets = event.tickets;
   const [step, setStep] = useState(0);
   const activeStep = steps[step];
+  const [coupon, setCoupon] = useState("");
 
   const customStep = (stepSlug: string) => {
     const stepIndex = steps.findIndex((step) => step.slug == stepSlug);
@@ -229,27 +233,45 @@ export default function Tickets({
               Selecciona la cantidad de tickets que quieres comprar
             </p>
           </div>
-          <div className="ml-auto flex w-full gap-4">
+          <div className="ml-auto flex w-full flex-col gap-4">
+            <div className="flex w-full gap-2 md:justify-end">
+              <Input
+                className="w-full md:w-[240px]"
+                placeholder="Cupón de Descuento"
+                value={coupon}
+                onChange={(e) => setCoupon(e.target.value)}
+              />
+              <Button
+                disabled={!coupon.length}
+                onClick={() => {
+                  window.location.href = urls.events.tickets(event.id, coupon);
+                }}
+              >
+                Aplicar
+              </Button>
+            </div>
             {Object.values(currencies).length > 1 ? (
-              <div className="flex w-full flex-col items-start justify-start gap-4 md:flex-row md:items-center md:justify-end">
-                <span className="text-muted-foreground">Tipo de Moneda</span>
-                <Select
-                  onValueChange={handleChangeCurrency}
-                  defaultValue={selectedCurrencyId}
-                >
-                  <SelectTrigger className="w-full md:w-[100px]">
-                    <SelectValue placeholder="Selecciona una Moneda" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {Object.values(currencies).map((currency) => (
-                        <SelectItem key={currency.id} value={currency.id}>
-                          {currency.currency}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+              <div className="ml-auto flex w-full gap-4">
+                <div className="flex w-full flex-col items-start justify-start gap-4 md:flex-row md:items-center md:justify-end">
+                  <span className="text-muted-foreground">Tipo de Moneda</span>
+                  <Select
+                    onValueChange={handleChangeCurrency}
+                    defaultValue={selectedCurrencyId}
+                  >
+                    <SelectTrigger className="w-full md:w-[100px]">
+                      <SelectValue placeholder="Selecciona una Moneda" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {Object.values(currencies).map((currency) => (
+                          <SelectItem key={currency.id} value={currency.id}>
+                            {currency.currency}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             ) : null}
           </div>
