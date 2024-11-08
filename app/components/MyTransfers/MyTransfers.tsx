@@ -65,7 +65,7 @@ export const MyTransfers = () => {
         if (data.acceptTransferredTicket.id) {
           setIsDisabled((prev) => ({ ...prev, [ticketTransfer.id]: false }));
           toast.success(
-            `La transferenciaha se ha confirmado exitosamente. Hemos notificado al ${ticketTransfer.sender.email}.`,
+            `La transferencia se ha confirmado exitosamente. Hemos notificado a ${ticketTransfer.sender.email}.`,
           );
         } else {
           setIsDisabled((prev) => ({ ...prev, [ticketTransfer.id]: false }));
