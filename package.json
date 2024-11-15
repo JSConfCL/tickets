@@ -57,6 +57,7 @@
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.438.0",
     "next-themes": "^0.3.0",
+    "posthog-js": "^1.184.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.53.0",

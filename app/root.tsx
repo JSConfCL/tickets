@@ -10,6 +10,7 @@ import {
 import { setDefaultOptions } from "date-fns";
 import { es } from "date-fns/locale";
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect } from "react";
 
 import "cal-sans";
 import "@fontsource-variable/inter";
@@ -19,6 +20,7 @@ import { Footer } from "~/components/Footer";
 import { Navbar } from "~/components/Navbar";
 import { Toaster } from "~/components/ui/sonner";
 import { getDefaultThemeKey } from "~/rootHelpers";
+import { pageview } from "~/utils/meta-pixel";
 import { AuthProvider } from "~/utils/supabase/AuthProvider";
 
 import "./tailwind.css";
@@ -87,6 +89,16 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+function MetaPageviews() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    pageview();
+  }, [pathname]);
+
+  return null;
+}
+
 export default function App() {
   return (
     <AuthProvider>
@@ -107,6 +119,7 @@ export default function App() {
         </AnimatePresence>
         <Footer />
         <Toaster />
+        <MetaPageviews />
       </ApolloWrapper>
     </AuthProvider>
   );
