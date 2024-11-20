@@ -38,4 +38,5 @@ export type SecondStepFooterProps = {
   onClickNext: MouseEventHandler<HTMLButtonElement>;
   isDisabled: boolean;
   total: string | null;
+  hoverText?: string | null;
 };
