@@ -11,6 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { useIsAuthReady, useIsLoggedIn } from "~/utils/supabase/AuthProvider";
 
 import { useCreatePurchaseOrderMutation } from "./graphql/createPurchaseOrder.generated";
 import { EventTicketFragmentFragment } from "./graphql/EventTicketFragment.generated";
@@ -39,6 +40,9 @@ export const ConfirmationTab = ({
   ) => string | null;
   currencyId: string;
 }) => {
+  const isLogged = useIsLoggedIn();
+  const isAuthReady = useIsAuthReady();
+  const hasSession = isAuthReady && isLogged;
   const [isDisabled, setIsDisabled] = useState(false);
   const [purchaseOrderMutation] = useCreatePurchaseOrderMutation();
   const createPurchaseOrder = useCallback(async () => {
@@ -161,8 +165,11 @@ export const ConfirmationTab = ({
             console.error(error);
           });
         }}
-        isDisabled={numberOfTickets === 0 || isDisabled}
+        isDisabled={numberOfTickets === 0 || isDisabled || !hasSession}
         total={formattedTotal}
+        hoverText={
+          !hasSession ? "Debes iniciar sesión para poder comprar tickets" : null
+        }
       />
     </div>
   );
