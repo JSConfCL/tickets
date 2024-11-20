@@ -1,4 +1,6 @@
 import { Link, useNavigate } from "@remix-run/react";
+import Bowser from "bowser";
+import InAppSpy from "inapp-spy";
 import { LogOut, Tickets, UserIcon, VenetianMaskIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 
@@ -18,12 +20,20 @@ import { ThemeSwitcher } from "./ThemeSwitcher";
 import type { NavbarMenuItem } from "./types";
 
 export const Navbar = () => {
+  const [{ isInApp }] = useState(() => InAppSpy());
   const navigate = useNavigate();
   const isLogged = useIsLoggedIn();
   const isAuthReady = useIsAuthReady();
   const myProfile = useMyProfileQuery({
     skip: !isLogged || !isAuthReady,
   });
+  const browser = Bowser.getParser(window.navigator.userAgent);
+  const isMobileSafari = browser.satisfies({
+    mobile: {
+      safari: ">=9",
+    },
+  });
+
   const { impersonation, setImpersonation } = useAuthContext();
 
   const [impersonateModal, setImpersonateModal] = useState(false);
@@ -96,15 +106,21 @@ export const Navbar = () => {
         {
           content: "Login",
           link: urls.login,
+          fullLink:
+            isInApp && isMobileSafari
+              ? `x-safari-https://tickets.communityos.io/${urls.login}`
+              : undefined,
           variant: "secondary",
           show: isAuthReady && !isLogged,
         },
       ] satisfies NavbarMenuItem[],
     [
-      impersonation,
       isAuthReady,
       isLogged,
+      impersonation,
       myProfile?.data?.me?.isSuperAdmin,
+      isInApp,
+      isMobileSafari,
       setImpersonation,
       navigate,
     ],

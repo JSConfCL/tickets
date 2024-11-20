@@ -13,7 +13,7 @@ export const MobileNavbarItem = ({
       return (
         <MobileLink
           key={`mobileitem-${item.content}`}
-          href={item.link}
+          href={item.fullLink ? item.fullLink : item.link}
           onClick={(e) => {
             item.onClick?.(e);
             onNavItemClick();
