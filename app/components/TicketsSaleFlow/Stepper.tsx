@@ -11,14 +11,17 @@ export const SecondStepFooter = ({
   onClickPrevious,
   onClickNext,
   isDisabled,
+  hoverText,
 }: SecondStepFooterProps) => (
   <div className="mt-2 flex justify-end gap-2 text-right">
     <Button variant="outline" onClick={onClickPrevious}>
       Atras
     </Button>
-    <Button disabled={isDisabled} onClick={onClickNext}>
-      Pagar
-    </Button>
+    <ConditionalPopoverWrapper popoverText={hoverText}>
+      <Button disabled={isDisabled} onClick={onClickNext}>
+        Pagar
+      </Button>
+    </ConditionalPopoverWrapper>
   </div>
 );
 

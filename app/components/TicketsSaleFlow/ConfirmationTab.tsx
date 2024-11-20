@@ -11,6 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { useIsAuthReady, useIsLoggedIn } from "~/utils/supabase/AuthProvider";
 
 import { useCreatePurchaseOrderMutation } from "./graphql/createPurchaseOrder.generated";
 import { EventTicketFragmentFragment } from "./graphql/EventTicketFragment.generated";
@@ -39,6 +40,9 @@ export const ConfirmationTab = ({
   ) => string | null;
   currencyId: string;
 }) => {
+  const isLogged = useIsLoggedIn();
+  const isAuthReady = useIsAuthReady();
+  const hasSession = isAuthReady && isLogged;
   const [isDisabled, setIsDisabled] = useState(false);
   const [purchaseOrderMutation] = useCreatePurchaseOrderMutation();
   const createPurchaseOrder = useCallback(async () => {
@@ -98,10 +102,10 @@ export const ConfirmationTab = ({
           <Table>
             <TableHeader>
               <TableRow className="border-t hover:bg-transparent">
-                <TableHead className="h-[52px] w-[200px] text-center text-base font-bold text-white">
+                <TableHead className="h-[52px] min-w-[140px] text-center text-base font-bold text-white">
                   Tipo de Ticket
                 </TableHead>
-                <TableHead className="h-[52px] text-center text-base font-bold text-white">
+                <TableHead className="h-[52px] min-w-[300px] text-center text-base font-bold text-white">
                   Descripción
                 </TableHead>
                 <TableHead className="h-[52px] w-[100px] grow-0 text-center text-base font-bold text-white">
@@ -161,8 +165,11 @@ export const ConfirmationTab = ({
             console.error(error);
           });
         }}
-        isDisabled={numberOfTickets === 0 || isDisabled}
+        isDisabled={numberOfTickets === 0 || isDisabled || !hasSession}
         total={formattedTotal}
+        hoverText={
+          !hasSession ? "Debes iniciar sesión para poder comprar tickets" : null
+        }
       />
     </div>
   );

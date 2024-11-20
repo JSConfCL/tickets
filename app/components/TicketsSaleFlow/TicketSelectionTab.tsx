@@ -63,10 +63,10 @@ export const TicketSelectionTab = ({
           <Table>
             <TableHeader>
               <TableRow className="border-t hover:bg-transparent">
-                <TableHead className="h-[52px] w-[200px] text-center text-base font-bold text-white">
+                <TableHead className="h-[52px] min-w-[140px] text-center text-base font-bold text-white">
                   Tipo de Ticket
                 </TableHead>
-                <TableHead className="h-[52px] text-center text-base font-bold text-white">
+                <TableHead className="h-[52px] min-w-[300px] text-center text-base font-bold text-white">
                   Descripción
                 </TableHead>
                 <TableHead className="h-[52px] w-[100px] grow-0 text-center text-base font-bold text-white">
