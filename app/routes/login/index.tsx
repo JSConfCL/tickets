@@ -3,6 +3,7 @@ import { useNavigate } from "@remix-run/react";
 import { useEffect } from "react";
 
 import { Login } from "~/components/Login/Login";
+import { usePreviousPath } from "~/components/Login/usePreviousPath";
 import { useIsAuthReady, useIsLoggedIn } from "~/utils/supabase/AuthProvider";
 import { urls } from "~/utils/urls";
 
@@ -34,6 +35,7 @@ const Redirecting = () => {
 export default function LoginRoute() {
   const isLoggedIn = useIsLoggedIn();
   const isAuthReady = useIsAuthReady();
+  const previousPath = usePreviousPath();
 
   if (!isAuthReady) {
     return null;
@@ -46,7 +48,7 @@ export default function LoginRoute() {
   return (
     <div className="flex w-full flex-1 flex-col items-center justify-center gap-2">
       <div className="pt-28" />
-      <Login />
+      <Login redirectTo={previousPath} />
     </div>
   );
 }

@@ -21,6 +21,7 @@ import { Navbar } from "~/components/Navbar";
 import { Toaster } from "~/components/ui/sonner";
 import { getDefaultThemeKey } from "~/rootHelpers";
 import { pageview } from "~/utils/meta-pixel";
+import { useNavigationHistoryStore } from "~/utils/navigationHistoryStore";
 import { AuthProvider } from "~/utils/supabase/AuthProvider";
 
 import "./tailwind.css";
@@ -91,10 +92,12 @@ export const meta: MetaFunction = () => {
 
 function MetaPageviews() {
   const { pathname } = useLocation();
+  const addToHistory = useNavigationHistoryStore().addToHistory;
 
   useEffect(() => {
     pageview();
-  }, [pathname]);
+    addToHistory(pathname);
+  }, [pathname, addToHistory]);
 
   return null;
 }

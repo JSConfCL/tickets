@@ -2,17 +2,22 @@ import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { useEffect, useState } from "react";
 
+import { useNavigationHistoryStore } from "~/utils/navigationHistoryStore";
 import { supabaseClient } from "~/utils/supabase/client";
 
-export const Login = () => {
+export const Login = ({ redirectTo }: { redirectTo: string }) => {
   const [url, setUrl] = useState<string | undefined>();
+  // const [redirectTo, setRedirectTo] = useState<string | undefined>();
+  const history = useNavigationHistoryStore().history;
 
   useEffect(() => {
     const url = new URL(window.location.href);
 
     url.hash = "";
+    url.pathname = redirectTo;
     setUrl(url.toString());
-  }, []);
+    // setRedirectTo(url.toString());
+  }, [history, redirectTo]);
 
   return (
     <div className="flex w-full max-w-lg shrink-0 flex-col gap-4 rounded-2xl border bg-background p-10 shadow-xl [&_form]:hidden">
