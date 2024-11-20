@@ -85,6 +85,7 @@
     "@graphql-codegen/typescript-react-apollo": "^4.3.0",
     "@graphql-eslint/eslint-plugin": "^3.20.0",
     "@remix-run/dev": "^2.10.0",
+    "@types/bowser": "^1.0.31",
     "@types/js-cookie": "^3.0.6",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",

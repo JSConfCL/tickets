@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "@remix-run/react";
 import Bowser from "bowser";
+import InAppSpy from "inapp-spy";
 import { LogOut, Tickets, UserIcon, VenetianMaskIcon } from "lucide-react";
 import { useMemo, useState } from "react";
-import InAppSpy from "inapp-spy";
 
 import { ImpersonationModal } from "~/components/Navbar/Impersonation";
 import { useMyProfileQuery } from "~/components/Profile/graphql/myProfile.generated";
@@ -115,10 +115,12 @@ export const Navbar = () => {
         },
       ] satisfies NavbarMenuItem[],
     [
-      impersonation,
       isAuthReady,
       isLogged,
+      impersonation,
       myProfile?.data?.me?.isSuperAdmin,
+      isInApp,
+      isMobileSafari,
       setImpersonation,
       navigate,
     ],

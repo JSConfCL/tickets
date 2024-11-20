@@ -27,9 +27,13 @@ export default async function handleRequest(
   const isAndroid = userAgent.toLowerCase().includes("android");
 
   const isWebview =
-    userAgent.toLowerCase().includes("CriOS") ||
-    userAgent.toLowerCase().includes("FxiOS") ||
-    userAgent.toLowerCase().includes("Instagram");
+    userAgent.toLowerCase().includes("crios") ||
+    userAgent.toLowerCase().includes("fxios") ||
+    userAgent.toLowerCase().includes("instagram");
+
+  console.log("isWebview", isWebview);
+  console.log("isAndroid", isAndroid);
+  console.log("userAgent", userAgent);
 
   if (isWebview && isAndroid) {
     responseHeaders.set("Content-Type", "application/pdf");
