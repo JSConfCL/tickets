@@ -8,6 +8,10 @@ import type { AppLoadContext, EntryContext } from "@remix-run/cloudflare";
 import { RemixServer } from "@remix-run/react";
 import { isbot } from "isbot";
 import { renderToReadableStream } from "react-dom/server";
+// noirmal safari
+// "userAgent": "Mozilla/5.0 (iPad; CPU OS 17_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/130.0.6723.37 Mobile/15E148 Safari/604.1"
+// "userAgent": "Mozilla/5.0 (iPad; CPU OS 17_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/21G93 Instagram 358.0.0.33.95 (iPad8,11; iPadOS 17_6_1; en_US; en; scale=2.00; 780x1688; 663992737; IABMV/1)"
+// "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 9 Pro XL Build/AD1A.240905.004; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/130.0.6723.107 Mobile Safari/537.36 Instagram 358.0.0.51.97 Android (34/14; 360dpi; 1008x2071; Google/google; Pixel 9 Pro XL; komodo; komodo; en_US; 665037474)"
 
 export default async function handleRequest(
   request: Request,
@@ -20,13 +24,14 @@ export default async function handleRequest(
   _loadContext: AppLoadContext,
 ) {
   const userAgent = request.headers.get("user-agent") ?? "";
-  console.log({ userAgent })
-  const isWebview =
-    userAgent.includes("CriOS") ||
-    userAgent.includes("FxiOS") ||
-    userAgent.includes("Instagram");
+  const isAndroid = userAgent.toLowerCase().includes("android")
 
-  if (isWebview) {
+  const isWebview =
+    userAgent.toLowerCase().includes("CriOS") ||
+    userAgent.toLowerCase().includes("FxiOS") ||
+    userAgent.toLowerCase().includes("Instagram");
+
+  if (isWebview && isAndroid) {
     responseHeaders.set("Content-Type", "application/pdf");
 
     return new Response("", {

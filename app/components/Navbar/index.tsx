@@ -2,6 +2,7 @@ import { Link, useNavigate } from "@remix-run/react";
 import Bowser from "bowser";
 import { LogOut, Tickets, UserIcon, VenetianMaskIcon } from "lucide-react";
 import { useMemo, useState } from "react";
+import InAppSpy from "inapp-spy";
 
 import { ImpersonationModal } from "~/components/Navbar/Impersonation";
 import { useMyProfileQuery } from "~/components/Profile/graphql/myProfile.generated";
@@ -19,6 +20,7 @@ import { ThemeSwitcher } from "./ThemeSwitcher";
 import type { NavbarMenuItem } from "./types";
 
 export const Navbar = () => {
+  const [{ isInApp }] = useState(() => InAppSpy());
   const navigate = useNavigate();
   const isLogged = useIsLoggedIn();
   const isAuthReady = useIsAuthReady();
@@ -104,9 +106,10 @@ export const Navbar = () => {
         {
           content: "Login",
           link: urls.login,
-          fullLink: isMobileSafari
-            ? `x-safari-https://tickets.communityos.io/${urls.login}`
-            : undefined,
+          fullLink:
+            isInApp && isMobileSafari
+              ? `x-safari-https://tickets.communityos.io/${urls.login}`
+              : undefined,
           variant: "secondary",
           show: isAuthReady && !isLogged,
         },
