@@ -19,6 +19,20 @@ export default async function handleRequest(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _loadContext: AppLoadContext,
 ) {
+  const userAgent = request.headers.get("user-agent") ?? "";
+  const isWebview =
+    userAgent.includes("CriOS") ||
+    userAgent.includes("FxiOS") ||
+    userAgent.includes("Instagram");
+
+  if (isWebview) {
+    responseHeaders.set("Content-Type", "application/pdf");
+
+    return new Response("", {
+      headers: responseHeaders,
+    });
+  }
+
   const body = await renderToReadableStream(
     <RemixServer context={remixContext} url={request.url} />,
     {
@@ -33,12 +47,6 @@ export default async function handleRequest(
     },
   );
   // loging user-agent
-  const userAgent = request.headers.get("user-agent") ?? "";
-  const isWebview = userAgent.includes("Instagram");
-
-  if (isWebview) {
-    responseHeaders.set("Content-Type", "application/pdf");
-  }
 
   if (isbot(request.headers.get("user-agent") || "")) {
     await body.allReady;

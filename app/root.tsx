@@ -104,16 +104,8 @@ export default function App() {
   const location = useLocation();
 
   useEffect(() => {
-    if (location.search.includes("nowebview=true")) {
-      // open this url in a new tab
-      window.open(
-        new URL(window.location.href).searchParams.get("url") || "",
-        "_blank",
-      );
-    }
-
     setIsClient(true);
-  }, []);
+  }, [location.search]);
 
   if (!isClient) {
     return;
