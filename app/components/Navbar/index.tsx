@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "@remix-run/react";
+import Bowser from "bowser";
 import { LogOut, Tickets, UserIcon, VenetianMaskIcon } from "lucide-react";
 import { useMemo, useState } from "react";
-import Bowser from "bowser";
 
 import { ImpersonationModal } from "~/components/Navbar/Impersonation";
 import { useMyProfileQuery } from "~/components/Profile/graphql/myProfile.generated";
