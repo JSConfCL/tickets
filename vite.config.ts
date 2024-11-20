@@ -10,7 +10,7 @@ export default defineConfig({
   plugins: [
     remixCloudflareDevProxy(),
     remix({
-      ssr: false,
+      ssr: true,
       future: {
         v3_fetcherPersist: true,
         v3_relativeSplatPath: true,

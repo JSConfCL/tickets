@@ -10,7 +10,7 @@ import {
 import { setDefaultOptions } from "date-fns";
 import { es } from "date-fns/locale";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import "cal-sans";
 import "@fontsource-variable/inter";
@@ -100,13 +100,24 @@ function MetaPageviews() {
 }
 
 export default function App() {
+  const [isClient, setIsClient] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    setIsClient(true);
+  }, [location.search]);
+
+  if (!isClient) {
+    return;
+  }
+
   return (
     <AuthProvider>
       <ApolloWrapper>
         <Navbar />
         <AnimatePresence mode="popLayout">
           <motion.div
-            key={useLocation().pathname}
+            key={location.pathname}
             variants={variants}
             initial="initial"
             animate="animate"
