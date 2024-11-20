@@ -24,7 +24,7 @@ export default async function handleRequest(
   _loadContext: AppLoadContext,
 ) {
   const userAgent = request.headers.get("user-agent") ?? "";
-  const isAndroid = userAgent.toLowerCase().includes("android")
+  const isAndroid = userAgent.toLowerCase().includes("android");
 
   const isWebview =
     userAgent.toLowerCase().includes("CriOS") ||
