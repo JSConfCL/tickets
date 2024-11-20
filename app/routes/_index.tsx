@@ -3,8 +3,6 @@ import { Link } from "@remix-run/react";
 import { CommunityOS } from "~/components/Icons/communityos";
 import { BackgroundBeams } from "~/components/ui/background-beams";
 import { Button, buttonVariants } from "~/components/ui/button";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { urls } from "~/utils/urls";
 import { cn } from "~/utils/utils";
 
 export default function Index() {
@@ -51,15 +49,17 @@ export default function Index() {
             >
               JSConf 2024
             </Link>
-            <Button
-              className={cn(
-                buttonVariants({ variant: "default" }),
-                "border-black bg-white text-black",
-              )}
-              disabled
-            >
-              Eventos
-            </Button>
+            <span className="cursor-not-allowed">
+              <Button
+                className={cn(
+                  buttonVariants({ variant: "default" }),
+                  "border-black bg-white text-black",
+                )}
+                disabled
+              >
+                Eventos
+              </Button>
+            </span>
             {/* <Link
               className={cn(
                 buttonVariants(),
