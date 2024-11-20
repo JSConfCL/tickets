@@ -28,10 +28,10 @@ export const Navbar = () => {
   const browser = Bowser.getParser(window.navigator.userAgent);
   const isMobileSafari = browser.satisfies({
     mobile: {
-      safari: '>=9',
+      safari: ">=9",
     },
   });
-  
+
   const { impersonation, setImpersonation } = useAuthContext();
 
   const [impersonateModal, setImpersonateModal] = useState(false);
@@ -104,7 +104,9 @@ export const Navbar = () => {
         {
           content: "Login",
           link: urls.login,
-          fullLink: isMobileSafari ? `x-safari-https://tickets.communityos.io/${urls.login}` : undefined,
+          fullLink: isMobileSafari
+            ? `x-safari-https://tickets.communityos.io/${urls.login}`
+            : undefined,
           variant: "secondary",
           show: isAuthReady && !isLogged,
         },

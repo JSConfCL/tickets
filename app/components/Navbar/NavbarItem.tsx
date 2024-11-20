@@ -33,7 +33,10 @@ export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
                       key={`dropdown-${item.content}`}
                       className="cursor-pointer"
                     >
-                      <Link to={child.fullLink ? child.fullLink: child.link} className="flex items-center">
+                      <Link
+                        to={child.fullLink ? child.fullLink : child.link}
+                        className="flex items-center"
+                      >
                         {child.icon}
                         <span>{child.content}</span>
                       </Link>
@@ -67,7 +70,9 @@ export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
   if (item.link) {
     return (
       <Button variant={variant} asChild>
-        <Link to={item.fullLink ? item.fullLink: item.link}>{item.content}</Link>
+        <Link to={item.fullLink ? item.fullLink : item.link}>
+          {item.content}
+        </Link>
       </Button>
     );
   }
