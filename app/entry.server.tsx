@@ -20,6 +20,7 @@ export default async function handleRequest(
   _loadContext: AppLoadContext,
 ) {
   const userAgent = request.headers.get("user-agent") ?? "";
+  console.log({ userAgent })
   const isWebview =
     userAgent.includes("CriOS") ||
     userAgent.includes("FxiOS") ||
