@@ -30,7 +30,7 @@ export type FirstStepFooterProps = {
   steps: Step[];
   step: number;
   total: string | null;
-  hoverText?: string | null;
+  popoverContent?: React.ReactNode | null;
 };
 
 export type SecondStepFooterProps = {
@@ -38,5 +38,5 @@ export type SecondStepFooterProps = {
   onClickNext: MouseEventHandler<HTMLButtonElement>;
   isDisabled: boolean;
   total: string | null;
-  hoverText?: string | null;
+  popoverContent?: React.ReactNode | null;
 };

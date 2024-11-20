@@ -1,6 +1,8 @@
+import { Link } from "@remix-run/react";
 import { MouseEventHandler, useCallback, useState } from "react";
 import { toast } from "sonner";
 
+import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
 import {
   Table,
@@ -12,6 +14,7 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { useIsAuthReady, useIsLoggedIn } from "~/utils/supabase/AuthProvider";
+import { urls } from "~/utils/urls";
 
 import { useCreatePurchaseOrderMutation } from "./graphql/createPurchaseOrder.generated";
 import { EventTicketFragmentFragment } from "./graphql/EventTicketFragment.generated";
@@ -167,8 +170,19 @@ export const ConfirmationTab = ({
         }}
         isDisabled={numberOfTickets === 0 || isDisabled || !hasSession}
         total={formattedTotal}
-        hoverText={
-          !hasSession ? "Debes iniciar sesión para poder comprar tickets" : null
+        popoverContent={
+          !hasSession ? (
+            <div className="flex flex-col gap-4 text-sm">
+              Debes iniciar sesión para poder comprar tickets.
+              <div className="flex justify-center">
+                <Button variant="default" asChild>
+                  <Link to={urls.login}>
+                    <span className="text-xs">Inicia sesión aquí</span>
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          ) : null
         }
       />
     </div>
