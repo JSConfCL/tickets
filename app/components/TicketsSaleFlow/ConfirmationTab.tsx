@@ -2,6 +2,7 @@ import { Link } from "@remix-run/react";
 import { MouseEventHandler, useCallback, useState } from "react";
 import { toast } from "sonner";
 
+import { useGetLoginURL } from "~/components/LoginButton";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
 import {
@@ -13,9 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import { useIsSafariMobileWebview } from "~/components/useIsSafariMobile";
 import { useIsAuthReady, useIsLoggedIn } from "~/utils/supabase/AuthProvider";
-import { urls } from "~/utils/urls";
 
 import { useCreatePurchaseOrderMutation } from "./graphql/createPurchaseOrder.generated";
 import { EventTicketFragmentFragment } from "./graphql/EventTicketFragment.generated";
@@ -44,7 +43,7 @@ export const ConfirmationTab = ({
   ) => string | null;
   currencyId: string;
 }) => {
-  const isSafariMobileWebview = useIsSafariMobileWebview();
+  const loginURL = useGetLoginURL();
   const isLogged = useIsLoggedIn();
   const isAuthReady = useIsAuthReady();
   const hasSession = isAuthReady && isLogged;
@@ -178,13 +177,7 @@ export const ConfirmationTab = ({
               Debes iniciar sesión para poder comprar tickets.
               <div className="flex justify-center">
                 <Button variant="default" asChild>
-                  <Link
-                    to={
-                      isSafariMobileWebview
-                        ? `x-safari-https://tickets.communityos.io/${urls.login}`
-                        : urls.login
-                    }
-                  >
+                  <Link to={loginURL}>
                     <span className="text-xs">Inicia sesión aquí</span>
                   </Link>
                 </Button>

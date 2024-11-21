@@ -4,15 +4,14 @@ import { GraphiQL } from "graphiql";
 import { useEffect, useRef } from "react";
 
 import "graphiql/graphiql.css";
+import { useGetLoginURL } from "~/components/LoginButton";
 import { Button } from "~/components/ui/button";
-import { useIsSafariMobileWebview } from "~/components/useIsSafariMobile";
 import {
   useIsAuthReady,
   useIsLoggedIn,
   useRefreshSession,
   useTokenRef,
 } from "~/utils/supabase/AuthProvider";
-import { urls } from "~/utils/urls";
 
 const communities = `query AllTheCommunities {
   communities {
@@ -128,14 +127,12 @@ const createPurchaseOrderMutation = `mutation claimUserTicket($input: TicketClai
 }`;
 
 export default function Pregunta() {
-  // const [isLoaded, setIsLoaded] = useState(false);
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const isSafariMobileWebview = useIsSafariMobileWebview();
   const fetcherRef = useRef<Fetcher>();
   const tokenRef = useTokenRef();
   const isLoggedIn = useIsLoggedIn();
   const isAuthReady = useIsAuthReady();
   const refreshSession = useRefreshSession();
+  const loginURL = useGetLoginURL();
 
   useEffect(() => {
     if (!tokenRef.current) {
@@ -183,13 +180,7 @@ export default function Pregunta() {
       <div className="m-auto my-0 p-4">
         <p>Woah! No estas logueado</p>
         Para loguearte{" "}
-        <Link
-          to={
-            isSafariMobileWebview
-              ? `x-safari-https://tickets.communityos.io/${urls.login}`
-              : urls.login
-          }
-        >
+        <Link to={loginURL}>
           <Button variant="outline">Haz click aquí</Button>
         </Link>
       </div>

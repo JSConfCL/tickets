@@ -2,9 +2,9 @@ import { Link, useNavigate } from "@remix-run/react";
 import { LogOut, Tickets, UserIcon, VenetianMaskIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 
+import { useGetLoginURL } from "~/components/LoginButton";
 import { ImpersonationModal } from "~/components/Navbar/Impersonation";
 import { useMyProfileQuery } from "~/components/Profile/graphql/myProfile.generated";
-import { useIsSafariMobileWebview } from "~/components/useIsSafariMobile";
 import {
   useAuthContext,
   useIsAuthReady,
@@ -25,7 +25,9 @@ export const Navbar = () => {
   const myProfile = useMyProfileQuery({
     skip: !isLogged || !isAuthReady,
   });
-  const isSafariMobileWebview = useIsSafariMobileWebview();
+  const loginURL = useGetLoginURL();
+
+  console.log({ loginURL });
 
   const { impersonation, setImpersonation } = useAuthContext();
 
@@ -97,11 +99,9 @@ export const Navbar = () => {
           ],
         },
         {
-          content: "Login",
-          link: urls.login,
-          fullLink: isSafariMobileWebview
-            ? `x-safari-https://tickets.communityos.io/${urls.login}`
-            : undefined,
+          content: `Login`,
+          link: loginURL,
+          // fullLink:  ? `x-safari-${loginURL}` : undefined,
           variant: "secondary",
           show: isAuthReady && !isLogged,
         },
@@ -111,7 +111,7 @@ export const Navbar = () => {
       isLogged,
       impersonation,
       myProfile?.data?.me?.isSuperAdmin,
-      isSafariMobileWebview,
+      loginURL,
       setImpersonation,
       navigate,
     ],

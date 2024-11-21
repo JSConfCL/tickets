@@ -4,19 +4,23 @@ import { useEffect, useState } from "react";
 
 import { useNavigationHistoryStore } from "~/utils/navigationHistoryStore";
 import { supabaseClient } from "~/utils/supabase/client";
+import { urls } from "~/utils/urls";
 
-export const Login = ({ redirectTo }: { redirectTo: string }) => {
+export const Login = ({ redirectTo }: { redirectTo?: string }) => {
   const [url, setUrl] = useState<string | undefined>();
-  // const [redirectTo, setRedirectTo] = useState<string | undefined>();
   const history = useNavigationHistoryStore().history;
 
   useEffect(() => {
-    const url = new URL(window.location.href);
+    const url = new URL(redirectTo ?? window.location.href);
+
+    if (!redirectTo) {
+      url.pathname = urls.events.tickets(
+        "7dfe393e-7c8f-4d5c-903d-aa65e28e4227",
+      );
+    }
 
     url.hash = "";
-    url.pathname = redirectTo;
     setUrl(url.toString());
-    // setRedirectTo(url.toString());
   }, [history, redirectTo]);
 
   return (

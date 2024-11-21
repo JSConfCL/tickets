@@ -96,7 +96,7 @@ function MetaPageviews() {
 
   useEffect(() => {
     pageview();
-    addToHistory(pathname);
+    addToHistory(window.location.href);
   }, [pathname, addToHistory]);
 
   return null;
