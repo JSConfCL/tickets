@@ -160,7 +160,7 @@ export const TicketSelectionTab = ({
         steps={steps}
         step={step}
         total={formattedTotal}
-        hoverText={
+        popoverContent={
           !isActive
             ? "Este evento no está activo"
             : hasFinished

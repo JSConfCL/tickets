@@ -11,13 +11,13 @@ export const SecondStepFooter = ({
   onClickPrevious,
   onClickNext,
   isDisabled,
-  hoverText,
+  popoverContent,
 }: SecondStepFooterProps) => (
   <div className="mt-2 flex justify-end gap-2 text-right">
     <Button variant="outline" onClick={onClickPrevious}>
       Atras
     </Button>
-    <ConditionalPopoverWrapper popoverText={hoverText}>
+    <ConditionalPopoverWrapper popoverContent={popoverContent}>
       <Button disabled={isDisabled} onClick={onClickNext}>
         Pagar
       </Button>
@@ -26,17 +26,17 @@ export const SecondStepFooter = ({
 );
 
 const ConditionalPopoverWrapper = ({
-  popoverText,
+  popoverContent,
   children,
 }: {
-  popoverText: string | undefined | null;
+  popoverContent?: React.ReactNode;
   children: React.ReactNode;
 }) => {
-  if (popoverText) {
+  if (popoverContent) {
     return (
       <Popover>
         <PopoverTrigger>{children}</PopoverTrigger>
-        <PopoverContent>{popoverText}.</PopoverContent>
+        <PopoverContent>{popoverContent}</PopoverContent>
       </Popover>
     );
   } else {
@@ -47,10 +47,10 @@ const ConditionalPopoverWrapper = ({
 export const FirstStepFooter = ({
   onClickNext,
   isDisabled,
-  hoverText,
+  popoverContent,
 }: FirstStepFooterProps) => (
   <div className="mt-2 flex justify-end gap-2 text-right">
-    <ConditionalPopoverWrapper popoverText={hoverText}>
+    <ConditionalPopoverWrapper popoverContent={popoverContent}>
       <Button disabled={isDisabled} onClick={onClickNext}>
         Siguiente
       </Button>
