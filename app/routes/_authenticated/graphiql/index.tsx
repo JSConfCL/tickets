@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 
 import "graphiql/graphiql.css";
 import { Button } from "~/components/ui/button";
+import { useIsSafariMobileWebview } from "~/components/useIsSafariMobile";
 import {
   useIsAuthReady,
   useIsLoggedIn,
@@ -129,6 +130,7 @@ const createPurchaseOrderMutation = `mutation claimUserTicket($input: TicketClai
 export default function Pregunta() {
   // const [isLoaded, setIsLoaded] = useState(false);
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const isSafariMobileWebview = useIsSafariMobileWebview();
   const fetcherRef = useRef<Fetcher>();
   const tokenRef = useTokenRef();
   const isLoggedIn = useIsLoggedIn();
@@ -181,7 +183,13 @@ export default function Pregunta() {
       <div className="m-auto my-0 p-4">
         <p>Woah! No estas logueado</p>
         Para loguearte{" "}
-        <Link to={urls.login}>
+        <Link
+          to={
+            isSafariMobileWebview
+              ? `x-safari-https://tickets.communityos.io/${urls.login}`
+              : urls.login
+          }
+        >
           <Button variant="outline">Haz click aquí</Button>
         </Link>
       </div>

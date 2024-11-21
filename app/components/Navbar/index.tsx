@@ -1,11 +1,10 @@
 import { Link, useNavigate } from "@remix-run/react";
-import Bowser from "bowser";
-import InAppSpy from "inapp-spy";
 import { LogOut, Tickets, UserIcon, VenetianMaskIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { ImpersonationModal } from "~/components/Navbar/Impersonation";
 import { useMyProfileQuery } from "~/components/Profile/graphql/myProfile.generated";
+import { useIsSafariMobileWebview } from "~/components/useIsSafariMobile";
 import {
   useAuthContext,
   useIsAuthReady,
@@ -20,19 +19,13 @@ import { ThemeSwitcher } from "./ThemeSwitcher";
 import type { NavbarMenuItem } from "./types";
 
 export const Navbar = () => {
-  const [{ isInApp }] = useState(() => InAppSpy());
   const navigate = useNavigate();
   const isLogged = useIsLoggedIn();
   const isAuthReady = useIsAuthReady();
   const myProfile = useMyProfileQuery({
     skip: !isLogged || !isAuthReady,
   });
-  const browser = Bowser.getParser(window.navigator.userAgent);
-  const isMobileSafari = browser.satisfies({
-    mobile: {
-      safari: ">=9",
-    },
-  });
+  const isSafariMobileWebview = useIsSafariMobileWebview();
 
   const { impersonation, setImpersonation } = useAuthContext();
 
@@ -106,10 +99,9 @@ export const Navbar = () => {
         {
           content: "Login",
           link: urls.login,
-          fullLink:
-            isInApp && isMobileSafari
-              ? `x-safari-https://tickets.communityos.io/${urls.login}`
-              : undefined,
+          fullLink: isSafariMobileWebview
+            ? `x-safari-https://tickets.communityos.io/${urls.login}`
+            : undefined,
           variant: "secondary",
           show: isAuthReady && !isLogged,
         },
@@ -119,8 +111,7 @@ export const Navbar = () => {
       isLogged,
       impersonation,
       myProfile?.data?.me?.isSuperAdmin,
-      isInApp,
-      isMobileSafari,
+      isSafariMobileWebview,
       setImpersonation,
       navigate,
     ],

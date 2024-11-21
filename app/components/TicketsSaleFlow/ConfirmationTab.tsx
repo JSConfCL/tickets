@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { useIsSafariMobileWebview } from "~/components/useIsSafariMobile";
 import { useIsAuthReady, useIsLoggedIn } from "~/utils/supabase/AuthProvider";
 import { urls } from "~/utils/urls";
 
@@ -43,6 +44,7 @@ export const ConfirmationTab = ({
   ) => string | null;
   currencyId: string;
 }) => {
+  const isSafariMobileWebview = useIsSafariMobileWebview();
   const isLogged = useIsLoggedIn();
   const isAuthReady = useIsAuthReady();
   const hasSession = isAuthReady && isLogged;
@@ -176,7 +178,13 @@ export const ConfirmationTab = ({
               Debes iniciar sesión para poder comprar tickets.
               <div className="flex justify-center">
                 <Button variant="default" asChild>
-                  <Link to={urls.login}>
+                  <Link
+                    to={
+                      isSafariMobileWebview
+                        ? `x-safari-https://tickets.communityos.io/${urls.login}`
+                        : urls.login
+                    }
+                  >
                     <span className="text-xs">Inicia sesión aquí</span>
                   </Link>
                 </Button>
