@@ -101,16 +101,14 @@ const useErrorLink = () => {
   });
 };
 
-// @ts-expect-error env is defined in wrangler.toml
-if (!__VITE_JSCL_API_URL__) {
+if (!import.meta.env.VITE_JSCL_API_URL) {
   throw new Error("Missing env var: VITE_JSCL_API_URL");
 }
 
 // Este link se encarga de definir donde y como se conecta el cliente de Apollo a la API
 const httpLink = new HttpLink({
-  // @ts-expect-error env is defined in wrangler.toml
   // Tiene que ser una URL absoluta, ya que las URLs relativas no pueden ser usadas en SSR.
-  uri: __VITE_JSCL_API_URL__ as string,
+  uri: import.meta.env.VITE_JSCL_API_URL,
   fetchOptions: { cache: "no-store" },
 });
 

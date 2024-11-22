@@ -42,6 +42,9 @@ jobs:
       - name: 📥 Install dependencies
         run: npm ci --prefer-offline --no-audit --legacy-peer-deps --cache ~/.npm
 
+      - name: 📝 Copy .env file
+        run: cp .env.${{ env.ENVIRONMENT }} .env
+
       - name: Build project
         run: BUILD_ENV=${{ env.ENVIRONMENT }} npm run build
 
