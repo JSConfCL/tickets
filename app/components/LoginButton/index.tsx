@@ -28,6 +28,8 @@ export function useGetLoginURL() {
         url.search = searchParams.toString();
       }
 
+      console.info("x-safari-", url.toString());
+
       return `x-safari-${url.toString()}`;
     }
   } else {
@@ -36,7 +38,7 @@ export function useGetLoginURL() {
     url.search = searchParams.toString();
   }
 
-  console.log(url.toString());
+  console.info(url.toString());
 
   return url.toString();
 }
