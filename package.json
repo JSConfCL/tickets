@@ -4,7 +4,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "remix vite:build",
+    "build": "remix vite:build && wrangler pages functions build --outdir build/worker",
     "prebuild": "npm run generate",
     "deploy": "wrangler pages deploy ./build/client",
     "dev": "remix vite:dev",
@@ -111,7 +111,7 @@
     "typescript": "^5.5.2",
     "vite": "^5.1.0",
     "vite-tsconfig-paths": "^4.2.1",
-    "wrangler": "3.57.1"
+    "wrangler": "3.87.0"
   },
   "engines": {
     "node": ">=20.0.0"

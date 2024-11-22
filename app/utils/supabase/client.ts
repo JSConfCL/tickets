@@ -2,17 +2,21 @@
 import { createClient } from "@supabase/supabase-js";
 import { CookieAttributes } from "node_modules/@types/js-cookie";
 
-if (!import.meta.env.VITE_SUPABASE_URL) {
+// @ts-expect-error env is defined in wrangler.toml
+if (!__VITE_SUPABASE_URL__) {
   throw new Error("Missing VITE_SUPABASE_URL");
 }
 
-if (!import.meta.env.VITE_SUPABASE_ANON_KEY) {
+// @ts-expect-error env is defined in wrangler.toml
+if (!__VITE_SUPABASE_ANON_KEY__) {
   throw new Error("Missing VITE_SUPABASE_ANON_KEY");
 }
 
 export const supabaseClient = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY,
+  // @ts-expect-error env is defined in wrangler.toml
+  __VITE_SUPABASE_URL__ as string,
+  // @ts-expect-error env is defined in wrangler.toml
+  __VITE_SUPABASE_ANON_KEY__ as string,
 );
 
 const oneHour = 1000 * 60 * 60;

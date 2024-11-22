@@ -1,0 +1,33 @@
+name = "tickets-app"
+account_id = "6e3497a44104902c23f58fe79ee984b6"
+main = "./build/worker/index.js"
+assets = { directory = "./build/client" }
+compatibility_date = "2024-10-04"
+
+[observability]
+enabled = true
+[define]
+__APP_ENV__ = "'development'"
+__VITE_SUPABASE_URL__ = "'https://ehailnrcwwdcldgfjmrq.supabase.co'"
+__VITE_SUPABASE_ANON_KEY__ = "'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoYWlsbnJjd3dkY2xkZ2ZqbXJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEyMjUwMDgsImV4cCI6MjAyNjgwMTAwOH0.tsPnOuFT37MyR4tkz9wrDNRAlnPnxtdHS2P8lxLPcVo'"
+__VITE_JSCL_API_URL__ = "'https://api.jsconf.dev/graphql'"
+
+
+[env.staging]
+[env.staging.observability]
+enabled = true
+[env.staging.define]
+__APP_ENV__ = "'staging'"
+__VITE_SUPABASE_URL__ = "'https://ehailnrcwwdcldgfjmrq.supabase.co'"
+__VITE_SUPABASE_ANON_KEY__ = "'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoYWlsbnJjd3dkY2xkZ2ZqbXJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEyMjUwMDgsImV4cCI6MjAyNjgwMTAwOH0.tsPnOuFT37MyR4tkz9wrDNRAlnPnxtdHS2P8lxLPcVo'"
+__VITE_JSCL_API_URL__ = "'https://api.jsconf.dev/graphql'"
+
+
+[env.production]
+[env.production.observability]
+enabled = true
+[env.production.define]
+__APP_ENV__ = "'production'"
+__VITE_SUPABASE_URL__ = "'https://ejekrsffaylfcsljthth.supabase.co'"
+__VITE_SUPABASE_ANON_KEY__ = "'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqZWtyc2ZmYXlsZmNzbGp0aHRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEyMjUxMTIsImV4cCI6MjAyNjgwMTExMn0.CN8_ZuoQZb64V4B9_pese_XsEZlMJ5tEodHdjq0GF-c'"
+__VITE_JSCL_API_URL__ = "'https://api.communityos.io/graphql'"

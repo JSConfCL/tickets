@@ -1,0 +1,53 @@
+name: Deploy website
+
+on:
+  workflow_run:
+    # Esto tiene q hacer match con los nombres de los workflows de tests
+    workflows: ["Lint and Typecheck"]
+    branches: [main, release]
+    types:
+      - completed
+
+jobs:
+  publish:
+    # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    name: Publish website to Cloudflare Workers
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    env:
+      ENVIRONMENT: ${{ github.event.workflow_run.head_branch == 'release' && 'production' || github.event.workflow_run.head_branch == 'main' && 'staging' || 'dev' }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: ⏳ Cloning repo
+        uses: actions/checkout@v4
+        with:
+          show-progress: false
+
+      - name: 📦 Download Cached Package Dependencies
+        uses: actions/cache@v3
+        env:
+          cache-name: NPM
+        with:
+          path: ~/.npm
+          key: CACHE-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
+
+      - name: ⬢ Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: 📥 Install dependencies
+        run: npm ci --prefer-offline --no-audit --legacy-peer-deps --cache ~/.npm
+
+      - name: Build project
+        run: BUILD_ENV=${{ env.ENVIRONMENT }} npm run build
+
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          packageManager: npm
+          command: deploy --env ${{ env.ENVIRONMENT }} --minify

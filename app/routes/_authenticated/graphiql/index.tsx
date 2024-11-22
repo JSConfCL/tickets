@@ -140,7 +140,8 @@ export default function Pregunta() {
     }
 
     const fetcher = createGraphiQLFetcher({
-      url: import.meta.env.VITE_JSCL_API_URL!,
+      // @ts-expect-error env is defined in wrangler.toml
+      url: __VITE_JSCL_API_URL__ as string,
       enableIncrementalDelivery: true,
       fetch(input, init) {
         return fetch(input, {
