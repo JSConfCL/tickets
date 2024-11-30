@@ -40,6 +40,7 @@ export type CheckPurchaseOrderStatusMutation = {
         id: string;
         name: string;
         description?: string | null;
+        isFree: boolean;
         event: {
           __typename?: "Event";
           id: string;
@@ -92,6 +93,7 @@ export const CheckPurchaseOrderStatusDocument = gql`
           id
           name
           description
+          isFree
           event {
             id
             name

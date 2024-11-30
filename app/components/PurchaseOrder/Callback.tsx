@@ -1,6 +1,6 @@
 import { Link } from "@remix-run/react";
 import { CircleCheck, CircleX } from "lucide-react";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import {
@@ -9,7 +9,7 @@ import {
 } from "~/api/gql/graphql";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { buttonVariants } from "~/components/ui/button";
-import { Card, CardContent } from "~/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
   Table,
   TableBody,
@@ -29,6 +29,7 @@ import {
   useCheckPurchaseOrderStatusMutation,
   CheckPurchaseOrderStatusMutation,
 } from "./graphql/checkPurchaseOrderStatus.generated";
+import { TicketAmountInput } from "../TicketsSaleFlow/inputs";
 
 type PurchaseCallbackProps = {
   purchaseOrderId: string;
@@ -115,6 +116,49 @@ const PurchaseStatusAlert = ({
   );
 };
 
+const MobileCard = ({
+  ticket,
+  count,
+  selectedCurrency,
+}: {
+  ticket: Ticket;
+  count: number;
+  selectedCurrency: Currency;
+}) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <Card className="w-full">
+      <CardHeader className="cursor-pointer p-4 pb-0">
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex flex-col gap-2">
+            <div>{ticket.name}</div>
+            <div>
+              {ticket.isFree && selectedCurrency
+                ? "Gratis"
+                : getFormmatedTicketPrice(ticket, selectedCurrency)}
+            </div>
+          </div>
+          <div className="text-lg font-bold">
+            <TicketAmountInput disabled value={count} onChange={() => {}} />
+          </div>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="p-4">
+        <button
+          className={cn(buttonVariants({ variant: "link" }), "p-0")}
+          onClick={() => {
+            setIsExpanded((isExpanded) => !isExpanded);
+          }}
+        >
+          {isExpanded ? "Esconder Detalles" : "Ver Detalles"}
+        </button>
+        {isExpanded && <p>{ticket.description}</p>}
+      </CardContent>
+    </Card>
+  );
+};
+
 export const PurchaseCallback = ({
   purchaseOrderId,
 }: PurchaseCallbackProps) => {
@@ -187,7 +231,7 @@ export const PurchaseCallback = ({
         alt={event.name}
       />
       <PurchaseStatusAlert status={purchaseOrder.status} />
-      <Card>
+      <Card className="hidden sm:block">
         <CardContent className="pb-2">
           <h2 className="mt-4	text-2xl font-bold leading-[52px]">
             Entrada General
@@ -253,6 +297,36 @@ export const PurchaseCallback = ({
           </Table>
         </CardContent>
       </Card>
+      <div className="space-y-8 sm:hidden">
+        <h2 className="mt-4	text-2xl font-bold leading-[52px]">
+          Entrada General
+        </h2>
+        <div className="space-y-4">
+          {tickets.map(({ count, ticket }) => (
+            <MobileCard
+              key={ticket.id}
+              ticket={ticket}
+              count={count}
+              selectedCurrency={selectedCurrency as Currency}
+            />
+          ))}
+        </div>
+        <div className="mt-12 flex justify-between gap-2">
+          <div className="text-lg font-bold uppercase">
+            {purchaseOrder.status !== PurchaseOrderStatusEnum.Complete
+              ? "Total a Pagar"
+              : null}
+          </div>
+          <div className="text-lg font-bold">
+            {purchaseOrder.finalPrice
+              ? formatCurrency(
+                  purchaseOrder.finalPrice,
+                  selectedCurrency?.currency as string,
+                )
+              : "Gratis"}
+          </div>
+        </div>
+      </div>
       {purchaseOrder.status === PurchaseOrderStatusEnum.Expired && (
         <div className="mt-2 flex justify-end gap-2">
           <Link

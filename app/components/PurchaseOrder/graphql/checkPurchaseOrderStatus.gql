@@ -21,6 +21,7 @@ mutation CheckPurchaseOrderStatus($input: CheckForPurchaseOrderInput!) {
         id
         name
         description
+        isFree
         event {
           id
           name
