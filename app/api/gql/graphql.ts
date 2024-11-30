@@ -1588,6 +1588,29 @@ export type FetchExampleEventsQuery = {
   };
 };
 
+export type ClaimUserTicketAddonsMutationVariables = Exact<{
+  addonsClaims: Array<ClaimUserTicketAddonInput> | ClaimUserTicketAddonInput;
+}>;
+
+export type ClaimUserTicketAddonsMutation = {
+  claimUserTicketAddons:
+    | {
+        __typename: "PurchaseOrder";
+        id: string;
+        status?: PurchaseOrderStatusEnum | null;
+        userTicketAddons: Array<{
+          id: string;
+          approvalStatus: UserTicketAddonApprovalStatus;
+          redemptionStatus: UserTicketAddonStatus;
+        }>;
+      }
+    | {
+        __typename: "RedeemUserTicketAddonsError";
+        error: boolean;
+        errorMessage: string;
+      };
+};
+
 export type MyEventQueryVariables = Exact<{
   input: PaginatedInputEventsSearchInput;
   userTicketSearchInput?: InputMaybe<EventsTicketsSearchInput>;
@@ -1620,6 +1643,7 @@ export type MyEventQuery = {
           name: string;
           description?: string | null;
         };
+        userTicketAddons: Array<{ addonId: string }>;
       }>;
     }>;
     pagination: {
@@ -1629,6 +1653,33 @@ export type MyEventQuery = {
       totalRecords: number;
     };
   };
+};
+
+export type MyEventAddonsQueryVariables = Exact<{
+  eventId: Scalars["String"]["input"];
+}>;
+
+export type MyEventAddonsQuery = {
+  searchAddons: Array<{
+    id: string;
+    description?: string | null;
+    isFree: boolean;
+    maxPerTicket?: number | null;
+    name: string;
+    totalStock?: number | null;
+    constraints: Array<{
+      id: string;
+      addonId: string;
+      relatedAddonId: string;
+      constraintType: AddonConstraintType;
+    }>;
+    ticketAddons: Array<{
+      id: string;
+      addonId: string;
+      orderDisplay: number;
+      ticketId: string;
+    }>;
+  }>;
 };
 
 export type TransferTicketMutationVariables = Exact<{
@@ -2082,6 +2133,132 @@ export const FetchExampleEventsDocument = {
   FetchExampleEventsQuery,
   FetchExampleEventsQueryVariables
 >;
+export const ClaimUserTicketAddonsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "claimUserTicketAddons" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "addonsClaims" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "ListType",
+              type: {
+                kind: "NonNullType",
+                type: {
+                  kind: "NamedType",
+                  name: { kind: "Name", value: "ClaimUserTicketAddonInput" },
+                },
+              },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "claimUserTicketAddons" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "addonsClaims" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "addonsClaims" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "__typename" } },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "PurchaseOrder" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "__typename" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "status" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "userTicketAddons" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "approvalStatus" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "redemptionStatus" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: {
+                      kind: "Name",
+                      value: "RedeemUserTicketAddonsError",
+                    },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "__typename" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "error" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "errorMessage" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ClaimUserTicketAddonsMutation,
+  ClaimUserTicketAddonsMutationVariables
+>;
 export const MyEventDocument = {
   kind: "Document",
   definitions: [
@@ -2290,6 +2467,19 @@ export const MyEventDocument = {
                                 ],
                               },
                             },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "userTicketAddons" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "addonId" },
+                                  },
+                                ],
+                              },
+                            },
                           ],
                         },
                       },
@@ -2329,6 +2519,109 @@ export const MyEventDocument = {
     },
   ],
 } as unknown as DocumentNode<MyEventQuery, MyEventQueryVariables>;
+export const MyEventAddonsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "myEventAddons" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "eventId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "searchAddons" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "eventId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "eventId" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "description" } },
+                { kind: "Field", name: { kind: "Name", value: "isFree" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "maxPerTicket" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                { kind: "Field", name: { kind: "Name", value: "totalStock" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "constraints" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "addonId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "relatedAddonId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "constraintType" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "ticketAddons" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "addonId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "orderDisplay" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "ticketId" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MyEventAddonsQuery, MyEventAddonsQueryVariables>;
 export const TransferTicketDocument = {
   kind: "Document",
   definitions: [

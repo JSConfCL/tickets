@@ -1,0 +1,20 @@
+mutation claimUserTicketAddons($addonsClaims: [ClaimUserTicketAddonInput!]!) {
+  claimUserTicketAddons(addonsClaims: $addonsClaims) {
+    __typename
+    ... on PurchaseOrder {
+      __typename
+      id
+      status
+      userTicketAddons {
+        id
+        approvalStatus
+        redemptionStatus
+      }
+    }
+    ... on RedeemUserTicketAddonsError {
+      __typename
+      error
+      errorMessage
+    }
+  }
+}
