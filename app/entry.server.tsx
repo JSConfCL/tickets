@@ -31,10 +31,6 @@ export default async function handleRequest(
     userAgent.toLowerCase().includes("fxios") ||
     userAgent.toLowerCase().includes("instagram");
 
-  console.log("isWebview", isWebview);
-  console.log("isAndroid", isAndroid);
-  console.log("userAgent", userAgent);
-
   if (isWebview && isAndroid) {
     responseHeaders.set("Content-Type", "application/pdf");
 

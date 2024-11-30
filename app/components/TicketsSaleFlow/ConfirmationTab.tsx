@@ -3,8 +3,8 @@ import { MouseEventHandler, useCallback, useState } from "react";
 import { toast } from "sonner";
 
 import { useGetLoginURL } from "~/components/LoginButton";
-import { Button } from "~/components/ui/button";
-import { Card, CardContent } from "~/components/ui/card";
+import { Button, buttonVariants } from "~/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
   Table,
   TableBody,
@@ -15,11 +15,62 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { useIsAuthReady, useIsLoggedIn } from "~/utils/supabase/AuthProvider";
+import { cn } from "~/utils/utils";
 
 import { useCreatePurchaseOrderMutation } from "./graphql/createPurchaseOrder.generated";
 import { EventTicketFragmentFragment } from "./graphql/EventTicketFragment.generated";
+import { TicketAmountInput } from "./inputs";
 import { SecondStepFooter } from "./Stepper";
 import { Step, TicketsState } from "./types";
+
+const MobileCard = ({
+  ticket,
+  getFormmatedTicketPrice,
+  selectedTickets,
+}: {
+  ticket: EventTicketFragmentFragment;
+  getFormmatedTicketPrice: (
+    ticket: EventTicketFragmentFragment,
+  ) => string | null;
+  selectedTickets: TicketsState;
+}) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <Card className="w-full">
+      <CardHeader className="cursor-pointer p-4 pb-0">
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex flex-col gap-2">
+            <div>{ticket.name}</div>
+            <div>
+              {ticket.isFree || !ticket.prices?.length
+                ? "Gratis"
+                : getFormmatedTicketPrice(ticket)}
+            </div>
+          </div>
+          <div className="text-lg font-bold">
+            <TicketAmountInput
+              disabled
+              value={selectedTickets[ticket.id]}
+              onChange={() => {}}
+            />
+          </div>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="p-4">
+        <button
+          className={cn(buttonVariants({ variant: "link" }), "p-0")}
+          onClick={() => {
+            setIsExpanded((isExpanded) => !isExpanded);
+          }}
+        >
+          {isExpanded ? "Esconder Detalles" : "Ver Detalles"}
+        </button>
+        {isExpanded && <p>{ticket.description}</p>}
+      </CardContent>
+    </Card>
+  );
+};
 
 export const ConfirmationTab = ({
   tickets,
@@ -98,7 +149,7 @@ export const ConfirmationTab = ({
 
   return (
     <div className="flex flex-col gap-4">
-      <Card>
+      <Card className="hidden sm:block">
         <CardContent className="pb-2">
           <h2 className="mt-4	text-2xl font-bold leading-[52px]">
             Entrada General
@@ -161,6 +212,29 @@ export const ConfirmationTab = ({
           </Table>
         </CardContent>
       </Card>
+      <div className="space-y-8 sm:hidden">
+        <h2 className="mt-4	text-2xl font-bold leading-[52px]">
+          Entrada General
+        </h2>
+        <div className="space-y-4">
+          {tickets
+            .filter((ticket) => selectedTickets[ticket.id])
+            .map((ticket) => (
+              <MobileCard
+                key={ticket.id}
+                ticket={ticket}
+                getFormmatedTicketPrice={getFormmatedTicketPrice}
+                selectedTickets={selectedTickets}
+              />
+            ))}
+        </div>
+        <div className="mt-12 flex justify-between gap-2">
+          <div className="text-lg font-bold uppercase">Total a Pagar</div>
+          <div className="text-lg font-bold">
+            {!numberOfTickets || formattedTotal ? formattedTotal : "Gratis"}
+          </div>
+        </div>
+      </div>
       <SecondStepFooter
         onClickPrevious={previousStep}
         onClickNext={() => {

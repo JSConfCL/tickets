@@ -1831,6 +1831,7 @@ export type CheckPurchaseOrderStatusMutation = {
         id: string;
         name: string;
         description?: string | null;
+        isFree: boolean;
         event: {
           id: string;
           name: string;
@@ -3384,6 +3385,10 @@ export const CheckPurchaseOrderStatusDocument = {
                             {
                               kind: "Field",
                               name: { kind: "Name", value: "description" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isFree" },
                             },
                             {
                               kind: "Field",

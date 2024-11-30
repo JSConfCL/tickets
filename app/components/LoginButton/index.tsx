@@ -38,7 +38,5 @@ export function useGetLoginURL() {
     url.search = searchParams.toString();
   }
 
-  console.info(url.toString());
-
   return url.toString();
 }

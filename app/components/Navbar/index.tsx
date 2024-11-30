@@ -27,8 +27,6 @@ export const Navbar = () => {
   });
   const loginURL = useGetLoginURL();
 
-  console.log({ loginURL });
-
   const { impersonation, setImpersonation } = useAuthContext();
 
   const [impersonateModal, setImpersonateModal] = useState(false);
