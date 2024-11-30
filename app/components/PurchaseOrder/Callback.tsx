@@ -106,7 +106,7 @@ const PurchaseStatusAlert = ({
   return (
     <Alert
       variant={alertVariant}
-      className={cn(alertInfo.classNames, "[&>svg~*]:pl-11")}
+      className={cn(alertInfo.classNames, "w-full [&>svg~*]:pl-11")}
     >
       {alertInfo.icon}
       <AlertTitle>{alertInfo.title}</AlertTitle>
@@ -180,15 +180,18 @@ export const PurchaseCallback = ({
   }
 
   return (
-    <div className="mx-auto flex max-w-[856px] flex-col gap-9">
+    <div className="mx-auto flex w-full max-w-[856px] flex-col  gap-9">
       <img
         className="mx-auto w-60"
         src={event.logoImage?.url}
         alt={event.name}
       />
       <PurchaseStatusAlert status={purchaseOrder.status} />
-      <Card className="mx-auto">
-        <CardContent>
+      <Card>
+        <CardContent className="pb-2">
+          <h2 className="mt-4	text-2xl font-bold leading-[52px]">
+            Entrada General
+          </h2>
           <Table>
             <TableHeader>
               <TableRow className="border-t hover:bg-transparent">

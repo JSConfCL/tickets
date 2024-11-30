@@ -13,7 +13,7 @@ export const CallbackLoadingSkeleton = () => {
   const tickets = Array.from({ length: 5 }).map((_, index) => index);
 
   return (
-    <div className="mx-auto flex max-w-[856px] flex-col gap-9">
+    <div className="mx-auto flex w-full max-w-[856px] flex-col gap-9">
       <div className="flex basis-4/12 flex-col gap-4">
         <Skeleton className="mx-auto h-40 w-60 rounded-md" />
         <Skeleton className="mx-auto h-16 w-full rounded-md" />
