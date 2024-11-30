@@ -72,6 +72,8 @@ export default function Tickets({
     setStep((tmpStep) => {
       const newStep = tmpStep + 1;
 
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+
       return Math.min(newStep, steps.length - 1);
     });
   };
@@ -79,6 +81,8 @@ export default function Tickets({
   const previousStep = () => {
     setStep((tmpStep) => {
       const newStep = tmpStep - 1;
+
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 
       return Math.max(newStep, 0);
     });

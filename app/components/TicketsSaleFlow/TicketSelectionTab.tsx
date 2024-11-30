@@ -1,10 +1,7 @@
 import { Minus, Plus } from "lucide-react";
 import { useState } from "react";
 
-import {
-  TicketTemplateStatus,
-  TicketTemplateVisibility,
-} from "~/api/gql/graphql";
+import { TicketTemplateStatus } from "~/api/gql/graphql";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
