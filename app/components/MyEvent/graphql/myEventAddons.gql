@@ -1,0 +1,22 @@
+query myEventAddons($eventId: String!) {
+  searchAddons(eventId: $eventId) {
+    id
+    description
+    isFree
+    maxPerTicket
+    name
+    totalStock
+    constraints {
+      id
+      addonId
+      relatedAddonId
+      constraintType
+    }
+    ticketAddons {
+      id
+      addonId
+      orderDisplay
+      ticketId
+    }
+  }
+}

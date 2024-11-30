@@ -49,6 +49,10 @@ export type MyEventQuery = {
           name: string;
           description?: string | null;
         };
+        userTicketAddons: Array<{
+          __typename?: "UserTicketAddon";
+          addonId: string;
+        }>;
       }>;
     }>;
     pagination: {
@@ -100,6 +104,9 @@ export const MyEventDocument = gql`
             id
             name
             description
+          }
+          userTicketAddons {
+            addonId
           }
         }
       }

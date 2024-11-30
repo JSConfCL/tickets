@@ -37,6 +37,9 @@ query myEvent(
           name
           description
         }
+        userTicketAddons {
+          addonId
+        }
       }
     }
     pagination {

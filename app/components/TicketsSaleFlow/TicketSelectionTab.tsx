@@ -44,7 +44,7 @@ const MobileCard = ({
       <CardHeader className="cursor-pointer p-4 pb-0">
         <CardTitle className="flex items-center justify-between">
           <div className="flex flex-col gap-2">
-            <div>{item.name}</div>
+            <div className="font-bold">{item.name}</div>
             <div>
               {" "}
               {item.isFree || !item.prices?.length
@@ -94,7 +94,9 @@ const MobileCard = ({
         >
           {isExpanded ? "Esconder Detalles" : "Ver Detalles"}
         </button>
-        {isExpanded && <p>{item.description}</p>}
+        {isExpanded && (
+          <div className="text-muted-foreground">{item.description}</div>
+        )}
       </CardContent>
     </Card>
   );

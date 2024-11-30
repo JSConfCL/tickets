@@ -16,16 +16,20 @@ import { urls } from "~/utils/urls";
 import { cn } from "~/utils/utils";
 
 import { MyEventQuery } from "./graphql/myEvent.generated";
+import { MyEventAddonsQuery } from "./graphql/myEventAddons.generated";
 import { TransferTicketDialog } from "./TransferTicketDialog";
 
 type Event = MyEventQuery["searchEvents"]["data"][0];
+type Addon = MyEventAddonsQuery["searchAddons"][0];
 
 export const TicketCard = ({
   event,
   ticket,
+  addons,
 }: {
   event: Event;
   ticket: Event["usersTickets"]["0"];
+  addons: Addon[];
 }) => {
   const [showQR, setShowQR] = useState(false);
   const [showMore, setShowMore] = useState(false);
@@ -109,6 +113,28 @@ export const TicketCard = ({
                   <span className="shrink-0 font-bold">Fecha de Compra</span>
                   <span className="text-right">
                     {formatCalendarDate(ticket.createdAt as string)}
+                  </span>
+                </li>
+                <li className="flex items-center justify-between">
+                  <span className="w-3/12 shrink-0 font-bold">Extras</span>
+                  <span className="text-right">
+                    {ticket.userTicketAddons.length ? (
+                      ticket.userTicketAddons
+                        .map((addon) => {
+                          const addonData = addons.find(
+                            (a) => a.id === addon.addonId,
+                          );
+
+                          if (!addonData) {
+                            return;
+                          }
+
+                          return <div key={addonData.id}>{addonData.name}</div>;
+                        })
+                        .filter(Boolean)
+                    ) : (
+                      <span>Ninguno</span>
+                    )}
                   </span>
                 </li>
               </ul>
